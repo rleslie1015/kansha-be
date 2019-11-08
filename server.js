@@ -10,4 +10,4 @@ server.use(cors());
 
 
 
-module.exports = server.js
+module.exports = server
