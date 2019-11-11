@@ -5,14 +5,14 @@ exports.up = function(knex) {
         tbl 
             .increments()
         tbl
-            .string('recipient', 255)
+            .integer('recipient')
             .notNullable()
             .references('id')
             .inTable('Users')
             .onDelete('CASCADE')
             .onUpdate('CASCADE')
         tbl
-            .string('sender', 255)
+            .integer('sender')
             .notNullable()
             .references('id')
             .inTable('Users')
@@ -25,7 +25,7 @@ exports.up = function(knex) {
         tbl
             .date('date')
             .notNullable()
-            .defaultTo(Date.now())
+            
     })
 };
 
