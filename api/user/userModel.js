@@ -18,8 +18,12 @@ function findById(id) {
 }
 
 function addUser(user) {
+
     return db('Users')
     .insert(user)
+    .then(() => {
+        findAll()
+    })
 }
 
 function deleteUser(id) {
