@@ -26,8 +26,8 @@ exports.up = function(knex) {
             .string('org_name', 255)
             .notNullable()
         tbl 
-            .boolean('user_type')
-            .defaultTo('false')
+            .string('user_type')
+            .defaultTo('standard')
             .notNullable()
         tbl
             .string('profile_picture', 500)
