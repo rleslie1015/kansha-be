@@ -1,4 +1,4 @@
-const port = process.env.PORT || 6660;
+const port = process.env.PORT || 8000;
 const server = require('./server.js');
 
 server.listen(port,() => {
