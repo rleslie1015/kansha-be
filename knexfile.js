@@ -18,7 +18,7 @@ module.exports = {
     }
   },
 
-  development: {
+  staging: {
     client: 'pg',
     connection: process.env.DATABASE_URL,
     migrations: {
@@ -33,7 +33,7 @@ module.exports = {
     }
   },
 
-  development: {
+  production: {
     client: 'pg',
     connection: process.env.DATABASE_URL,
     migrations: {
