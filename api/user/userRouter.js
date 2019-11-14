@@ -38,6 +38,7 @@ router
                 res.status(201).json(user)
             })
             .catch(err => {
+                console.log(err)
                 res.status(500).json(err)
             })
     })
