@@ -4,6 +4,7 @@ const helmet = require('helmet');
 const server = express();
 const userRouter = require('./api/user/userRouter');
 const recRouter = require('./api/recognition/recRouter');
+const auth = require('./middleware/authMiddleWare')
 
 server.use(express.json());
 server.use(helmet());
@@ -11,7 +12,7 @@ server.use(helmet());
 server.use('/users', userRouter);
 server.use('/rec', recRouter);
 
-server.get('/', (req, res) => {
+server.get('/', auth, (req, res) => {
     res.status(200).json({ message: 'API is Running!' })
 }) 
 
