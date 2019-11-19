@@ -10,11 +10,12 @@ const profileRouter = require('./api/user/profileRouter')
 server.use(express.json());
 server.use(helmet());
 server.use(cors());
+server.use(auth.validateToken)
 server.use('/users', userRouter);
 server.use('/rec', recRouter);
 server.use('/profile', profileRouter)
 
-server.get('/', auth, (req, res) => {
+server.get('/', (req, res) => {
     res.status(200).json({ message: 'API is Running!' })
 }) 
 
