@@ -1,6 +1,7 @@
 const aws = require('aws-sdk');
 const multer = require('multer');
 const multerS3 = require('multer-s3');
+const path = require('path');
 
 
 aws.config.update({
@@ -21,8 +22,11 @@ const upload = multer({
       cb(null, {fieldName: file.fieldname});
     },
     key: function (req, file, cb) {
-      cb(null, Date.now().toString())
-    }
+      cb(null, Date.now().toString() + path.extname(file.originalname))
+    },
+    
+    
+    
   })
 })
  
