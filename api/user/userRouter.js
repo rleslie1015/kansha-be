@@ -1,5 +1,7 @@
 const router = require('express').Router();
 const dbModel = require('./userModel');
+const auth = require
+
 
 router
     .get('/', (req, res) => {
@@ -67,5 +69,6 @@ router
                 res.status(500).json(err)
             })
     })
+
 
 module.exports = router
