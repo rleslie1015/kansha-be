@@ -1,12 +1,12 @@
 const knex = require('knex')
 const knexConfig = require('../knexfile')
-const Rec = require('../api/recognition/recModel');
+const Rec = require('../api/user/userModel');
 const db = knex(knexConfig.testing)
 const request = require('supertest');
 
-describe('recognition model', () => {
+describe('Users model', () => {
     beforeEach(async () => {
-        await db('Recognition').truncate();
+        await db('Users').truncate();
     })
     it('should see test env', () => {
         expect(process.env.DB_ENV).toBe('testing');
@@ -14,8 +14,8 @@ describe('recognition model', () => {
 }) 
 
 describe('insert()', () => {
-    it('should add a rocognition to the database', async () => {
-        const empty = await db('Recognition');
+    it('should add a user to the database', async () => {
+        const empty = await db('Users');
         expect(empty).toHaveLength(0);
     
     });
