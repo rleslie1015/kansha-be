@@ -6,7 +6,7 @@ exports.up = function(knex) {
             .increments()
 
         tbl
-            .integer('auth0_id')
+            .string('sub', 64)
             .notNullable()
             
         tbl

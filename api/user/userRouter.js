@@ -1,5 +1,7 @@
 const router = require('express').Router();
 const dbModel = require('./userModel');
+const auth = require
+
 
 router
     .get('/', (req, res) => {
@@ -38,6 +40,7 @@ router
                 res.status(201).json(user)
             })
             .catch(err => {
+                console.log(err)
                 res.status(500).json(err)
             })
     })
@@ -66,5 +69,6 @@ router
                 res.status(500).json(err)
             })
     })
+
 
 module.exports = router
