@@ -20,3 +20,15 @@ describe('insert()', () => {
     
     });
 });
+
+describe('findAll', () => {
+    it('should have a recognition', async () => {
+        const seed = await db('Recognition');
+        expect(seed).toHaveLength(0);
+        //await Rec.addRec({recipient: 1, sender: 2, message: 'Go forth and be a God', date: '2019/11/13'})
+        //const rec = await db('Recognition');
+
+        //expect(rec).toHaveLength(1);
+    })
+})
+

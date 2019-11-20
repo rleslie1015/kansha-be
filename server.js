@@ -15,4 +15,4 @@ server.get('/', (req, res) => {
     res.status(200).json({ message: 'API is Running!' })
 }) 
 
-module.exports = server
+module.exports = server 
