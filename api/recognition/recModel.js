@@ -5,7 +5,8 @@ module.exports={
     findById,
     deleteRec,
     editRec,
-    addRec
+    addRec,
+    getUserInteractions
 }
 
 function findAll(){
@@ -35,4 +36,9 @@ function addRec(obj, id){
     .then(() => {
         findAll()
     })
+}
+
+function getUserInteractions(id) {
+    return db('Recognition')
+    .where({sender: id})
 }
