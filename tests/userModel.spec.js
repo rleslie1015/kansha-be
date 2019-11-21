@@ -1,6 +1,6 @@
 const knex = require('knex')
 const knexConfig = require('../knexfile')
-const Rec = require('../api/user/userModel');
+const Users = require('../api/user/userModel');
 const db = knex(knexConfig.testing)
 const request = require('supertest');
 
@@ -13,10 +13,15 @@ describe('Users model', () => {
     })
 }) 
 
-describe('insert()', () => {
-    it('should add a user to the database', async () => {
-        const empty = await db('Users');
-        expect(empty).toHaveLength(0);
-    
+describe('GET()', () => {
+    it('should get user from the database', async () => {
+        const User = await db('Users');
+        expect(User).toHaveLength(0);
+
+
+
+        const users = await db('Users')
+        expect(users).toHaveLength(0);
     });
 });
+

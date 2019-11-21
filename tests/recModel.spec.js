@@ -3,6 +3,7 @@ const knexConfig = require('../knexfile')
 const Rec = require('../api/recognition/recModel');
 const db = knex(knexConfig.testing)
 const request = require('supertest');
+const {addRec} = require('../api/recognition/recModel')
 
 describe('recognition model', () => {
     beforeEach(async () => {
