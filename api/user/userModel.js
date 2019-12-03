@@ -22,7 +22,7 @@ function addUser(user) {
     return db('Users')
     .insert(user)
     .returning("id")
-    .then(id => findById(id))
+    then((id) => console.log(id))
 }
 
 function deleteUser(id) {

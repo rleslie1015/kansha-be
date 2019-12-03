@@ -29,9 +29,10 @@ function editRec(id, changes) {
 		.update(changes);
 }
 
-function addRec(obj, id) {
+function addRec(obj) {
 	return db('Recognition')
 		.insert(obj)
+		.returning("id")
 		.then(() => {
 			findAll();
 		});
