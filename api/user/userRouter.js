@@ -33,8 +33,12 @@ router
 
 router 
     .post('/', (req, res) => {
-        const {body} = req
-
+        const { body, user } = req
+        console.log(user)
+        body.sub = user.sub
+        if (user.picture) {
+            body.profile_picture = user.picture
+        }
         dbModel.addUser(body)
             .then(user => {
                 res.status(201).json(user)
