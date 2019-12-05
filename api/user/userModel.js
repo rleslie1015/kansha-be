@@ -6,6 +6,7 @@ module.exports = {
     addUser,
     deleteUser,
     editUser,
+    editUserBySub,
     find
 }
 
@@ -34,6 +35,12 @@ function deleteUser(id) {
 function editUser(id, changes) {
     return db('Users')
     .where({ id })
+    .update(changes)
+}
+
+function editUserBySub(sub, changes) {
+    return db('Users')
+    .where({ sub })
     .update(changes)
 }
 
