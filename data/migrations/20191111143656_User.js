@@ -31,7 +31,7 @@ exports.up = function(knex) {
             .notNullable()
         tbl
             .string('profile_picture', 500)
-            .defaultTo('https://www.sackettwaconia.com/wp-content/uploads/default-profile.png')
+            .defaultTo('https://kansha-bucket.s3-us-west-1.amazonaws.com/avatarblank.png')
     })
 };
 
