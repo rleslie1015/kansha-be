@@ -4,19 +4,18 @@ exports.up = function(knex) {
     .createTable('Users', tbl => {
         tbl
             .increments()
+
+        tbl
+            .string('sub', 64)
+            .notNullable()
+            
         tbl
             .string('first_name', 255)
             .notNullable()
         tbl
             .string('last_name', 255)
             .notNullable()
-        tbl
-            .string('email', 255)
-            .notNullable()
-            .unique()
-        tbl
-            .string('password', 255)
-            .notNullable()
+
         tbl
             .string('job_title', 255)
             .notNullable()
