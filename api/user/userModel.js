@@ -5,7 +5,9 @@ module.exports = {
     findById,
     addUser,
     deleteUser,
-    editUser
+    editUser,
+    editUserBySub,
+    find
 }
 
 function findAll() {
@@ -18,12 +20,10 @@ function findById(id) {
 }
 
 function addUser(user) {
-
     return db('Users')
     .insert(user)
-    .then(() => {
-        findAll()
-    })
+    .returning("id")
+    then((id) => console.log(id))
 }
 
 function deleteUser(id) {
@@ -36,4 +36,16 @@ function editUser(id, changes) {
     return db('Users')
     .where({ id })
     .update(changes)
+}
+
+function editUserBySub(sub, changes) {
+    return db('Users')
+    .where({ sub })
+    .update(changes)
+}
+
+function find(filter) {
+    return db('Users')
+    .where(filter)
+
 }
