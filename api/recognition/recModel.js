@@ -73,3 +73,4 @@ function getUserInteractions(id) {
 		])
 		.orderBy('date');
 }
+

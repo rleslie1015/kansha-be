@@ -1,4 +1,5 @@
 const router = require('express').Router();
+
 const upload = require('./profilePicUpload');
 const userModel = require('../user/userModel.js');
 
@@ -14,3 +15,4 @@ router.post('/', function(req, res) {
 });
 
 module.exports = router;
+
