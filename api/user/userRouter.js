@@ -1,5 +1,7 @@
 const router = require('express').Router();
 const dbModel = require('./userModel');
+const auth = require
+
 
 router
     .get('/', (req, res) => {
@@ -31,13 +33,18 @@ router
 
 router 
     .post('/', (req, res) => {
-        const {body} = req
-
+        const { body, user } = req
+        console.log(user)
+        body.sub = user.sub
+        if (user.picture) {
+            body.profile_picture = user.picture
+        }
         dbModel.addUser(body)
             .then(user => {
                 res.status(201).json(user)
             })
             .catch(err => {
+                console.log(err)
                 res.status(500).json(err)
             })
     })
@@ -66,5 +73,6 @@ router
                 res.status(500).json(err)
             })
     })
+
 
 module.exports = router
