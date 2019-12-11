@@ -13,7 +13,7 @@ router.get('/', (req, res) => {
 });
 
 router.get('/:id', validatePeerId, (req, res) => {
-    getUserInteractions(req.profile.id).then(rec => {
+    getUserInteractions(req.peer.id).then(rec => {
         let { peer } = req
         peer.rec = rec
         res.status(200).json({ peer });
