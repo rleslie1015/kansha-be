@@ -5,7 +5,7 @@ const server = express();
 const userRouter = require('./api/user/userRouter');
 const recRouter = require('./api/recognition/recRouter');
 const auth = require('./middleware/authMiddleWare')
-const profileRouter = require('./api/user/profileRouter')
+const profileRouter = require('./api/profile/profileRouter')
 const picRouter = require('./api/profile-pic/picRouter');
 
 server.use(express.json());

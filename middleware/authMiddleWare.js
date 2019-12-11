@@ -1,21 +1,8 @@
-const userModel = require('../api/user/userModel');
-const recModel = require('../api/recognition/recModel');
+
 const expressJwt = require('express-jwt');
-const jwt = require('jsonwebtoken');
 const jwksRsa = require('jwks-rsa');
 
-module.exports.validateId = (req, res, next) => {
-	const { sub } = req.user;
-	userModel.find({ sub }).then(user => {
-		if (!user[0]) {
-			console.log('user');
-			res.status(200).json({ user: false });
-		} else {
-			req.profile = user[0];
-			next();
-		}
-  })
-};
+
 
 // Authentication middleware. When used, the
 // Access Token must exist and be verified against
