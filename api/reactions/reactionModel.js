@@ -3,9 +3,9 @@ const db = require('../../data/dbConfig');
 function getReactions(rec_id) {
 	return db
 		.select('u.first_name', 'u.last_name', 'r.user_id')
-		.from('Recogntions as r')
-		.where({ id })
-		.join('Users as u', 'r.user_id = u.id');
+		.from('Reactions as r')
+		.where('r.rec_id', '=',  rec_id )
+		.join('Users as u', 'r.user_id', '=', 'u.id');
 }
 
 function addEvent(type, data) {
@@ -20,18 +20,17 @@ function deleteEvent(type, id) {
 		.del();
 }
 
-function getComments(id) {
+function getComments(rec_id) {
 	return db
 		.select(
 			'u.first_name',
 			'u.last_name',
 			'c.user_id',
-			'c.rec_id',
 			'c.message',
 		)
 		.from('Comments as c')
-		.where({ id })
-		.join('Users as u', 'c.user_id = u.id');
+		.where('c.rec_id', '=',  rec_id )
+		.join('Users as u', 'c.user_id', '=', 'u.id');
 }
 
 module.exports = { getComments, getReactions, deleteEvent, addEvent };

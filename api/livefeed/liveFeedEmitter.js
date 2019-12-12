@@ -10,4 +10,8 @@ feedEmitter.addListener('newRecognition', ([form]) => {
         .then(([rec]) => feedEmitter.emit(`recognition-${rec.org_name}`, [rec]))
 })
 
+feedEmitter.addListener('newComments', (comments) => {
+     feedEmitter.emit(`comments-${rec.org_name}`, comments)
+})
+
 module.exports = { feedEmitter }

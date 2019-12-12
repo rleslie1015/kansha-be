@@ -14,6 +14,7 @@ const reactionRouter = type => {
 					if (!reactions) {
 						res.status(404).json({ message: 'reactions not found' });
 					} else {
+                        
 						res.status(200).json(reactions);
 					}
 				})
@@ -27,6 +28,7 @@ const reactionRouter = type => {
 					if (!comments) {
 						res.status(404).json({ message: 'post not found' });
 					} else {
+                       
 						res.status(200).json(comments);
 					}
 				})
@@ -44,7 +46,7 @@ const reactionRouter = type => {
 		dbModel
 			.addEvent(type, body)
 			.then(post => {
-				feedEmitter.emit(`newReaction${type}`, post);
+                feedEmitter.emit(`new${type}`, post)
 				res.status(201).json(post);
 			})
 			.catch(err => {
