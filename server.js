@@ -8,6 +8,7 @@ const auth = require('./middleware/authMiddleWare')
 const profileRouter = require('./api/profile/profileRouter')
 const picRouter = require('./api/profile-pic/picRouter');
 const liveFeedRouter = require('./api/livefeed/liveFeedRouter')
+const reactionRouter = require('./api/reactions/reactionRouter')
 
 server.use(express.json());
 server.use(express.urlencoded({ extended: false }));
@@ -20,6 +21,8 @@ server.use('/rec', recRouter);
 server.use('/profile', profileRouter)
 server.use('/profile-pic', picRouter);
 server.use('/feed', liveFeedRouter);
+server.use('/comments', reactionRouter('Comments'))
+server.use('/reactions', reactionRouter('Reactions'))
 
 
 server.get('/', (req, res) => {

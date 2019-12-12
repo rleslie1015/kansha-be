@@ -10,7 +10,7 @@ exports.up = function(knex) {
 		tbl.integer('rec_id')
 			.notNullable()
 			.references('id')
-			.inTable('Users')
+			.inTable('Recognition')
 			.onDelete('CASCADE')
 			.onUpdate('CASCADE');
 	});
