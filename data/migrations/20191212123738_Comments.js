@@ -13,7 +13,7 @@ exports.up = function(knex) {
 			.inTable('Users')
 			.onDelete('CASCADE')
             .onUpdate('CASCADE');
-        tbl.string(256)
+        tbl.string('message')
             .notNullable()
 	});
 };

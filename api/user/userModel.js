@@ -22,7 +22,7 @@ function findById(id) {
 function addUser(user) {
     return db('Users')
     .insert(user)
-    .returning("id")
+    .returning('*')
 }
 
 function deleteUser(id) {
@@ -35,6 +35,7 @@ function editUser(id, changes) {
     return db('Users')
     .where({ id })
     .update(changes)
+    .returning('*')
 }
 
 function editUserBySub(sub, changes) {
