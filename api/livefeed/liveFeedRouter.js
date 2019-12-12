@@ -14,9 +14,8 @@ router.get('/live', validateId, (req, res) => {
 		'Connection': 'keep-alive',
 	});
 
-	
 
-	feedEmitter.on('recognition', data => {
+	feedEmitter.on(`recognition-${req.profile.org_name}`, data => {
 		res.write(`event: recognition\n`);
 		res.write(`data: ${JSON.stringify(data)}\n\n`);
 	});

@@ -5,9 +5,9 @@ const { getRecognition } = require('./liveFeedModel')
 
 const feedEmitter = new EventEmitter().setMaxListeners(50);
 
-feedEmitter.addListener('newRecognition', ([rec]) => {
-    getRecognition(rec.id)
-        .then(data => feedEmitter.emit('recognition', data))
+feedEmitter.addListener('newRecognition', ([form]) => {
+    getRecognition(form.id)
+        .then(([rec]) => feedEmitter.emit(`recognition-${rec.org_name}`, [rec]))
 })
 
 module.exports = { feedEmitter }
