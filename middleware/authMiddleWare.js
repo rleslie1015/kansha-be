@@ -23,3 +23,8 @@ module.exports.validateToken = expressJwt({
 	issuer: process.env.DOMAIN,
 	algorithms: ['RS256'],
 });
+
+module.exports.fixSSEToken = (req, res, next) => {
+	req.headers.authorization = req.query.token
+	next()
+}
