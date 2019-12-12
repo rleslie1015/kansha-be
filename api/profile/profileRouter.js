@@ -2,7 +2,7 @@ const router = require('express').Router();
 const { findProfile, getUserInteractions } = require('./profileModel')
 const auth = require('../../middleware/authMiddleWare');
 
-router.use(validateId);
+router.use(auth.validateId);
 
 router.get('/', (req, res) => {
     getUserInteractions(req.profile.id).then(rec => {
@@ -36,18 +36,5 @@ function validatePeerId (req, res, next) {
 		}
   })
 }
-
-function validateId (req, res, next) {
-	const { sub } = req.user;
-	findProfile({sub}).then(([user]) => {
-		if (!user) {
-			console.log('user');
-			res.status(200).json({ user: false });
-		} else {
-			req.profile = user;
-			next();
-		}
-  })
-};
 
 module.exports = router;

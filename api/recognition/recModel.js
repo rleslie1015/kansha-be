@@ -31,8 +31,5 @@ function editRec(id, changes) {
 function addRec(obj) {
 	return db('Recognition')
 		.insert(obj)
-		.returning("id")
-		.then(() => {
-			findAll();
-		});
+		.returning('*');
 }

@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const dbModel = require('./recModel');
-const { feedEmmiter } = require('../livefeed/liveFeedEmmiter')
+const { feedEmitter } = require('../livefeed/liveFeedEmitter')
 
 router.get('/', (req, res) => {
 	dbModel
@@ -36,7 +36,7 @@ router.post('/', (req, res) => {
 	dbModel
 		.addRec(body)
 		.then(post => {
-            feedEmmiter.emit('recognition', body);
+            feedEmitter.emit('newRecognition', post);
 			res.status(201).json(post);
 		})
 		.catch(err => {

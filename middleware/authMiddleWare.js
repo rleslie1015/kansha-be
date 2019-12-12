@@ -1,8 +1,6 @@
-
 const expressJwt = require('express-jwt');
 const jwksRsa = require('jwks-rsa');
-
-
+const db = require('../data/dbConfig');
 
 // Authentication middleware. When used, the
 // Access Token must exist and be verified against
@@ -24,7 +22,23 @@ module.exports.validateToken = expressJwt({
 	algorithms: ['RS256'],
 });
 
+module.exports.validateId = (req, res, next) => {
+	const { sub } = req.user;
+	db('Users')
+		.where({sub})
+		.limit(1)
+		.then(([user]) => {
+			if (!user) {
+				console.log('user');
+				res.status(200).json({ user: false });
+			} else {
+				req.profile = user;
+				next();
+			}
+		});
+};
+
 module.exports.fixSSEToken = (req, res, next) => {
-	req.headers.authorization = req.query.token
-	next()
-}
+	req.headers.authorization = req.query.token;
+	next();
+};
