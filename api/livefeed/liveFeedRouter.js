@@ -14,11 +14,18 @@ router.get('/live', validateId, (req, res) => {
 		'Connection': 'keep-alive',
 	});
 
-
-	feedEmitter.on(`recognition-${req.profile.org_name}`, data => {
-		res.write(`event: recognition\n`);
+	const composeListener = (name) => data => {
+		res.write(`event: ${name}\n`);
 		res.write(`data: ${JSON.stringify(data)}\n\n`);
-	});
+	}
+
+	const recListener = composeListener('recognition')
+
+	feedEmitter.on(`recognition-${req.profile.org_name}`, recListener)
+
+	res.on('close', () => {
+		feedEmitter.removeListener(`recognition-${req.profile.org_name}`, recListener)
+	})
 });
 
 module.exports = router
