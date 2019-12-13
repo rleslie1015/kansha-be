@@ -39,11 +39,11 @@ const reactionRouter = type => {
 	});
 
 	router.post('/', (req, res) => {
-		const { rec_id } = req.body;
 
 		dbModel
-			.addEvent(type, {user_id: req.profile.id, rec_id})
+			.addEvent(type, {user_id: req.profile.id, ...req.body})
 			.then(post => {
+				console.log(`new${type}`)
                 feedEmitter.emit(`new${type}`, post)
 				res.status(201).json(post);
 			})

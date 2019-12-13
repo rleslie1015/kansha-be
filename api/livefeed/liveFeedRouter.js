@@ -20,17 +20,17 @@ router.get('/live', validateId, (req, res) => {
 	}
 
 	const recListener = composeListener('recognition')
-	const commentListener = composeListener('comments')
-	const reactionListener = composeListener('reactions')
+	const commentListener = composeListener('comment')
+	const reactionListener = composeListener('reaction')
 
 	feedEmitter.on(`recognition-${req.profile.org_name}`, recListener)
-	feedEmitter.on(`comments-${req.profile.org_name}`, commentListener)
-	feedEmitter.on(`reactions-${req.profile.org_name}`, reactionListener)
+	feedEmitter.on(`comment-${req.profile.org_name}`, commentListener)
+	feedEmitter.on(`reaction-${req.profile.org_name}`, reactionListener)
 
 	res.on('close', () => {
 		feedEmitter.removeListener(`recognition-${req.profile.org_name}`, recListener)
-		feedEmitter.removeListener(`comments-${req.profile.org_name}`, commentListener)
-		feedEmitter.removeListener(`reactions-${req.profile.org_name}`, reactionListener)
+		feedEmitter.removeListener(`comment-${req.profile.org_name}`, commentListener)
+		feedEmitter.removeListener(`reaction-${req.profile.org_name}`, reactionListener)
 	})
 });
 

@@ -10,13 +10,7 @@ function getReactions(rec_id) {
 
 function getReaction(id) {
 	return db
-		.select(
-			'u.first_name',
-			'u.last_name',
-			'r.user_id',
-			'r.id',
-			'u.org_name',
-		)
+		.select('u.first_name', 'u.last_name', 'r.*', 'u.org_name')
 		.from('Reactions as r')
 		.where('r.id', '=', id)
 		.join('Users as u', 'r.user_id', '=', 'u.id');
@@ -47,8 +41,7 @@ function getComment(id) {
 		.select(
 			'u.first_name',
 			'u.last_name',
-			'c.user_id',
-			'c.message',
+			'c.*',
 			'u.org_name',
 		)
 		.from('Comments as c')
