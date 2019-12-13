@@ -21,8 +21,8 @@ server.use('/rec', recRouter);
 server.use('/profile', profileRouter)
 server.use('/profile-pic', picRouter);
 server.use('/feed', liveFeedRouter);
-server.use('/comments', reactionRouter('Comments'))
-server.use('/reactions', reactionRouter('Reactions'))
+server.use('/comments', auth.validateId, reactionRouter('Comments'))
+server.use('/reactions', auth.validateId, reactionRouter('Reactions'))
 
 
 server.get('/', (req, res) => {

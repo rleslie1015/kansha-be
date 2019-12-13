@@ -41,10 +41,10 @@ const reactionRouter = type => {
 	});
 
 	router.post('/', (req, res) => {
-		const { body } = req;
+		const { rec_id } = req.body;
 
 		dbModel
-			.addEvent(type, body)
+			.addEvent(type, {user_id: req.profile.id, rec_id})
 			.then(post => {
                 feedEmitter.emit(`new${type}`, post)
 				res.status(201).json(post);
@@ -56,9 +56,8 @@ const reactionRouter = type => {
 
 	router.delete('/:id', (req, res) => {
 		const { id } = req.params;
-
 		dbModel
-			.deleteEvent(id)
+			.deleteEvent(type ,id)
 			.then(() => res.sendStatus(204))
 			.catch(err => {
 				res.status(500).json(err);

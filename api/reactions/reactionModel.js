@@ -2,20 +2,20 @@ const db = require('../../data/dbConfig');
 
 function getReactions(rec_id) {
 	return db
-		.select('u.first_name', 'u.last_name', 'r.user_id')
+		.select('u.first_name', 'u.last_name', 'r.user_id', 'r.id')
 		.from('Reactions as r')
 		.where('r.rec_id', '=',  rec_id )
 		.join('Users as u', 'r.user_id', '=', 'u.id');
 }
 
 function addEvent(type, data) {
-	db(type)
+	return db(type)
 		.insert(data)
 		.returning('*');
 }
 
 function deleteEvent(type, id) {
-	db(type)
+	return db(type)
 		.where({ id })
 		.del();
 }
