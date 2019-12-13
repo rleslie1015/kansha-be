@@ -4,16 +4,21 @@ function getReactions(rec_id) {
 	return db
 		.select('u.first_name', 'u.last_name', 'r.user_id', 'r.id')
 		.from('Reactions as r')
-		.where('r.rec_id', '=',  rec_id )
+		.where('r.rec_id', '=', rec_id)
 		.join('Users as u', 'r.user_id', '=', 'u.id');
 }
 
-
 function getReaction(id) {
 	return db
-		.select('u.first_name', 'u.last_name', 'r.user_id', 'r.id')
+		.select(
+			'u.first_name',
+			'u.last_name',
+			'r.user_id',
+			'r.id',
+			'u.org_name',
+		)
 		.from('Reactions as r')
-		.where('r.id', '=',  id )
+		.where('r.id', '=', id)
 		.join('Users as u', 'r.user_id', '=', 'u.id');
 }
 
@@ -31,14 +36,9 @@ function deleteEvent(type, id) {
 
 function getComments(rec_id) {
 	return db
-		.select(
-			'u.first_name',
-			'u.last_name',
-			'c.user_id',
-			'c.message',
-		)
+		.select('u.first_name', 'u.last_name', 'c.user_id', 'c.message')
 		.from('Comments as c')
-		.where('c.rec_id', '=',  rec_id )
+		.where('c.rec_id', '=', rec_id)
 		.join('Users as u', 'c.user_id', '=', 'u.id');
 }
 
@@ -49,10 +49,18 @@ function getComment(id) {
 			'u.last_name',
 			'c.user_id',
 			'c.message',
+			'u.org_name',
 		)
 		.from('Comments as c')
-		.where('c.id', '=',  id )
+		.where('c.id', '=', id)
 		.join('Users as u', 'c.user_id', '=', 'u.id');
 }
 
-module.exports = { getComments, getReactions, deleteEvent, addEvent };
+module.exports = {
+	getComments,
+	getReactions,
+	deleteEvent,
+	addEvent,
+	getReaction,
+	getComment,
+};
