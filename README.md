@@ -90,8 +90,6 @@ Why did you choose this framework?
 
 ## 2️⃣ Actions
 
-🚫 This is an example, replace this with the actions that pertain to your backend
-
 `findAll()` -> Returns all
 
 `findById(id)` -> Returns a single object by ID
