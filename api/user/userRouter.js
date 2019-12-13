@@ -67,7 +67,7 @@ router
 
         dbModel.editUser(id, body) 
             .then(user => {
-                res.status(200).json(body)
+                res.status(200).json(user)
             })
             .catch(err => {
                 res.status(500).json(err)
