@@ -1,21 +1,6 @@
-const userModel = require('../api/user/userModel');
-const recModel = require('../api/recognition/recModel');
 const expressJwt = require('express-jwt');
-const jwt = require('jsonwebtoken');
 const jwksRsa = require('jwks-rsa');
-
-module.exports.validateId = (req, res, next) => {
-	const { sub } = req.user;
-	userModel.find({ sub }).then(user => {
-		if (!user[0]) {
-			console.log('user');
-			res.status(200).json({ user: false });
-		} else {
-			req.profile = user[0];
-			next();
-		}
-  })
-};
+const db = require('../data/dbConfig');
 
 // Authentication middleware. When used, the
 // Access Token must exist and be verified against
@@ -36,3 +21,24 @@ module.exports.validateToken = expressJwt({
 	issuer: process.env.DOMAIN,
 	algorithms: ['RS256'],
 });
+
+module.exports.validateId = (req, res, next) => {
+	const { sub } = req.user;
+	db('Users')
+		.where({sub})
+		.limit(1)
+		.then(([user]) => {
+			if (!user) {
+				console.log('user');
+				res.status(200).json({ user: false });
+			} else {
+				req.profile = user;
+				next();
+			}
+		});
+};
+
+module.exports.fixSSEToken = (req, res, next) => {
+	req.headers.authorization = req.query.token;
+	next();
+};
