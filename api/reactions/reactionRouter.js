@@ -14,7 +14,6 @@ const reactionRouter = type => {
 					if (!reactions) {
 						res.status(404).json({ message: 'reactions not found' });
 					} else {
-                        
 						res.status(200).json(reactions);
 					}
 				})
@@ -28,7 +27,6 @@ const reactionRouter = type => {
 					if (!comments) {
 						res.status(404).json({ message: 'post not found' });
 					} else {
-                       
 						res.status(200).json(comments);
 					}
 				})
@@ -41,12 +39,21 @@ const reactionRouter = type => {
 	});
 
 	router.post('/', (req, res) => {
+<<<<<<< HEAD
 		const { rec_id } = req.body;
 
 		dbModel
 			.addEvent(type, {user_id: req.profile.id, rec_id})
 			.then(post => {
                 feedEmitter.emit(`new${type}`, post)
+=======
+		const { body } = req;
+
+		dbModel
+			.addEvent(type, body)
+			.then(post => {
+				feedEmitter.emit(`newReaction${type}`, post);
+>>>>>>> 284fc2f707c20619930b667b717b91d30541af93
 				res.status(201).json(post);
 			})
 			.catch(err => {
@@ -56,8 +63,14 @@ const reactionRouter = type => {
 
 	router.delete('/:id', (req, res) => {
 		const { id } = req.params;
+<<<<<<< HEAD
 		dbModel
 			.deleteEvent(type ,id)
+=======
+
+		dbModel
+			.deleteEvent(id)
+>>>>>>> 284fc2f707c20619930b667b717b91d30541af93
 			.then(() => res.sendStatus(204))
 			.catch(err => {
 				res.status(500).json(err);
