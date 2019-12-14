@@ -120,15 +120,15 @@ In order for the app to function correctly, the user must set up their own envir
 
 create a .env file that includes the following:
     
-    *  DATABASE_URL = 'db url'
-    *  CLIENT_ID = '7zLELHA3Jyrt7O5M561HgBg3EjRsoT5K'
-    *  DOMAIN = 'https://kansha.auth0.com/'
-    *  SIGNING_CERT_URL = 'https://kansha.auth0.com/.well-known/jwks.json'
-    *  S3_BUCKET_NAME = 'kansha-bucket'
-    *  S3_ID = 'AKIA4QVBN53732IGKCEH'
-    *  S3_KEY = 'njbvhUUh8bsHO9Z3MpZV84x10UKRSwfnLosIe+XQ'
-    *  AWS_ACCESS_KEY_ID = 'AKIA4QVBN53732IGKCEH'
-    *  AWS_SECRET_ACCESS_KEY = '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'
+    *  DATABASE_URL = 
+    *  CLIENT_ID = 
+    *  DOMAIN = 
+    *  SIGNING_CERT_URL = 
+    *  S3_BUCKET_NAME = 
+    *  S3_ID = 
+    *  S3_KEY = 
+    *  AWS_ACCESS_KEY_ID = 
+    *  AWS_SECRET_ACCESS_KEY = 
 
 ## Contributing
 
