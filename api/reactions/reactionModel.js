@@ -46,7 +46,8 @@ function getComment(id) {
 		)
 		.from('Comments as c')
 		.where('c.id', '=', id)
-		.join('Users as u', 'c.user_id', '=', 'u.id');
+		.join('Users as u', 'c.user_id', '=', 'u.id')
+		.orderBy('date');
 }
 
 module.exports = {
