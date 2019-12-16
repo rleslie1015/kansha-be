@@ -16,10 +16,17 @@ function getReaction(id) {
 		.join('Users as u', 'r.user_id', '=', 'u.id');
 }
 
-function addEvent(type, data) {
-	return db(type)
+function addReaction(data) {
+	return db('Reactions')
 		.insert(data)
-		.returning('*');
+		.returning('*')
+		.then(([reaction]) => getReaction(reaction.id));
+}
+function addComment(data) {
+	return db('Comments')
+		.insert(data)
+		.returning('*')
+		.then(([comment]) => getCommemt(comment.id));
 }
 
 function deleteEvent(type, id) {
@@ -38,12 +45,7 @@ function getComments(rec_id) {
 
 function getComment(id) {
 	return db
-		.select(
-			'u.first_name',
-			'u.last_name',
-			'c.*',
-			'u.org_name',
-		)
+		.select('u.first_name', 'u.last_name', 'c.*', 'u.org_name')
 		.from('Comments as c')
 		.where('c.id', '=', id)
 		.join('Users as u', 'c.user_id', '=', 'u.id')
@@ -54,7 +56,8 @@ module.exports = {
 	getComments,
 	getReactions,
 	deleteEvent,
-	addEvent,
 	getReaction,
 	getComment,
+	addReaction,
+	addComment
 };

@@ -1,25 +1,10 @@
 const { EventEmitter } = require('events');
-const { getRecognition } = require('./liveFeedModel');
-const { getReaction, getComment } = require('../reactions/reactionModel');
 
-const feedEmitter = new EventEmitter().setMaxListeners(50);
+const emitterInput = new EventEmitter(5);
+const emitterOutput = new EventEmitter(100);
 
-feedEmitter.addListener('newRecognition', ([form]) => {
-	getRecognition(form.id).then(([rec]) =>
-		feedEmitter.emit(`recognition-${rec.org_name}`, [rec]),
-	);
+emitterInput.addListener('event', ({ org_name, payload, type }) => {
+	emitterOutput.emit(org_name, { type, payload });
 });
 
-feedEmitter.addListener('newComments', ([comment]) => {
-	getComment(comment.id).then(([comment]) =>
-		feedEmitter.emit(`comment-${comment.org_name}`, comment),
-	);
-});
-
-feedEmitter.addListener('newReactions', ([reaction]) => {
-	getReaction(reaction.id).then(([reaction]) =>
-		feedEmitter.emit(`reaction-${reaction.org_name}`, reaction),
-	);
-});
-
-module.exports = { feedEmitter };
+module.exports = { emitterInput, emitterOutput };
