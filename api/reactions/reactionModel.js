@@ -2,7 +2,7 @@ const db = require('../../data/dbConfig');
 
 function getReactions(rec_id) {
 	return db
-		.select('u.first_name', 'u.last_name', 'r.user_id', 'r.id')
+		.select('u.first_name', 'u.last_name', 'r.user_id', 'r.id', 'u.profile_picture')
 		.from('Reactions as r')
 		.where('r.rec_id', '=', rec_id)
 		.join('Users as u', 'r.user_id', '=', 'u.id');
@@ -10,7 +10,7 @@ function getReactions(rec_id) {
 
 function getReaction(id) {
 	return db
-		.select('u.first_name', 'u.last_name', 'r.*', 'u.org_name')
+		.select('u.first_name', 'u.last_name', 'r.*', 'u.org_name', 'u.profile_picture')
 		.from('Reactions as r')
 		.where('r.id', '=', id)
 		.join('Users as u', 'r.user_id', '=', 'u.id');
@@ -37,7 +37,7 @@ function deleteEvent(type, id) {
 
 function getComments(rec_id) {
 	return db
-		.select('u.first_name', 'u.last_name', 'c.user_id', 'c.message')
+		.select('u.first_name', 'u.last_name', 'c.*', 'u.profile_picture')
 		.from('Comments as c')
 		.where('c.rec_id', '=', rec_id)
 		.join('Users as u', 'c.user_id', '=', 'u.id');
@@ -45,7 +45,7 @@ function getComments(rec_id) {
 
 function getComment(id) {
 	return db
-		.select('u.first_name', 'u.last_name', 'c.*', 'u.org_name')
+		.select('u.first_name', 'u.last_name', 'c.*', 'u.org_name', 'u.profile_picture')
 		.from('Comments as c')
 		.where('c.id', '=', id)
 		.join('Users as u', 'c.user_id', '=', 'u.id')
