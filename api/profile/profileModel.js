@@ -3,11 +3,7 @@ const db = require('../../data/dbConfig');
 const getUserInteractions = id => {
 	return db
 		.select([
-			'rec.id',
-			'rec.sender',
-			'rec.recipient',
-			'rec.message',
-			'rec.date',
+			'rec.*',
 			'r.first_name as first_name',
 			'r.last_name as last_name',
 			'r.profile_picture as profile_pic',
