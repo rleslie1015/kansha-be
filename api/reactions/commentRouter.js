@@ -21,7 +21,7 @@ router.get('/:rec_id', (req, res) => {
 
 router.post('/', (req, res) => {
 	dbModel
-		.addComment(type, { user_id: req.profile.id, ...req.body })
+		.addComment({ user_id: req.profile.id, ...req.body })
 		.then(([comment]) => {
 			emitterInput.emit('event', {
 				payload: comment,

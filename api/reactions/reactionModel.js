@@ -26,7 +26,7 @@ function addComment(data) {
 	return db('Comments')
 		.insert(data)
 		.returning('*')
-		.then(([comment]) => getCommemt(comment.id));
+		.then(([comment]) => getComment(comment.id));
 }
 
 function deleteEvent(type, id) {
