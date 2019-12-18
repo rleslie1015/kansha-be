@@ -15,11 +15,7 @@ const getUserInteractions = id => {
 		.union([
 			db
 				.select([
-					'rec.id',
-					'rec.sender',
-					'rec.recipient',
-					'rec.message',
-					'rec.date',
+					'rec.*',
 					's.first_name as first_name',
 					's.last_name as last_name',
 					's.profile_picture as profile_pic',
