@@ -38,7 +38,7 @@ router.post('/', (req, res) => {
 router.delete('/:id', (req, res) => {
 	const { id } = req.params;
 	dbModel
-		.deleteEvent(type, id)
+		.deleteEvent('Comments', id)
 		.then(() => res.sendStatus(204))
 		.catch(err => {
 			res.status(500).json(err);
