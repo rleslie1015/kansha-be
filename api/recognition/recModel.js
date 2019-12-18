@@ -6,7 +6,8 @@ module.exports = {
 	deleteRec,
 	editRec,
 	addRec,
-	getRecognition
+	getRecognition,
+	getBadges,
 };
 
 function findAll() {
@@ -49,3 +50,7 @@ function getRecognition(id) {
 		.join('Users as r', 'i.recipient', '=', 'r.id')
 		.where('i.id', '=', id);
 }
+
+function getBadges() {
+	return db('Badges');
+} 
