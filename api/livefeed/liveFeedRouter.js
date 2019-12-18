@@ -14,8 +14,11 @@ router.get('/live', validateId, (req, res) => {
 		Connection: 'keep-alive',
 	});
 
+<<<<<<< HEAD
 	req.socket.setTimeout(0x7FFFFFFF);
 
+=======
+>>>>>>> 496b79a021507264f9e24308af424623d77bb25d
 	const sendEvent = event => {
 		res.write(`event: ${event.type}\n`);
 		res.write(`data: ${JSON.stringify(event.payload)}\n\n`);

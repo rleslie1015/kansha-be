@@ -6,7 +6,7 @@ module.exports = {
 	deleteRec,
 	editRec,
 	addRec,
-	getUserInteractions,
+	getRecognition
 };
 
 function findAll() {
@@ -32,45 +32,20 @@ function editRec(id, changes) {
 function addRec(obj) {
 	return db('Recognition')
 		.insert(obj)
-		.returning("id")
-		.then(() => {
-			findAll();
-		});
+		.returning('*')
+		.then(([rec]) => getRecognition(rec.id))
 }
 
-function getUserInteractions(id) {
+function getRecognition(id) {
 	return db
-		.select([
-			'rec.id',
-			'rec.sender',
-			'rec.recipient',
-			'rec.message',
-			'rec.date',
-			'r.first_name as first_name',
-            'r.last_name as last_name',
-            'r.profile_picture as profile_pic'
-		])
-		.from('Recognition as rec')
-		.where('sender', '=', id)
-		.join('Users as s', 'rec.sender', '=', 's.id')
-		.join('Users as r', 'rec.recipient', '=', 'r.id')
-		.union([
-			db
-				.select([
-					'rec.id',
-					'rec.sender',
-					'rec.recipient',
-					'rec.message',
-					'rec.date',
-					's.first_name as first_name',
-					's.last_name as last_name',
-                    's.profile_picture as profile_pic'
-				])
-				.from('Recognition as rec')
-				.where('recipient', '=', id)
-				.join('Users as s', 'rec.sender', '=', 's.id')
-				.join('Users as r', 'rec.recipient', '=', 'r.id'),
-		])
-		.orderBy('date');
+		.select(
+			's.*',
+			'i.*',
+			'r.last_name as recipient_last',
+			'r.first_name as recipient_first',
+		)
+		.from('Recognition as i')
+		.join('Users as s', 'i.sender', '=', 's.id')
+		.join('Users as r', 'i.recipient', '=', 'r.id')
+		.where('i.id', '=', id);
 }
-

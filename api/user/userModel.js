@@ -16,36 +16,37 @@ function findAll() {
 
 function findById(id) {
     return db('Users')
-    .where({ id })
+        .where({ id })
 }
 
 function addUser(user) {
     return db('Users')
-    .insert(user)
-    .returning("id")
+        .insert(user)
+        .returning("id")
     then((id) => console.log(id))
 }
 
 function deleteUser(id) {
     return db('Users')
-    .where({ id })
-    .del()
+        .where({ id })
+        .del()
 }
 
 function editUser(id, changes) {
     return db('Users')
-    .where({ id })
-    .update(changes)
+        .where('id', id)
+        .update(changes)
+        .returning('*')
 }
 
 function editUserBySub(sub, changes) {
     return db('Users')
-    .where({ sub })
-    .update(changes)
+        .where({ sub })
+        .update(changes)
 }
 
 function find(filter) {
     return db('Users')
-    .where(filter)
+        .where(filter)
 
 }
