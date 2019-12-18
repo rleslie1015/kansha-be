@@ -1,13 +1,10 @@
-const { EventEmitter } = require('events')
-const { getRecognition } = require('./liveFeedModel')
+const { EventEmitter } = require('events');
 
+const emitterInput = (new EventEmitter).setMaxListeners(5);
+const emitterOutput = (new EventEmitter).setMaxListeners(100);
 
+emitterInput.addListener('event', ({ org_name, payload, type }) => {
+	emitterOutput.emit(org_name, { type, payload });
+});
 
-const feedEmitter = new EventEmitter().setMaxListeners(50);
-
-feedEmitter.addListener('newRecognition', ([form]) => {
-    getRecognition(form.id)
-        .then(([rec]) => feedEmitter.emit(`recognition-${rec.org_name}`, [rec]))
-})
-
-module.exports = { feedEmitter }
+module.exports = { emitterInput, emitterOutput };

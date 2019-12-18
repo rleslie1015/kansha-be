@@ -1,3 +1,4 @@
+const router = require('express').Router();
 const expressJwt = require('express-jwt');
 const jwksRsa = require('jwks-rsa');
 const db = require('../data/dbConfig');
@@ -5,9 +6,9 @@ const db = require('../data/dbConfig');
 // Authentication middleware. When used, the
 // Access Token must exist and be verified against
 // the Auth0 JSON Web Key Set
-module.exports.validateToken = expressJwt({
+const tokenValidator = expressJwt({
 	// Dynamically provide a signing key
-	// based on the kid in the header and
+	// based on the id in the header and
 	// the signing keys provided by the JWKS endpoint.
 	secret: jwksRsa.expressJwtSecret({
 		cache: true,
@@ -22,10 +23,15 @@ module.exports.validateToken = expressJwt({
 	algorithms: ['RS256'],
 });
 
+const fixSSEToken = (req, res, next) => {
+	req.headers.authorization = req.headers.authorization || req.query.token;
+	next();
+};
+
 module.exports.validateId = (req, res, next) => {
 	const { sub } = req.user;
 	db('Users')
-		.where({sub})
+		.where({ sub })
 		.limit(1)
 		.then(([user]) => {
 			if (!user) {
@@ -38,7 +44,7 @@ module.exports.validateId = (req, res, next) => {
 		});
 };
 
-module.exports.fixSSEToken = (req, res, next) => {
-	req.headers.authorization = req.query.token;
-	next();
-};
+router.use(fixSSEToken);
+router.use(tokenValidator);
+
+module.exports.validateToken = router;

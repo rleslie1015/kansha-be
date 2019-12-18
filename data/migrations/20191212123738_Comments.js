@@ -1,6 +1,6 @@
 exports.up = function(knex) {
 	return knex.schema.createTable('Comments', tbl => {
-        tbl.increments()
+		tbl.increments();
 		tbl.integer('user_id')
 			.notNullable()
 			.references('id')
@@ -10,11 +10,11 @@ exports.up = function(knex) {
 		tbl.integer('rec_id')
 			.notNullable()
 			.references('id')
-			.inTable('Users')
+			.inTable('Recognition')
 			.onDelete('CASCADE')
-            .onUpdate('CASCADE');
-        tbl.string('message')
-            .notNullable()
+			.onUpdate('CASCADE');
+		tbl.string('message').notNullable();
+		tbl.datetime('date').notNullable();
 	});
 };
 

@@ -2,36 +2,62 @@ const db = require('../../data/dbConfig');
 
 function getReactions(rec_id) {
 	return db
-		.select('u.first_name', 'u.last_name', 'r.user_id')
-		.from('Recogntions as r')
-		.where({ id })
-		.join('Users as u', 'r.user_id = u.id');
+		.select('u.first_name', 'u.last_name', 'r.user_id', 'r.id', 'u.profile_picture')
+		.from('Reactions as r')
+		.where('r.rec_id', '=', rec_id)
+		.join('Users as u', 'r.user_id', '=', 'u.id');
 }
 
-function addEvent(type, data) {
-	db(type)
+function getReaction(id) {
+	return db
+		.select('u.first_name', 'u.last_name', 'r.*', 'u.org_name', 'u.profile_picture')
+		.from('Reactions as r')
+		.where('r.id', '=', id)
+		.join('Users as u', 'r.user_id', '=', 'u.id');
+}
+
+function addReaction(data) {
+	return db('Reactions')
 		.insert(data)
-		.returning('*');
+		.returning('*')
+		.then(([reaction]) => getReaction(reaction.id));
+}
+function addComment(data) {
+	return db('Comments')
+		.insert(data)
+		.returning('*')
+		.then(([comment]) => getComment(comment.id));
 }
 
 function deleteEvent(type, id) {
-	db(type)
+	return db(type)
 		.where({ id })
 		.del();
 }
 
-function getComments(id) {
+function getComments(rec_id) {
 	return db
-		.select(
-			'u.first_name',
-			'u.last_name',
-			'c.user_id',
-			'c.rec_id',
-			'c.message',
-		)
+		.select('u.first_name', 'u.last_name', 'c.*', 'u.profile_picture')
 		.from('Comments as c')
-		.where({ id })
-		.join('Users as u', 'c.user_id = u.id');
+		.where('c.rec_id', '=', rec_id)
+		.join('Users as u', 'c.user_id', '=', 'u.id');
 }
 
-module.exports = { getComments, getReactions, deleteEvent, addEvent };
+function getComment(id) {
+	return db
+		.select('u.first_name', 'u.last_name', 'c.*', 'u.org_name', 'u.profile_picture')
+		.from('Comments as c')
+		.where('c.id', '=', id)
+		.join('Users as u', 'c.user_id', '=', 'u.id')
+		.orderBy('date');
+}
+
+module.exports = {
+	getComments,
+	getReactions,
+	deleteEvent,
+	getReaction,
+	getComment,
+	addReaction,
+	addComment
+};
