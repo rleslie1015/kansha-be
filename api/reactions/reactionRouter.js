@@ -37,9 +37,15 @@ router.post('/', (req, res) => {
 
 router.delete('/:id', (req, res) => {
 	const { id } = req.params;
+	const { rec_id } = req.query;
 	dbModel
 		.deleteEvent('Reactions', id)
 		.then(() => {
+			emitterInput.emit('event', {
+				payload: {id, rec_id},
+				type: 'FEED_EVENT_REMOVE_REACTION',
+				org_name: req.profile.org_name
+			});
 			res.sendStatus(204);
 		})
 		.catch(err => {

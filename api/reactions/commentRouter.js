@@ -37,11 +37,20 @@ router.post('/', (req, res) => {
 
 router.delete('/:id', (req, res) => {
 	const { id } = req.params;
+	const { rec_id } = req.query;
+	console.log(req.body)
 	dbModel
 		.deleteEvent('Comments', id)
-		.then(() => res.sendStatus(204))
+		.then(() => {
+			emitterInput.emit('event', {
+				payload: {id, rec_id},
+				type: 'FEED_EVENT_REMOVE_COMMENT',
+				org_name: req.profile.org_name
+			});
+			res.sendStatus(204)
+		})
 		.catch(err => {
-			res.status(500).json(err);
+			res.status(500).json(err);g
 		});
 });
 

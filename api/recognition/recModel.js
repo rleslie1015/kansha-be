@@ -44,6 +44,7 @@ function getRecognition(id) {
 			'i.*',
 			'r.last_name as recipient_last',
 			'r.first_name as recipient_first',
+			'r.profile_picture as recipient_picture',
 		)
 		.from('Recognition as i')
 		.join('Users as s', 'i.sender', '=', 's.id')

@@ -49,7 +49,11 @@ router.post('/', (req, res) => {
 
 router.delete('/:id', (req, res) => {
 	const { id } = req.params;
-
+	emitterInput.emit('event', {
+		payload: {id},
+		type: 'FEED_EVENT_REMOVE_REC',
+		org_name: req.profile.org_name
+	});
 	dbModel
 		.deleteRec(id)
 		.then(() => res.sendStatus(204))
