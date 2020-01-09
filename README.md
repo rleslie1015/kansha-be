@@ -88,7 +88,7 @@ Why did you choose this framework?
   }
 ```
 
-## 2️⃣ Actions
+## Actions
 
 `findAll()` -> Returns all
 
