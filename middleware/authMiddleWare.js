@@ -2,6 +2,7 @@ const router = require('express').Router();
 const expressJwt = require('express-jwt');
 const jwksRsa = require('jwks-rsa');
 const db = require('../data/dbConfig');
+const { findAll } = require('../api/user/userModel.js');
 
 // Authentication middleware. When used, the
 // Access Token must exist and be verified against
@@ -30,12 +31,11 @@ const fixSSEToken = (req, res, next) => {
 
 module.exports.validateId = (req, res, next) => {
 	const { sub } = req.user;
-	db('Users')
+	findAll()
 		.where({ sub })
-		.limit(1)
-		.then(([user]) => {
+		.first()
+		.then(user => {
 			if (!user) {
-				console.log('user');
 				res.status(200).json({ user: false });
 			} else {
 				req.profile = user;

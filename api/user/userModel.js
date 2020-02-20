@@ -1,52 +1,102 @@
-const db = require('../../data/dbConfig')
+const db = require('../../data/dbConfig');
 
 module.exports = {
-    findAll,
-    findById,
-    addUser,
-    deleteUser,
-    editUser,
-    editUserBySub,
-    find
-}
-
+	findAll,
+	findById,
+	addUser,
+	deleteUser,
+	editUser,
+	editUserBySub,
+	find,
+};
+//tested in userRouter, works
 function findAll() {
-    return db('Users')
+	return db('Users')
+		.join('Employees', 'Users.id', 'Employees.user_id')
+		.join('Organizations', 'Employees.org_id', 'Organizations.id')
+		.select(
+			'Users.*',
+			'Employees.job_title',
+			'Employees.user_type',
+			'Organizations.id as org_id',
+			'Organizations.name as org_name',
+		);
 }
-
+//tested in userRouter, works
 function findById(id) {
-    return db('Users')
-        .where({ id })
+	return findAll().where({ 'Users.id': id });
 }
+//tested in userRouter, works
+async function addUser(newUser) {
+	const {
+		org_name,
+		first_name,
+		last_name,
+		job_title,
+		user_type,
+		email,
+		profile_picture,
+		sub,
+	} = newUser;
+	const [org] = await db('Organizations').insert({ name: org_name }, 'id');
+	const [user] = await db('Users').insert(
+		{
+			first_name,
+			last_name,
+			email,
+			profile_picture,
+			sub,
+		},
+		'id',
+	);
 
-function addUser(user) {
-    return db('Users')
-        .insert(user)
-        .returning("id")
-    then((id) => console.log(id))
+	await db('Employees').insert({
+		org_id: org,
+		user_id: user,
+		job_title,
+		user_type,
+	});
+	return [user];
 }
-
-function deleteUser(id) {
-    return db('Users')
-        .where({ id })
-        .del()
+//tested in userRouter, works
+async function deleteUser(id) {
+	await db('Employees')
+		.where({ user_id: id })
+		.del();
+	return db('Users')
+		.where({ id })
+		.del();
 }
-
-function editUser(id, changes) {
-    return db('Users')
-        .where('id', id)
-        .update(changes)
-        .returning('*')
+//tested in userRouter, works
+async function editUser(id, changes) {
+	const {
+		first_name,
+		last_name,
+		job_title,
+		user_type,
+		email,
+		profile_picture,
+	} = changes;
+	if (job_title || user_type) {
+		await db('Employees')
+			.where({ user_id: id })
+			.update({ job_title, user_type });
+	}
+	if (first_name || last_name || email || profile_picture) {
+		await db('Users')
+			.where({ id })
+			.update({ first_name, last_name, email, profile_picture });
+	}
+	return findById(id);
 }
 
 function editUserBySub(sub, changes) {
-    return db('Users')
-        .where({ sub })
-        .update(changes)
+	return db('Users')
+		.where({ sub })
+		.update(changes);
 }
 
+//not currently used in userRouter fwiw ¯\_(ツ)_/¯
 function find(filter) {
-    return db('Users')
-        .where(filter)
-
+	return findAll().where(filter);
 }

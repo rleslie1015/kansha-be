@@ -18,10 +18,10 @@ server.use(express.urlencoded({ extended: false }));
 server.use(helmet());
 server.use(cors());
 server.use('/badges', badgeRouter);
+
 server.use(auth.validateToken);
 
 server.use('/users', userRouter);
-
 server.use('/profile', profileRouter);
 server.use('/profile-pic', picRouter);
 server.use('/feed', liveFeedRouter);
