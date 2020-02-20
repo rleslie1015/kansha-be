@@ -15,17 +15,19 @@ function getReactions(rec_id) {
 }
 //needs refactoring
 function getReaction(id) {
-	return db
+	return db('Reactions as r')
+		.join('Users as u', 'r.user_id', 'u.id')
+		.join('Employees as e', 'u.id', 'e.user_id')
+		.join('Organizations as o', 'e.org_id', 'o.id')
+		.where('r.id', '=', id)
 		.select(
 			'u.first_name',
 			'u.last_name',
 			'r.*',
-			'u.org_name',
+			'o.name',
+			'o.id as org_id',
 			'u.profile_picture',
-		)
-		.from('Reactions as r')
-		.where('r.id', '=', id)
-		.join('Users as u', 'r.user_id', '=', 'u.id');
+		);
 }
 
 function addReaction(data) {
@@ -56,18 +58,32 @@ function getComments(rec_id) {
 }
 
 function getComment(id) {
-	return db
+	return db('Comments as c')
+		.join('Users as u', 'c.user_id', 'u.id')
+		.join('Employees as e', 'u.id', 'e.user_id')
+		.join('Organizations as o', 'e.org_id', 'o.id')
+		.where('c.id', '=', id)
 		.select(
 			'u.first_name',
 			'u.last_name',
 			'c.*',
-			'u.org_name',
+			'o.name',
+			'o.id as org_id',
 			'u.profile_picture',
 		)
-		.from('Comments as c')
-		.where('c.id', '=', id)
-		.join('Users as u', 'c.user_id', '=', 'u.id')
 		.orderBy('date');
+	// return db
+	// 	.select(
+	// 		'u.first_name',
+	// 		'u.last_name',
+	// 		'c.*',
+	// 		'u.org_name',
+	// 		'u.profile_picture',
+	// 	)
+	// 	.from('Comments as c')
+	// 	.where('c.id', '=', id)
+	// 	.join('Users as u', 'c.user_id', '=', 'u.id')
+	// 	.orderBy('date');
 }
 
 module.exports = {
