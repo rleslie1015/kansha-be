@@ -26,7 +26,7 @@ function findAll() {
 function findById(id) {
 	return findAll().where({ 'Users.id': id });
 }
-//tested in userRouter, works
+// need to migrate for email
 async function addUser(newUser) {
 	const {
 		org_name,
@@ -37,13 +37,14 @@ async function addUser(newUser) {
 		email,
 		profile_picture,
 		sub,
+		department,
 	} = newUser;
 	const [org] = await db('Organizations').insert({ name: org_name }, 'id');
 	const [user] = await db('Users').insert(
 		{
 			first_name,
 			last_name,
-			email,
+			department,
 			profile_picture,
 			sub,
 		},
