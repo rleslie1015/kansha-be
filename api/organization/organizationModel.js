@@ -38,5 +38,5 @@ function editOrg(id, changes) {
 	return db('Organizations')
 		.where({ id })
 		.update(changes)
-		.then(count => (count > 0 ? findById(id) : null));
+		.then(count => (count > 0 ? findOrgById(id) : null));
 }

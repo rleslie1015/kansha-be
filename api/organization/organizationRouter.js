@@ -4,6 +4,7 @@ const auth = require('../../middleware/authMiddleWare');
 
 router.use(auth.validateId);
 
+// get all orgs
 router.get('/', (req, res) => {
 	Orgs.findAllOrgs()
 		.then(orgs => {
@@ -14,8 +15,8 @@ router.get('/', (req, res) => {
 			res.status(500).end();
 		});
 });
-
-router.get('/:id', (req, res) => {
+// get one org
+router.get('/:id', validateOrgId, (req, res) => {
 	const id = req.params.id;
 	Orgs.findOrgById(id)
 		.then(org => {
@@ -26,7 +27,7 @@ router.get('/:id', (req, res) => {
 			res.status(500).json({ error: 'Error getting org' });
 		});
 });
-
+// add an org
 router.post('/', (req, res) => {
 	Orgs.addOrg(req)
 		.then(org => {
@@ -37,8 +38,8 @@ router.post('/', (req, res) => {
 			res.status(500).json({ error: 'Error creating Org' });
 		});
 });
-
-router.delete('/:id', (req, res) => {
+// delete an org
+router.delete('/:id', validateOrgId, (req, res) => {
 	const id = req.params.id;
 	Orgs.deleteOrg(id)
 		.then(org => {
@@ -53,5 +54,35 @@ router.delete('/:id', (req, res) => {
 			});
 		});
 });
+
+// edit an org
+
+router.put('/:id', validateOrgId, (req, res) => {
+	const id = req.params.id;
+	const changes = req.body;
+	Orgs.editOrg(id, changes)
+		.then(updatedOrg => {
+			res.status(200).json(updatedOrg);
+		})
+		.catch(error => {
+			res.status(500).json({
+				message: 'Failed to update the organization',
+			});
+		});
+});
+
+// Middleware
+
+function validateOrgId(req, res, next) {
+	const { id } = req.params;
+	Orgs.findOrgById(id).then(org => {
+		if (org) {
+			req.org = org;
+			next();
+		} else {
+			res.status(404).json({ error: 'there is no org with that id' });
+		}
+	});
+}
 
 module.exports = router;
