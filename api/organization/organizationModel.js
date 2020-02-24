@@ -21,12 +21,12 @@ function findOrgById(id) {
 async function addOrg(org) {
 	const [id] = await db('Organizations').insert(org);
 
-	return findById(id);
+	return findOrgById(id);
 }
 
 // delete an organizaiton
 
-function deleteOrg(org) {
+function deleteOrg(id) {
 	return db('Organizations')
 		.where({ id })
 		.del();

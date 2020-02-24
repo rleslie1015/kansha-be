@@ -33,19 +33,25 @@ router.post('/', (req, res) => {
 			res.status(201).json(org);
 		})
 		.catch(err => {
-			console.log('Error creatign org', err);
-			res.status(500).json({ error: 'Error creatign Org' });
+			console.log('Error creating org', err);
+			res.status(500).json({ error: 'Error creating Org' });
 		});
 });
 
 router.delete('/:id', (req, res) => {
 	const id = req.params.id;
-	Orgs.deleteOrg(id).then(org => {
-		res.status(200).json(org);
-	})(err => {
-		onsole.log('error deleting Org', err);
-		res.status(500).json({ error: 'Error Deleting org' });
-	});
+	Orgs.deleteOrg(id)
+		.then(org => {
+			res.status(204).json({
+				response: 'Successfully deleted organization',
+			});
+		})
+		.catch(error => {
+			console.log('error deleting Org', error);
+			res.status(500).json({
+				error: 'Error Deleting org',
+			});
+		});
 });
 
 module.exports = router;
