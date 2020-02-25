@@ -36,6 +36,7 @@ router.post('/', (req, res) => {
 	if (user.picture) {
 		body.profile_picture = user.picture;
 	}
+	console.log(body, 'body');
 	dbModel
 		.addUser(body)
 		.then(newUser => {

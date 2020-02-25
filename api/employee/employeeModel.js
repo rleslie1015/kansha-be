@@ -15,12 +15,14 @@ function findAllEmployees() {
 
 // find one employee
 function findEmployeeById(id) {
-	return db('Employees').where({ id });
+	return db('Employees')
+		.where({ id })
+		.first();
 }
 
 // add an employee
 async function addEmployee(employee) {
-	const [id] = await db('Employees').insert(employee);
+	const [id] = await db('Employees').insert(employee, 'id');
 
 	return findEmployeeById(id);
 }

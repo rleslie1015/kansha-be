@@ -55,48 +55,47 @@ router.delete('/:id', validateEmployeeId, (req, res) => {
 
 // Add an employee
 
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
 	const currentOrgId = req.profile.org_id;
 
-	const { first_name, last_name, email } = req.body;
+	const {
+		first_name,
+		last_name,
+		email,
+		department,
+		user_type,
+		job_title,
+	} = req.body;
 
 	if (!first_name || !last_name || !email) {
-		res.status(400).json({
+		return res.status(400).json({
 			message: 'You need to pass in first_name, last_name, and email',
 		});
 	}
-	const employeeId = userModel.findByEmail(email);
 
-	if (!employeeId) {
-		userModel
-			.addUser({ first_name, last_name, email })
-			.then(newUserId => {
-				emp.addEmployee({
-					user_id: newUserId,
-					first_name: first_name,
-					last_name: last_name,
-					org_id: currentOrgId,
-				})
-					.then(newEmployee => {
-						res.status(201).json(newEmployee);
-					})
-					.catch(error => {
-						console.log('error adding employee', error);
-						res.status(500).json({
-							error: 'Error Adding employee',
-						});
-					});
-			})
-			.catch(error => {
-				console.log('error adding user', error);
-				res.status(500).json({ error: 'Error adding user' });
+	try {
+		let { id: employeeId } = await userModel.findByEmail(email);
+
+		if (!employeeId) {
+			[employeeId] = await userModel.addNewUser({
+				first_name,
+				last_name,
+				email,
+				department,
+				sub: 'no-auth',
 			});
-	} else {
-		emp.addEmployee({ user_id: employeeId, org_id: currentOrgId }).then(
-			newEmployee => {
-				res.status(201).json(newEmployee);
-			},
-		);
+		}
+		console.log(employeeId, 'newUserId');
+		const newEmployee = await emp.addEmployee({
+			user_id: employeeId,
+			org_id: currentOrgId,
+			user_type,
+			job_title,
+		});
+		res.status(201).json(newEmployee);
+	} catch (error) {
+		console.log('error adding user', error);
+		res.status(500).json({ error: 'Error adding user' });
 	}
 });
 
