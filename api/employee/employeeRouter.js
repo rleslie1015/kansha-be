@@ -58,33 +58,46 @@ router.delete('/:id', validateEmployeeId, (req, res) => {
 router.post('/', (req, res) => {
 	const currentOrgId = req.profile.org_id;
 
-	const { first_name, last_name } = req.body;
+	const { first_name, last_name, email } = req.body;
 
-	// if (!userModel.findById(employeeId)) {
-	// 	userModel
-	// 		.addUser({})
-	// 		.then(newUser => {
-	// 			emp.addEmployee()
-	// 				.then(newEmployee => {
-	// 					res.status(201).json(newEmployee);
-	// 				})
-	// 				.catch(error => {
-	// 					console.log('error adding employee', error);
-	// 					res.status(500).json({
-	// 						error: 'Error Adding employee',
-	// 					});
-	// 				});
-	// 		})
-	// 		.catch(error => {
-	// 			console.log('error adding user', error);
-	// 			res.status(500).json({ error: 'Error adding user' });
-	// 		});
-	// } else {
-	//     emp.addEmployee({user_id: currentUserId,
-	//     org_id: currentOrgId}).then(newEmployee => {
-	//         res.status(201).json(newEmployee)
-	//     })
-	// }
+	if (!first_name || !last_name || !email) {
+		res.status(400).json({
+			message: 'You need to pass in first_name, last_name, and email',
+		});
+	}
+	const employeeId = userModel.findByEmail(email);
+
+	if (!employeeId) {
+		userModel
+			.addUser({ first_name, last_name, email })
+			.then(newUserId => {
+				emp.addEmployee({
+					user_id: newUserId,
+					first_name: first_name,
+					last_name: last_name,
+					org_id: currentOrgId,
+				})
+					.then(newEmployee => {
+						res.status(201).json(newEmployee);
+					})
+					.catch(error => {
+						console.log('error adding employee', error);
+						res.status(500).json({
+							error: 'Error Adding employee',
+						});
+					});
+			})
+			.catch(error => {
+				console.log('error adding user', error);
+				res.status(500).json({ error: 'Error adding user' });
+			});
+	} else {
+		emp.addEmployee({ user_id: employeeId, org_id: currentOrgId }).then(
+			newEmployee => {
+				res.status(201).json(newEmployee);
+			},
+		);
+	}
 });
 
 // get the org id from the current user profile

@@ -26,6 +26,15 @@ function findAll() {
 function findById(id) {
 	return findAll().where({ 'Users.id': id });
 }
+
+// needed in employee router
+
+function findByEmail(email) {
+	return db('Users')
+		.where({ email })
+		.select('username', 'id');
+}
+
 // need to migrate for email
 async function addUser(newUser) {
 	const {
