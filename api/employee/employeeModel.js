@@ -10,7 +10,7 @@ module.exports = {
 
 // find all employees
 function findAllEmployees() {
-	return db('Employees').select('id', 'name');
+	return db('Employees');
 }
 
 // find one employee

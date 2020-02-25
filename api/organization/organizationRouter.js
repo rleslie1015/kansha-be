@@ -29,14 +29,17 @@ router.get('/:id', validateOrgId, (req, res) => {
 });
 // add an org
 router.post('/', (req, res) => {
+	// console.log(req.profile, 'req.profile');
 	const { name } = req.body;
 
 	if (!name) {
 		return res.status(400).json({ error: 'Organization needs a name' });
 	}
-	Orgs.addOrg(req)
+	Orgs.addOrg(req.body)
 		.then(org => {
-			res.status(201).json(org);
+			res.status(201).json({
+				mesage: 'Successfully created organization',
+			});
 		})
 		.catch(err => {
 			console.log('Error creating org', err);

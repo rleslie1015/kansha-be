@@ -19,8 +19,7 @@ function findOrgById(id) {
 
 // create an organization
 async function addOrg(org) {
-	const [id] = await db('Organizations').insert(org);
-
+	const id = await db('Organizations').insert(org, 'id');
 	return findOrgById(id);
 }
 
