@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const Orgs = require('./organizationModel.js');
 const auth = require('../../middleware/authMiddleWare');
+const emp = require('../employee/employeeModel');
 
 router.use(auth.validateId);
 
@@ -28,24 +29,34 @@ router.get('/:id', validateOrgId, (req, res) => {
 		});
 });
 // add an org
-router.post('/', (req, res) => {
-	// console.log(req.profile, 'req.profile');
+router.post('/', async (req, res) => {
+	const { id, user_type, job_title } = req.profile;
 	const { name } = req.body;
 
 	if (!name) {
 		return res.status(400).json({ error: 'Organization needs a name' });
 	}
-	Orgs.addOrg(req.body)
-		.then(org => {
-			res.status(201).json({
-				mesage: 'Successfully created organization',
+
+	try {
+		let { id: org_id } = await Orgs.addOrg(req.body);
+		if (id) {
+			const newEmployee = await emp.addEmployee({
+				user_id: id,
+				org_id,
+				user_type,
+				job_title,
 			});
-		})
-		.catch(err => {
-			console.log('Error creating org', err);
-			res.status(500).json({ error: 'Error creating Org' });
-		});
+			res.status(201).json({
+				message: 'successfully added organization',
+			});
+		}
+		res.status(406).json({ error: 'You are not logged in' });
+	} catch (error) {
+		console.log('error creating organization', error);
+		res.status(500).json({ error: 'Error adding organization' });
+	}
 });
+
 // delete an org
 router.delete('/:id', validateOrgId, (req, res) => {
 	const id = req.params.id;

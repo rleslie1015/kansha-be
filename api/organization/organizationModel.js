@@ -14,12 +14,14 @@ function findAllOrgs() {
 
 // get information about one organization
 function findOrgById(id) {
-	return db('Organizations').where({ id });
+	return db('Organizations')
+		.where({ id })
+		.first();
 }
 
 // create an organization
 async function addOrg(org) {
-	const id = await db('Organizations').insert(org, 'id');
+	const [id] = await db('Organizations').insert(org, 'id');
 	return findOrgById(id);
 }
 

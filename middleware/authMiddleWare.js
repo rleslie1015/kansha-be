@@ -39,6 +39,7 @@ module.exports.validateId = (req, res, next) => {
 				res.status(200).json({ user: false });
 			} else {
 				req.profile = user;
+				console.log(req.profile, 'req.profile');
 				next();
 			}
 		});
