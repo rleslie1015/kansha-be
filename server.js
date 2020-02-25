@@ -12,6 +12,8 @@ const liveFeedRouter = require('./api/livefeed/liveFeedRouter');
 const reactionRouter = require('./api/reactions/reactionRouter');
 const commentRouter = require('./api/reactions/commentRouter');
 const organizationRouter = require('./api/organization/organizationRouter');
+const employeeRouter = require('./api/employee/employeeRouter');
+
 // Global MiddleWare
 server.use(express.json());
 server.use(express.urlencoded({ extended: false }));
@@ -22,7 +24,8 @@ server.use('/badges', badgeRouter);
 server.use(auth.validateToken);
 
 server.use('/users', userRouter);
-server.use('/organization', organizationRouter);
+server.use('/employees', employeeRouter);
+server.use('/organizations', organizationRouter);
 server.use('/profile', profileRouter);
 server.use('/profile-pic', picRouter);
 server.use('/feed', liveFeedRouter);

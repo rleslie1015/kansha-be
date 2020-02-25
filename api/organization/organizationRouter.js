@@ -29,6 +29,11 @@ router.get('/:id', validateOrgId, (req, res) => {
 });
 // add an org
 router.post('/', (req, res) => {
+	const { name } = req.body;
+
+	if (!name) {
+		return res.status(400).json({ error: 'Organization needs a name' });
+	}
 	Orgs.addOrg(req)
 		.then(org => {
 			res.status(201).json(org);
@@ -59,6 +64,10 @@ router.delete('/:id', validateOrgId, (req, res) => {
 
 router.put('/:id', validateOrgId, (req, res) => {
 	const id = req.params.id;
+	const { name } = req.body;
+	if (!name) {
+		return res.status(400).json({ error: 'Organization needs a name' });
+	}
 	const changes = req.body;
 	Orgs.editOrg(id, changes)
 		.then(updatedOrg => {

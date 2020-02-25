@@ -24,7 +24,7 @@ async function addOrg(org) {
 	return findOrgById(id);
 }
 
-// delete an organizaiton
+// delete an organization
 
 function deleteOrg(id) {
 	return db('Organizations')
