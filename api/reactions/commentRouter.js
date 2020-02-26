@@ -15,6 +15,7 @@ router.get('/:rec_id', (req, res) => {
 			}
 		})
 		.catch(err => {
+			console.error(err);
 			res.status(500).json(err);
 		});
 });
@@ -31,6 +32,7 @@ router.post('/', (req, res) => {
 			res.status(201).json(comment);
 		})
 		.catch(err => {
+			console.error(err);
 			res.status(500).json(err);
 		});
 });
@@ -38,19 +40,19 @@ router.post('/', (req, res) => {
 router.delete('/:id', (req, res) => {
 	const { id } = req.params;
 	const { rec_id } = req.query;
-	console.log(req.body)
 	dbModel
 		.deleteEvent('Comments', id)
 		.then(() => {
 			emitterInput.emit('event', {
-				payload: {id, rec_id},
+				payload: { id, rec_id },
 				type: 'FEED_EVENT_REMOVE_COMMENT',
-				org_name: req.profile.org_name
+				org_name: req.profile.org_name,
 			});
-			res.sendStatus(204)
+			res.sendStatus(204);
 		})
 		.catch(err => {
-			res.status(500).json(err);g
+			console.error(err);
+			res.status(500).json(err);
 		});
 });
 

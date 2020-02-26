@@ -34,8 +34,7 @@ function findById(id) {
 function findByEmail(email) {
 	return db('Users')
 		.where({ email })
-		.select('id')
-		.first();
+		.select('id');
 }
 
 // need to migrate for email

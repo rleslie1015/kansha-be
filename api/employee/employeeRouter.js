@@ -25,15 +25,15 @@ router.get('/organizations', (req, res) => {
 	const orgId = req.profile.org_id;
 
 	emp.getEmployeesByOrg(orgId)
-	.then(emp => {
-		res.status(200).json(emp);
-	})
-	.catch(error => {
-		console.log(error, "error");
-		res.status(500).json({
-			error: 'Employee List could not be retrieved from the database',
+		.then(emp => {
+			res.status(200).json(emp);
+		})
+		.catch(error => {
+			console.log(error, 'error');
+			res.status(500).json({
+				error: 'Employee List could not be retrieved from the database',
+			});
 		});
-	});
 });
 
 // Retrieve a specific employee from the database
@@ -91,7 +91,7 @@ router.post('/', async (req, res) => {
 	}
 
 	try {
-		let { id: employeeId } = await userModel.findByEmail(email);
+		let [employeeId] = await userModel.findByEmail(email);
 
 		if (!employeeId) {
 			[employeeId] = await userModel.addNewUser({
