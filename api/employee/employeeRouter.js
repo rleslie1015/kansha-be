@@ -108,10 +108,10 @@ router.post('/', async (req, res) => {
 			user_type,
 			job_title,
 		});
-		res.status(201).json(newEmployee);
+		return res.status(201).json(newEmployee);
 	} catch (error) {
 		console.log('error adding user', error);
-		res.status(500).json({ error: 'Error adding user' });
+		return res.status(500).json({ error: 'Error adding user' });
 	}
 });
 
