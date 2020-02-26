@@ -9,6 +9,7 @@ router.use(auth.validateId);
 router.get('/', (req, res) => {
 	Orgs.findAllOrgs()
 		.then(orgs => {
+			console.log('hello this is the organization endpoint');
 			res.status(200).json(orgs);
 		})
 		.catch(err => {
