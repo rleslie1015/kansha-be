@@ -14,9 +14,26 @@ router.get('/', (req, res) => {
 		})
 		.catch(error => {
 			res.status(500).json({
-				message: 'Could not retrieve employees from the database',
+				error: 'Could not retrieve employees from the database',
 			});
 		});
+});
+
+// Endpoint to retrieve all employees belonging to a specific organization
+
+router.get('/organizations', (req, res) => {
+	const orgId = req.profile.org_id;
+
+	emp.getEmployeesByOrg(orgId)
+	.then(emp => {
+		res.status(200).json(emp);
+	})
+	.catch(error => {
+		console.log(error, "error");
+		res.status(500).json({
+			error: 'Employee List could not be retrieved from the database',
+		});
+	});
 });
 
 // Retrieve a specific employee from the database
@@ -30,7 +47,7 @@ router.get('/:id', (req, res) => {
 		})
 		.catch(error => {
 			res.status(500).json({
-				message: 'Employee could not be retrieved from the database',
+				error: 'Employee could not be retrieved from the database',
 			});
 		});
 });
@@ -42,7 +59,7 @@ router.delete('/:id', validateEmployeeId, (req, res) => {
 	emp.deleteEmployee(id)
 		.then(emp => {
 			res.status(204).json({
-				response: 'Successfully deleted employee',
+				message: 'Successfully deleted employee',
 			});
 		})
 		.catch(error => {
@@ -85,7 +102,6 @@ router.post('/', async (req, res) => {
 				sub: 'no-auth',
 			});
 		}
-		console.log(employeeId, 'newUserId');
 		const newEmployee = await emp.addEmployee({
 			user_id: employeeId,
 			org_id: currentOrgId,
@@ -119,7 +135,7 @@ router.put('/:id', validateEmployeeId, (req, res) => {
 		})
 		.catch(error => {
 			res.status(500).json({
-				message: 'Failed to update the employee',
+				error: 'Failed to update the employee',
 			});
 		});
 });

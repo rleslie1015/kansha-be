@@ -3,6 +3,7 @@ const db = require('../../data/dbConfig');
 module.exports = {
 	findAllEmployees,
 	findEmployeeById,
+	getEmployeesByOrg,
 	addEmployee,
 	deleteEmployee,
 	editEmployee,
@@ -41,3 +42,10 @@ function editEmployee(id, changes) {
 		.update(changes)
 		.then(count => (count > 0 ? findEmployeeById(id) : null));
 }
+// Get all employees by org id
+
+function getEmployeesByOrg(org_id) {
+	return db('Employees')
+	.where({ org_id })
+}
+

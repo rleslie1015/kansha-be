@@ -9,7 +9,6 @@ router.use(auth.validateId);
 router.get('/', (req, res) => {
 	Orgs.findAllOrgs()
 		.then(orgs => {
-			console.log('hello this is the organization endpoint');
 			res.status(200).json(orgs);
 		})
 		.catch(err => {
@@ -64,7 +63,7 @@ router.delete('/:id', validateOrgId, (req, res) => {
 	Orgs.deleteOrg(id)
 		.then(org => {
 			res.status(204).json({
-				response: 'Successfully deleted organization',
+				message: 'Successfully deleted organization',
 			});
 		})
 		.catch(error => {
@@ -90,7 +89,7 @@ router.put('/:id', validateOrgId, (req, res) => {
 		})
 		.catch(error => {
 			res.status(500).json({
-				message: 'Failed to update the organization',
+				error: 'Failed to update the organization',
 			});
 		});
 });
