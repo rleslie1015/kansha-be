@@ -24,7 +24,7 @@ router.post('/', upload.single('bulkupload'), async (req, res) => {
 		const jsonArray = await csv().fromString(req.file.buffer.toString());
 
 		/*
-// create migration to remove notnullable from 'sub' in the user table
+// create migration to remove notnullable from 'sub' in the user table  <--- Done
 
         // loop over the array
             // for each element check if required fields are present
