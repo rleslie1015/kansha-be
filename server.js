@@ -13,6 +13,7 @@ const reactionRouter = require('./api/reactions/reactionRouter');
 const commentRouter = require('./api/reactions/commentRouter');
 const organizationRouter = require('./api/organization/organizationRouter');
 const employeeRouter = require('./api/employee/employeeRouter');
+const csvUploadRouter = require('./api/csv/csvUploadRouter');
 
 // Global MiddleWare
 server.use(express.json());
@@ -24,6 +25,7 @@ server.use('/badges', badgeRouter);
 server.use(auth.validateToken);
 
 server.use('/users', userRouter);
+server.use('/csv', csvUploadRouter);
 server.use('/employees', employeeRouter);
 server.use('/organizations', organizationRouter);
 server.use('/profile', profileRouter);
