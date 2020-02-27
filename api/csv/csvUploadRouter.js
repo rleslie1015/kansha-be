@@ -1,16 +1,9 @@
-/* 
-As a front end engineer I can create a button that when clicked will upload a CSV file to 
-an AWS bucket
-
-1. Take the csv, convert it to an array of JSON objects
-2. for each JSON object make a post request to /employees
-
-*/
-
 const csv = require('csvtojson');
 const router = require('express').Router();
 const auth = require('../../middleware/authMiddleWare');
 const multer = require('multer');
+const user = require('../user/userModel');
+const employee = require('../employee/employeeModel');
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
@@ -18,27 +11,54 @@ const upload = multer({ storage: storage });
 router.use(auth.validateId);
 
 router.post('/', upload.single('bulkupload'), async (req, res) => {
-	// const csvFilePath = req.file;
-
+	// retrieve the org id from the currently logged-in user's org
+	const currentOrgId = req.profile.org_id;
 	try {
-		const jsonArray = await csv().fromString(req.file.buffer.toString());
+		// convert the csv into an array of JSON objects
+		let jsonArray = await csv().fromString(req.file.buffer.toString());
+		// create a counter
+		let counter = 0;
+		// loop over the csv objects, skipping the first one because it's an example in the given csv file
+		for (const newUser of jsonArray) {
+			// if the object has all of the required fields
+			if (
+				newUser['First name'] &&
+				newUser['Last name'] &&
+				newUser['Job title'] &&
+				newUser['Email']
+			) {
+				// add the user to the Users table
+				const [newUserId] = await user.addNewUser({
+					first_name: newUser['First name'],
+					last_name: newUser['Last name'],
+					email: newUser['Email'],
+					ext_id: newUser['Internal ID (optional)'],
+					department: 'X',
+				});
 
-		/*
-// create migration to remove notnullable from 'sub' in the user table  <--- Done
+				// add the user to the Employees table
 
-        // loop over the array
-            // for each element check if required fields are present
-                // create a user for each one
-                    // add that user to the employee table
-                        // DON'T FORGET to give user_type (standard)
+				const newEmployee = await employee.addEmployee({
+					org_id: currentOrgId,
+					user_id: newUserId,
+					job_title: newUser.job_title,
+					user_type: 'Standard',
+				});
+				// increase the counter so we know how many employees were added
+				counter++;
+			}
+		}
 
-        // if none of the fields work, then return 400 error 
-            //(you need a first_name, last_name, email, department, job_title)
-        
-        // if it worked return a success message, the number of employees added
-        return res.status(200).json(jsonArray);
-        
-        */
+		if (counter === 0) {
+			res.status(400).json({
+				error:
+					"Each employee needs a 'First Name', 'Last name', 'Job title' and 'Email'",
+			});
+		} else {
+			res.status(200).json({
+				message: `Success! You have added ${counter} employees`,
+			});
+		}
 	} catch (error) {
 		console.log(error, 'error');
 		return res.status(500).json(error);
