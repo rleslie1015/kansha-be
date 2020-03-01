@@ -48,6 +48,46 @@ function editEmployee(id, changes) {
 }
 // Get all employees by org id
 
-function getEmployeesByOrg(org_id) {
-	return db('Employees').where({ org_id });
+async function getEmployeesByOrg(org_id, query = {}) {
+	const {
+		page = 1,
+		limit = 20,
+		sortby = 'id',
+		sortdir = 'asc',
+		search = '',
+	} = query;
+	const offset = limit * (page - 1);
+	const employees = await db('Employees')
+		.join('Users', 'Users.id', 'Employees.user_id')
+		.join('Organizations', 'Organizations.id', 'Employees.org_id')
+		.select(
+			'Users.id',
+			'first_name',
+			'last_name',
+			'profile_picture',
+			'job_title',
+			'user_type',
+			'department',
+			'Organizations.name as org_name',
+		)
+		.where({ org_id })
+		.andWhere(builder => {
+			builder
+				.where('first_name', 'ilike', `%${search}%`)
+				.orWhere('last_name', 'ilike', `%${search}%`);
+		})
+		.orderBy(sortby, sortdir)
+		.limit(limit)
+		.offset(offset);
+
+	let { count } = await db('Employees')
+		.where({ org_id })
+		.count()
+		.first();
+	count = Number(count);
+
+	return {
+		count,
+		employees,
+	};
 }

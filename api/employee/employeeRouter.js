@@ -24,7 +24,7 @@ router.get('/', (req, res) => {
 router.get('/organizations', (req, res) => {
 	const orgId = req.profile.org_id;
 
-	emp.getEmployeesByOrg(orgId)
+	emp.getEmployeesByOrg(orgId, req.query)
 		.then(emp => {
 			res.status(200).json(emp);
 		})
