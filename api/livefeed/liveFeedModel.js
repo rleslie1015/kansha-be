@@ -1,22 +1,23 @@
 const db = require('../../data/dbConfig');
 
-function getOrgRecognitions(org_name) {
-	return db
+function getOrgRecognitions(org_id) {
+	return db('Recognition as r')
 		.select(
 			's.*',
-			'i.*',
-			'r.last_name as recipient_last',
-			'r.first_name as recipient_first',
-			'r.profile_picture as recipient_picture'
+			'r.*',
+			'o.name as org_name',
+			'o.id as org_id',
+			'u.last_name as recipient_last',
+			'u.first_name as recipient_first',
+			'u.profile_picture as recipient_picture',
 		)
-		.from('Recognition as i')
-		.join('Users as s', 'i.sender', '=', 's.id')
-		.join('Users as r', 'i.recipient', '=', 'r.id')
-		.where('s.org_name', '=', org_name)
-		.orderBy('i.date', 'desc')
+		.join('Organizations as o', 'o.id', 'r.org_id')
+		.join('Users as s', 'r.sender', 's.id')
+		.join('Users as u ', 'r.recipient', 'u.id')
+		.where('o.id', org_id)
+		.orderBy('r.date', 'desc')
 		.limit(25);
 }
-
 
 module.exports = {
 	getOrgRecognitions,
