@@ -46,9 +46,7 @@ router.post('/', async (req, res) => {
 				user_type,
 				job_title,
 			});
-			res.status(201).json({
-				message: 'successfully added organization',
-			});
+			res.status(201).json({ org_id });
 		}
 		res.status(406).json({ error: 'You are not logged in' });
 	} catch (error) {

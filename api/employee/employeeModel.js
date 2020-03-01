@@ -13,7 +13,11 @@ module.exports = {
 function findAllEmployees() {
 	return db('Employees');
 }
-
+function findByEmail(email) {
+	return db('Users')
+		.where({ email })
+		.select('id');
+}
 // find one employee
 function findEmployeeById(id) {
 	return db('Employees')
@@ -45,7 +49,5 @@ function editEmployee(id, changes) {
 // Get all employees by org id
 
 function getEmployeesByOrg(org_id) {
-	return db('Employees')
-	.where({ org_id })
+	return db('Employees').where({ org_id });
 }
-
