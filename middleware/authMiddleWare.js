@@ -41,7 +41,7 @@ module.exports.validateId = async (req, res, next) => {
 		if (!user) {
 			res.status(200).json({ user: false });
 		} else {
-			await editUser(user.id, { email });
+			await editUser(user.id, { sub });
 			req.profile = user;
 			next();
 		}
