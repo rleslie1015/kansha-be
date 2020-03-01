@@ -56,11 +56,16 @@ async function addUser(newUser) {
 			first_name,
 			last_name,
 			department,
-			profile_picture,
+			email,
 			sub,
 		},
 		'id',
 	);
+	if (profile_picture) {
+		await db('Users')
+			.where({ id: user })
+			.update({ profile_picture });
+	}
 
 	await db('Employees').insert({
 		org_id: org,
