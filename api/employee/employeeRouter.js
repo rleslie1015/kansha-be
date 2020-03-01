@@ -91,9 +91,11 @@ router.post('/', async (req, res) => {
 	}
 
 	try {
-		let [employeeId] = await userModel.findByEmail(email);
-
-		if (!employeeId) {
+		let [foundEmployee] = await userModel.findByEmail(email);
+		let employeeId;
+		if (foundEmployee) {
+			let { id: employeeId } = foundEmployee;
+		} else {
 			[employeeId] = await userModel.addNewUser({
 				first_name,
 				last_name,

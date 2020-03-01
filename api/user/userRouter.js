@@ -33,6 +33,7 @@ router.get('/:id', (req, res) => {
 router.post('/', (req, res) => {
 	const { body, user } = req;
 	body.sub = user.sub;
+	body.email = user.email;
 	if (user.picture) {
 		body.profile_picture = user.picture;
 	}

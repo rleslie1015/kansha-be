@@ -80,7 +80,7 @@ async function addNewUser(newUser) {
 		sub = 'no-auth',
 		profile_picture,
 	} = newUser;
-	console.log(newUser, 'newUser');
+
 	return db('Users').insert(
 		{
 			first_name,
