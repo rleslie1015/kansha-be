@@ -21,16 +21,17 @@ router.get('/:rec_id', (req, res) => {
 
 router.post('/', (req, res) => {
 	dbModel
-		.addReaction( { user_id: req.profile.id, ...req.body })
+		.addReaction({ user_id: req.profile.id, ...req.body })
 		.then(([reaction]) => {
 			emitterInput.emit('event', {
 				payload: reaction,
 				type: 'FEED_EVENT_NEW_REACTION',
-				org_name: req.profile.org_name
+				org_name: req.profile.org_name,
 			});
 			res.status(201).json(reaction);
 		})
 		.catch(err => {
+			console.log(err);
 			res.status(500).json(err);
 		});
 });
@@ -42,9 +43,9 @@ router.delete('/:id', (req, res) => {
 		.deleteEvent('Reactions', id)
 		.then(() => {
 			emitterInput.emit('event', {
-				payload: {id, rec_id},
+				payload: { id, rec_id },
 				type: 'FEED_EVENT_REMOVE_REACTION',
-				org_name: req.profile.org_name
+				org_name: req.profile.org_name,
 			});
 			res.sendStatus(204);
 		})

@@ -2,18 +2,32 @@ const db = require('../../data/dbConfig');
 
 function getReactions(rec_id) {
 	return db
-		.select('u.first_name', 'u.last_name', 'r.user_id', 'r.id', 'u.profile_picture')
+		.select(
+			'u.first_name',
+			'u.last_name',
+			'r.user_id',
+			'r.id',
+			'u.profile_picture',
+		)
 		.from('Reactions as r')
 		.where('r.rec_id', '=', rec_id)
 		.join('Users as u', 'r.user_id', '=', 'u.id');
 }
-
+//needs refactoring
 function getReaction(id) {
-	return db
-		.select('u.first_name', 'u.last_name', 'r.*', 'u.org_name', 'u.profile_picture')
-		.from('Reactions as r')
+	return db('Reactions as r')
+		.join('Users as u', 'r.user_id', 'u.id')
+		.join('Employees as e', 'u.id', 'e.user_id')
+		.join('Organizations as o', 'e.org_id', 'o.id')
 		.where('r.id', '=', id)
-		.join('Users as u', 'r.user_id', '=', 'u.id');
+		.select(
+			'u.first_name',
+			'u.last_name',
+			'r.*',
+			'o.name',
+			'o.id as org_id',
+			'u.profile_picture',
+		);
 }
 
 function addReaction(data) {
@@ -44,12 +58,32 @@ function getComments(rec_id) {
 }
 
 function getComment(id) {
-	return db
-		.select('u.first_name', 'u.last_name', 'c.*', 'u.org_name', 'u.profile_picture')
-		.from('Comments as c')
+	return db('Comments as c')
+		.join('Users as u', 'c.user_id', 'u.id')
+		.join('Employees as e', 'u.id', 'e.user_id')
+		.join('Organizations as o', 'e.org_id', 'o.id')
 		.where('c.id', '=', id)
-		.join('Users as u', 'c.user_id', '=', 'u.id')
+		.select(
+			'u.first_name',
+			'u.last_name',
+			'c.*',
+			'o.name',
+			'o.id as org_id',
+			'u.profile_picture',
+		)
 		.orderBy('date');
+	// return db
+	// 	.select(
+	// 		'u.first_name',
+	// 		'u.last_name',
+	// 		'c.*',
+	// 		'u.org_name',
+	// 		'u.profile_picture',
+	// 	)
+	// 	.from('Comments as c')
+	// 	.where('c.id', '=', id)
+	// 	.join('Users as u', 'c.user_id', '=', 'u.id')
+	// 	.orderBy('date');
 }
 
 module.exports = {
@@ -59,5 +93,5 @@ module.exports = {
 	getReaction,
 	getComment,
 	addReaction,
-	addComment
+	addComment,
 };
