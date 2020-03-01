@@ -19,9 +19,9 @@ function findByEmail(email) {
 		.select('id');
 }
 // find one employee
-function findEmployeeById(id) {
+function findEmployeeById(user_id) {
 	return db('Employees')
-		.where({ id })
+		.where({ user_id })
 		.first();
 }
 
@@ -33,9 +33,9 @@ async function addEmployee(employee) {
 }
 
 // delete an employee
-function deleteEmployee(id) {
+function deleteEmployee(user_id, org_id) {
 	return db('Employees')
-		.where({ id })
+		.where({ user_id, org_id })
 		.del();
 }
 
