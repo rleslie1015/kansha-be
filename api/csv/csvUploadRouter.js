@@ -59,9 +59,9 @@ router.post('/', upload.single('bulkupload'), async (req, res) => {
 					"Each employee needs a 'First Name', 'Last name', 'Job title' and 'Email'",
 			});
 		} else {
-			res.status(200).json({
+			res.status(200).json(
 				userArray
-			});
+			);
 		}
 	} catch (error) {
 		console.log(error, 'error');
