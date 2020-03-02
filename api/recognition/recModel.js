@@ -8,6 +8,7 @@ module.exports = {
 	addRec,
 	getRecognition,
 	getBadges,
+	// getRecByOrg
 };
 
 function findAll() {
@@ -58,3 +59,9 @@ function getRecognition(id) {
 function getBadges() {
 	return db('Badges');
 }
+
+// function getRecByOrg(org_id) {
+// 	return db('Recognition')
+// 	.where({ org_id})
+	
+// }
