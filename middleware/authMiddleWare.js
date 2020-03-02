@@ -30,13 +30,14 @@ const fixSSEToken = (req, res, next) => {
 };
 
 module.exports.validateId = async (req, res, next) => {
-	const { sub, email } = req.user;
+	const { sub, email, name } = req.user;
 	let user = await findAll()
 		.where({ sub })
 		.first();
 	if (!user) {
+		const search = email || name;
 		user = await findAll()
-			.where({ email })
+			.where({ email: search })
 			.first();
 		if (!user) {
 			res.status(200).json({ user: false });
