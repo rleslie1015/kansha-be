@@ -60,7 +60,6 @@ router.post('/', upload.single('bulkupload'), async (req, res) => {
 			});
 		} else {
 			res.status(200).json({
-				message: `Succesfully uploaded ${counter} users`,
 				userArray
 			});
 		}
