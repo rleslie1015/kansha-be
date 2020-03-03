@@ -1,10 +1,26 @@
 const db = require('../../data/dbConfig');
+const moment = require('moment');
 
 module.exports = {
-	getAll
+	dataForMyOrg,
 };
 
+async function dataForMyOrg(org_id, query = {}) {
+	const { time = '' } = query;
 
-function sortAll(recs) {
-	
+	let { count } = await db('Recognition')
+		.where({ org_id })
+		.andWhere(
+			'date',
+			'>',
+			moment()
+				.subtract(1, time)
+				.toDate(),
+		)
+
+		.count()
+		.first();
+	count = Number(count);
+
+	return count;
 }
