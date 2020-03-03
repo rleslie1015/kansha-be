@@ -46,16 +46,16 @@ router.post('/', upload.single('bulkupload'), async (req, res) => {
 					user_type: 'Standard',
 				});
 
-				 await userArray.push({
+				userArray.push({
 					first_name: newUser['First name'],
 					last_name: newUser['Last name'],
 					email: newUser['Email'],
 					job_title: newUser['Job title'],
 					ext_id: newUser['Internal ID (optional)'],
-				})
+				});
 
 				// increase the counter so we know how many employees were added
-				counter++;				
+				counter++;
 			}
 		}
 
@@ -67,7 +67,7 @@ router.post('/', upload.single('bulkupload'), async (req, res) => {
 		} else {
 			res.status(200).json({
 				message: `Succesfully uploaded ${counter} users`,
-				userArray
+				userArray,
 			});
 		}
 	} catch (error) {
