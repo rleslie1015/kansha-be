@@ -14,6 +14,7 @@ const commentRouter = require('./api/reactions/commentRouter');
 const organizationRouter = require('./api/organization/organizationRouter');
 const employeeRouter = require('./api/employee/employeeRouter');
 const csvUploadRouter = require('./api/csv/csvUploadRouter');
+const reportRouter = require('./api/reports/reportRouter');
 
 // Global MiddleWare
 server.use(express.json());
@@ -24,6 +25,7 @@ server.use('/badges', badgeRouter);
 
 server.use(auth.validateToken);
 
+// server.use('/reports', reportRouter);
 server.use('/users', userRouter);
 server.use('/csv', csvUploadRouter);
 server.use('/employees', employeeRouter);

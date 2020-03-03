@@ -18,6 +18,7 @@ router.post('/', upload.single('bulkupload'), async (req, res) => {
 		let jsonArray = await csv().fromString(req.file.buffer.toString());
 		// create a counter
 		let counter = 0;
+		const userArray = [];
 		// loop over the csv objects, skipping the first one because it's an example in the given csv file
 		for (const newUser of jsonArray) {
 			// if the object has all of the required fields
@@ -36,6 +37,8 @@ router.post('/', upload.single('bulkupload'), async (req, res) => {
 					department: 'X',
 				});
 
+				console.log(newUser, 'New user')
+
 				// add the user to the Employees table
 
 				const newEmployee = await employee.addEmployee({
@@ -46,6 +49,7 @@ router.post('/', upload.single('bulkupload'), async (req, res) => {
 				});
 				// increase the counter so we know how many employees were added
 				counter++;
+				userArray.push(newUser);
 			}
 		}
 
@@ -56,7 +60,8 @@ router.post('/', upload.single('bulkupload'), async (req, res) => {
 			});
 		} else {
 			res.status(200).json({
-				message: `Success! You have added ${counter} employees`,
+				message: `Succesfully uploaded ${counter} users`,
+				userArray
 			});
 		}
 	} catch (error) {
