@@ -51,7 +51,7 @@ function editEmployee(id, changes) {
 async function getEmployeesByOrg(org_id, query = {}) {
 	const {
 		page = 1,
-		limit = 20,
+		limit = 10,
 		sortby = 'id',
 		sortdir = 'asc',
 		search = '',
