@@ -8,7 +8,7 @@ module.exports = {
 	addRec,
 	getRecognition,
 	getBadges,
-	// getRecByOrg
+	getRecByOrg,
 };
 
 function findAll() {
@@ -60,8 +60,20 @@ function getBadges() {
 	return db('Badges');
 }
 
-// function getRecByOrg(org_id) {
-// 	return db('Recognition')
-// 	.where({ org_id})
-	
-// }
+function getRecByOrg(org_id) {
+	return db
+		.select(
+			's.*',
+			'i.*',
+			'o.name as org_name',
+			'r.last_name as recipient_last',
+			'r.first_name as recipient_first',
+			'r.profile_picture as recipient_picture',
+		)
+		.from('Recognition as i')
+		.join('Users as s', 'i.sender', '=', 's.id')
+		.join('Users as r', 'i.recipient', '=', 'r.id')
+		.join('Employees as e', 's.id', 'e.user_id')
+		.join('Organizations as o', 'e.org_id', 'o.id')
+		.where('e.org_id', '=', org_id);
+}
