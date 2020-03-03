@@ -3,6 +3,9 @@ const dbModel = require('./recModel');
 const { emitterInput } = require('../livefeed/liveFeedEmitter');
 const { validateId } = require('../../middleware/authMiddleWare');
 const emp = require('../employee/employeeModel');
+const auth = require('../../middleware/authMiddleWare');
+
+router.use(auth.validateId);
 
 router.get('/', (req, res) => {
 	dbModel
@@ -13,6 +16,23 @@ router.get('/', (req, res) => {
 		.catch(err => {
 			console.error(err);
 			res.status(500).json(err.message);
+		});
+});
+
+// Get recognitions by organization ID
+router.get('/admin', (req, res) => {
+	const orgId = req.profile.org_id;
+	dbModel
+		.getRecByOrg(orgId, req.query)
+		.then(emp => {
+			res.status(200).json(emp);
+		})
+		.catch(error => {
+			console.log(error, 'error');
+			res.status(500).json({
+				error:
+					'Recognition List could not be retrieved from the database',
+			});
 		});
 });
 
@@ -33,25 +53,6 @@ router.get('/:id', (req, res) => {
 			res.status(500).json(err);
 		});
 });
-
-
-// Get recognitions by organization ID
-
-router.get('/admin', (req, res) => {
-	const orgId = req.profile.org_id;
-
-	emp.getRecByOrg(orgId, req.query)
-		.then(emp => {
-			res.status(200).json(emp);
-		})
-		.catch(error => {
-			console.log(error, 'error');
-			res.status(500).json({
-				error: 'Recognition List could not be retrieved from the database'
-			});
-		});
-});
-
 
 router.post('/', (req, res) => {
 	const { body, profile } = req;

@@ -37,8 +37,6 @@ router.post('/', upload.single('bulkupload'), async (req, res) => {
 					department: 'X',
 				});
 
-				console.log(newUser, 'New user')
-
 				// add the user to the Employees table
 
 				const newEmployee = await employee.addEmployee({
@@ -47,9 +45,17 @@ router.post('/', upload.single('bulkupload'), async (req, res) => {
 					job_title: newUser.job_title,
 					user_type: 'Standard',
 				});
+
+				userArray.push({
+					first_name: newUser['First name'],
+					last_name: newUser['Last name'],
+					email: newUser['Email'],
+					job_title: newUser['Job title'],
+					ext_id: newUser['Internal ID (optional)'],
+				});
+
 				// increase the counter so we know how many employees were added
 				counter++;
-				userArray.push(newUser);
 			}
 		}
 
@@ -61,7 +67,7 @@ router.post('/', upload.single('bulkupload'), async (req, res) => {
 		} else {
 			res.status(200).json({
 				message: `Succesfully uploaded ${counter} users`,
-				userArray
+				userArray,
 			});
 		}
 	} catch (error) {
