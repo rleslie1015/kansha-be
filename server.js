@@ -25,7 +25,7 @@ server.use('/badges', badgeRouter);
 
 server.use(auth.validateToken);
 
-// server.use('/reports', reportRouter);
+server.use('/reports', reportRouter);
 server.use('/users', userRouter);
 server.use('/csv', csvUploadRouter);
 server.use('/employees', employeeRouter);

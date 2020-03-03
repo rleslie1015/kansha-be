@@ -1,10 +1,23 @@
 const db = require('../../data/dbConfig');
 
 module.exports = {
-	getAll
+	recognitionInfoForMyOrg,
 };
 
+async function recognitionInfoForMyOrg(org_id) {
+	const recognitionInfo = await db('Recognition')
+		.select('recipient', 'sender', 'date')
+		.where({ org_id })
+		.orderBy('date', 'desc');
 
-function sortAll(recs) {
-	
+	let { count } = await db('Recognition')
+		.where({ org_id })
+		.count()
+		.first();
+	count = Number(count);
+
+	return {
+		count,
+		recognitionInfo,
+	};
 }
