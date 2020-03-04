@@ -95,7 +95,7 @@ router.put('/:id', validateOrgId, (req, res) => {
 // Middleware
 
 function validateOrgId(req, res, next) {
-	const { id } = req.params;
+	const { id } = req.org_id;
 	Orgs.findOrgById(id).then(org => {
 		if (org) {
 			req.org = org;
