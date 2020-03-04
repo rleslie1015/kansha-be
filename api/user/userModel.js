@@ -116,6 +116,7 @@ async function editUser(id, changes) {
 		user_type,
 		email,
 		profile_picture,
+		sub,
 	} = changes;
 	if (job_title || user_type) {
 		await db('Employees')
@@ -125,7 +126,7 @@ async function editUser(id, changes) {
 	if (first_name || last_name || email || profile_picture) {
 		await db('Users')
 			.where({ id })
-			.update({ first_name, last_name, email, profile_picture });
+			.update({ first_name, last_name, email, profile_picture, sub });
 	}
 	return findById(id);
 }
