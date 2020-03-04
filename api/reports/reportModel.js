@@ -28,10 +28,21 @@ async function dataForMyOrg(org_id, query = {}) {
 
 async function getTopEmployees(org_id) {
 	const topEmployees = await db('Recognition')
-		.where({ org_id })
-		.select('recipient')
+		.join('Users', 'Users.id', 'recipient')
+		.select(
+			'Users.first_name',
+			'Users.last_name',
+			'recipient',
+			'Users.profile_picture',
+		)
+		// .where({ org_id })
 		.count('recipient')
-		.groupBy('recipient')
+		.groupBy(
+			'recipient',
+			'Users.first_name',
+			'Users.last_name',
+			'Users.profile_picture',
+		)
 		.orderByRaw('COUNT(recipient) DESC')
 		.limit(3);
 
