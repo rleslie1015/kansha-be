@@ -27,17 +27,20 @@ async function dataForMyOrg(org_id, query = {}) {
 }
 
 async function getTopEmployees(org_id) {
-	const employees = await db('Recognition')
-		.join('Users', 'Users.id', 'Recognition.recipient')
-		.select(
-			'Users.id',
-			'first_name',
-			'last_name',
-			'profile_picture',
-			'COUNT() as received',
-		)
-		.where({ org_id });
+	const topEmployees = await db('Recognition')
+		.where({ org_id })
+		.select('recipient')
+		.count('recipient')
+		.groupBy('recipient')
+		.orderByRaw('COUNT(recipient) DESC')
+		.limit(3);
 
-	// right now i have a list of all the employees who have received gifts.
-	//I need to count how many gifts each person has received
+	return topEmployees;
 }
+/*
+SELECT recipient, COUNT(recipient)
+FROM Recognition
+GROUP BY recipient
+ORDER BY COUNT(recipient) DESC
+
+*/

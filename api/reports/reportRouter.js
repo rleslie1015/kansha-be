@@ -21,7 +21,7 @@ router.get('/topemployees', async (req, res) => {
 	const { org_id } = req.profile;
 
 	try {
-		const reportInfo = await reportModel.getTopEmployees(org_id, req.query);
+		const reportInfo = await reportModel.getTopEmployees(org_id);
 
 		return res.status(201).json(reportInfo);
 	} catch (error) {
