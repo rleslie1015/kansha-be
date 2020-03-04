@@ -7,7 +7,7 @@ jest.mock('express-jwt', () => {
 		return jest.fn((req, res, next) => {
 			req.user = {
 				sub: '1',
-				org_id: 1,
+				org_id: '1',
 				email: 'testing_email@kansharewards.com',
 			};
 			next();
@@ -25,7 +25,7 @@ beforeAll(() => {
 
 //working
 describe('/organizations router', () => {
-	describe.skip('GET /organizations/', () => {
+	describe('GET /organizations/', () => {
 		it('return all organizations', async () => {
 			const { body } = await request(server).get('/organizations');
 			expect(body).toEqual(
@@ -41,7 +41,7 @@ describe('/organizations router', () => {
 
 	//working
 
-	describe.skip('GET /organizations/:id', () => {
+	describe('GET /organizations/:id', () => {
 		it('returns one organization with matching id', async () => {
 			const { body } = await request(server).get('/organizations/1');
 			expect(body).toMatchObject({
@@ -55,7 +55,7 @@ describe('/organizations router', () => {
 		});
 	});
 
-	//working
+	//working EXCEPT NEED TO TEST MIDDLEWARE. we can currently delete other orgs.
 
 	describe('DELETE /organizations', () => {
 		it('should successfully delete an organization by id', async () => {
@@ -65,7 +65,7 @@ describe('/organizations router', () => {
 	});
 
 	//getting a setheaders error on this one
-	describe.skip('POST /organizations', () => {
+	describe('POST /organizations', () => {
 		it('should successfully create a new organization', async () => {
 			const { status } = await request(server)
 				.post('/organizations')
@@ -78,15 +78,15 @@ describe('/organizations router', () => {
 
 	//working
 
-	describe.skip('PUT /organizations', () => {
+	describe('PUT /organizations', () => {
 		it('should edit a new org successfully', async () => {
 			const { body } = await request(server)
-				.put('/organizations/2')
+				.put('/organizations/1')
 				.send({
 					name: 'NEW ORG',
 				});
 			expect(body).toEqual(
-				expect.objectContaining({ id: 2, name: 'NEW ORG' }),
+				expect.objectContaining({ id: 1, name: 'NEW ORG' }),
 			);
 		});
 	});

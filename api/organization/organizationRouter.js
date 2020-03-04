@@ -46,7 +46,7 @@ router.post('/', async (req, res) => {
 				user_type,
 				job_title,
 			});
-			res.status(201).json({ org_id });
+			return res.status(201).json({ org_id });
 		}
 		res.status(406).json({ error: 'You are not logged in' });
 	} catch (error) {
@@ -95,15 +95,20 @@ router.put('/:id', validateOrgId, (req, res) => {
 // Middleware
 
 function validateOrgId(req, res, next) {
-	const { id } = req.org_id;
-	Orgs.findOrgById(id).then(org => {
-		if (org) {
-			req.org = org;
-			next();
-		} else {
-			res.status(404).json({ error: 'there is no org with that id' });
-		}
-	});
+	if (req.user.org_id === req.params.id) {
+		const id = req.user.org_id;
+		console.log(id);
+		Orgs.findOrgById(id).then(org => {
+			if (org) {
+				req.org = org;
+				next();
+			} else {
+				res.status(404).json({ error: 'there is no org with that id' });
+			}
+		});
+	} else {
+		res.sendStatus(406);
+	}
 }
 
 module.exports = router;

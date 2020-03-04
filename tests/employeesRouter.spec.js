@@ -99,7 +99,7 @@ describe('/employees router', () => {
 			});
 		});
 
-		describe.skip('GET /employees/:id', () => {
+		describe('GET /employees/:id', () => {
 			it('should fetch one employee', async () => {
 				const { body } = await request(server).get('/employees/4');
 				expect(body).toMatchObject({
