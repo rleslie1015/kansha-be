@@ -35,7 +35,7 @@ async function getTopEmployees(org_id) {
 			'recipient',
 			'Users.profile_picture',
 		)
-		// .where({ org_id })
+		.where({ org_id })
 		.count('recipient')
 		.groupBy(
 			'recipient',
