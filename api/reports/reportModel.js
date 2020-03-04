@@ -4,6 +4,7 @@ const moment = require('moment');
 module.exports = {
 	dataForMyOrg,
 	getTopEmployees,
+	getTopGivers,
 };
 
 async function dataForMyOrg(org_id, query = {}) {
@@ -60,10 +61,34 @@ async function getTopEmployees(org_id, query = {}) {
 
 	return topEmployees;
 }
-/*
-SELECT recipient, COUNT(recipient)
-FROM Recognition
-GROUP BY recipient
-ORDER BY COUNT(recipient) DESC
 
-*/
+async function getTopGivers(org_id, query = {}) {
+	const { time = '' } = query;
+
+	const topGivers = await db('Recognition')
+		.join('Users', 'Users.id', 'sender')
+		.select(
+			'Users.first_name',
+			'Users.last_name',
+			'sender',
+			'Users.profile_picture',
+		)
+		.where({ org_id })
+		.andWhere(
+			'date',
+			'>',
+			moment()
+				.subtract(1, time)
+				.toDate(),
+		)
+		.count('sender')
+		.groupBy(
+			'sender',
+			'Users.first_name',
+			'Users.last_name',
+			'Users.profile_picture',
+		)
+		.orderByRaw('COUNT(sender) DESC');
+
+	return topGivers;
+}

@@ -30,4 +30,17 @@ router.get('/topemployees', async (req, res) => {
 	}
 });
 
+router.get('/topgivers', async (req, res) => {
+	const { org_id } = req.profile;
+
+	try {
+		const reportInfo = await reportModel.getTopGivers(org_id, req.query);
+
+		return res.status(201).json(reportInfo);
+	} catch (error) {
+		console.log('error getting report', error);
+		return res.status(500).json({ error });
+	}
+});
+
 module.exports = router;
