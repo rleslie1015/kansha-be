@@ -34,7 +34,6 @@ router.get('/:id', (req, res) => {
 		});
 });
 
-
 // Get recognitions by organization ID
 
 router.get('/admin', (req, res) => {
@@ -47,11 +46,11 @@ router.get('/admin', (req, res) => {
 		.catch(error => {
 			console.log(error, 'error');
 			res.status(500).json({
-				error: 'Recognition List could not be retrieved from the database'
+				error:
+					'Recognition List could not be retrieved from the database',
 			});
 		});
 });
-
 
 router.post('/', (req, res) => {
 	const { body, profile } = req;

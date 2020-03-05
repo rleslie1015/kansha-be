@@ -1,25 +1,35 @@
 const server = require('../../server');
 const request = require('supertest');
 
-jest.mock('express-jwt', () => {
-	return jest.fn(() => {
-		return jest.fn((req, res, next) => {
-			req.user = {
-				sub: '1',
-				org_id: '1',
-				email: 'testing_email@kansharewards.com',
-			};
-			next();
+module.exports = () => {
+	describe('/profile router', () => {
+		describe('GET /profile', () => {
+			it('should return an array of profiles', async () => {
+				const { body } = await request(server).get('/profile');
+				expect(body).toMatchObject({
+					user: {
+						department: 'X',
+						email: 'testing_email@kansharewards.com',
+						first_name: 'Test',
+						id: 5,
+						job_title: 'Person',
+						last_name: 'User 5',
+						org_id: 3,
+						org_name: 'NEW ORG',
+						profile_picture:
+							'https://kansha-bucket.s3-us-west-1.amazonaws.com/avatarblank.png',
+						rec: [],
+						sub: '1',
+						user_type: 'admin',
+					},
+				});
+			});
+		});
+		describe.skip('GET /profile/:id', () => {
+			it.todo('should return an array of profiles', async () => {
+				const { body } = await request(server).get('/profile');
+				expect(body).toEqual(expect.arrayContaining);
+			});
 		});
 	});
-});
-
-afterEach(() => {
-	jest.clearAllMocks();
-});
-
-describe('/profile router', () => {
-	describe('GET /', () => {
-		it.todo('something something dark side something');
-	});
-});
+};
