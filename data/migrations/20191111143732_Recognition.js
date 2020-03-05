@@ -23,7 +23,7 @@ exports.up = function(knex) {
             .notNullable()
             .defaultTo('Thank you for your hard work! 🙃')
         tbl
-            .date('date')
+            .datetime('date')
             .notNullable()
             
     })

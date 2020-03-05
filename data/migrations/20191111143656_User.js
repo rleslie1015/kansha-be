@@ -4,19 +4,18 @@ exports.up = function(knex) {
     .createTable('Users', tbl => {
         tbl
             .increments()
+
+        tbl
+            .string('sub', 64)
+            .notNullable()
+            
         tbl
             .string('first_name', 255)
             .notNullable()
         tbl
             .string('last_name', 255)
             .notNullable()
-        tbl
-            .string('email', 255)
-            .notNullable()
-            .unique()
-        tbl
-            .string('password', 255)
-            .notNullable()
+
         tbl
             .string('job_title', 255)
             .notNullable()
@@ -31,7 +30,7 @@ exports.up = function(knex) {
             .notNullable()
         tbl
             .string('profile_picture', 500)
-            .defaultTo('https://www.sackettwaconia.com/wp-content/uploads/default-profile.png')
+            .defaultTo('https://kansha-bucket.s3-us-west-1.amazonaws.com/avatarblank.png')
     })
 };
 
