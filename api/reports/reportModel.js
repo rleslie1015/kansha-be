@@ -20,7 +20,7 @@ async function getRangeOfDataForMyOrg(org_id, query = {}) {
 	for (let i = 1; i < number; i++) {
 		// getting the number of recognitions within that time period
 		let numberOfRecognitions = await db('Recognition')
-			// .where({ org_id })
+			.where({ org_id })
 			.andWhere(
 				'date',
 				'>',
