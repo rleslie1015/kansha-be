@@ -1,19 +1,63 @@
-// const router = require('express').Router();
+const router = require('express').Router();
+const reportModel = require('./reportModel');
+const auth = require('../../middleware/authMiddleWare');
 
-// const auth = require('../../middleware/authMiddleWare');
+router.use(auth.validateId);
 
-// router.use(auth.validateId);
+router.get('/', async (req, res) => {
+	const { org_id } = req.profile;
 
-// // Get all recognitions for the organization
-// router.get('/rec', (req, res) => {
-// 	emp.getEmployeesByOrg(orgId, req.query)
-// 		.then(emp => {
-// 			res.status(200).json(emp);
-// 		})
-// 		.catch(error => {
-// 			console.log(error, 'error');
-// 			res.status(500).json({
-// 				error: 'Employee List could not be retrieved from the database',
-// 			});
-// 		});
-// });
+	try {
+		const reportInfo = await reportModel.getDataForMyOrg(org_id, req.query);
+
+		return res.status(201).json(reportInfo);
+	} catch (error) {
+		console.log('error getting report', error);
+		return res.status(500).json({ error });
+	}
+});
+
+router.get('/topemployees', async (req, res) => {
+	const { org_id } = req.profile;
+
+	try {
+		const reportInfo = await reportModel.getTopEmployees(org_id, req.query);
+
+		return res.status(201).json(reportInfo);
+	} catch (error) {
+		console.log('error getting report', error);
+		return res.status(500).json({ error });
+	}
+});
+
+router.get('/topgivers', async (req, res) => {
+	const { org_id } = req.profile;
+
+	try {
+		const reportInfo = await reportModel.getTopGivers(org_id, req.query);
+
+		return res.status(201).json(reportInfo);
+	} catch (error) {
+		console.log('error getting report', error);
+		return res.status(500).json({ error });
+	}
+});
+
+// Endpoint to get employee engagement
+
+router.get('/engagement', async (req, res) => {
+	const { org_id } = req.profile;
+
+	try {
+		const empEngagement = await reportModel.getPercentThanked(
+			org_id,
+			req.query,
+		);
+		return res.status(200).json(empEngagement);
+	} catch (error) {
+		console.log('Error getting total engagement', error);
+		return res.status(500).json({ error });
+	}
+});
+
+module.exports = router;
