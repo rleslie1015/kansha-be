@@ -1,6 +1,5 @@
-const server = require('../server');
+const server = require('../../server');
 const request = require('supertest');
-const testdb = require('../data/dbConfig');
 
 jest.mock('express-jwt', () => {
 	return jest.fn(() => {
@@ -19,6 +18,8 @@ afterEach(() => {
 	jest.clearAllMocks();
 });
 
-beforeAll(() => {
-	return testdb.seed.run();
+describe('/profile router', () => {
+	describe('GET /', () => {
+		it.todo('something something dark side something');
+	});
 });

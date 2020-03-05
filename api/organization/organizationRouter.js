@@ -95,8 +95,8 @@ router.put('/:id', validateOrgId, (req, res) => {
 // Middleware
 
 function validateOrgId(req, res, next) {
-	if (req.user.org_id === req.params.id) {
-		const id = req.user.org_id;
+	if (req.profile.org_id === Number(req.params.id)) {
+		const id = req.profile.org_id;
 		Orgs.findOrgById(id).then(org => {
 			if (org) {
 				req.org = org;
@@ -106,6 +106,7 @@ function validateOrgId(req, res, next) {
 			}
 		});
 	} else {
+		console.log('brokennnnnn');
 		res.sendStatus(406);
 	}
 }

@@ -8,8 +8,7 @@ exports.up = function(knex) {
 
 exports.down = function(knex) {
 	return knex.schema.alterTable('Users', function(tbl) {
-		table
-			.string('sub', 64)
+		tbl.string('sub', 64)
 			.notNullable()
 			.alter();
 	});
