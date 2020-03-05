@@ -31,22 +31,32 @@ const fixSSEToken = (req, res, next) => {
 
 module.exports.validateId = async (req, res, next) => {
 	const { sub, email, name } = req.user;
+	// check if there is a user based on sub
 	let user = await findAll()
 		.where({ sub })
 		.first();
+
+	const search = email || name;
 	if (!user) {
-		const search = email || name;
+		// check if there is a user based on email
 		user = await findAll()
 			.where({ email: search })
 			.first();
+
 		if (!user) {
+			// returns 200 so that onboarding can be accounted for.
 			res.status(200).json({ user: false });
 		} else {
+			// adds sub if user is found by email
 			await editUser(user.id, { sub });
 			req.profile = user;
 			next();
 		}
 	} else {
+		if (!user.email) {
+			// adds email address for legacy users
+			await editUser(user.id, { email: search });
+		}
 		req.profile = user;
 		next();
 	}
@@ -54,5 +64,12 @@ module.exports.validateId = async (req, res, next) => {
 
 router.use(fixSSEToken);
 router.use(tokenValidator);
+
+router.use((err, req, res, next) => {
+	if (err.name === 'UnauthorizedError') {
+		return res.sendStatus(401);
+	}
+	next();
+});
 
 module.exports.validateToken = router;
