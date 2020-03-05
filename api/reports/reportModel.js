@@ -6,7 +6,45 @@ module.exports = {
 	getTopEmployees,
 	getTopGivers,
 	getPercentThanked,
+	getRangeOfDataForMyOrg,
 };
+
+async function getRangeOfDataForMyOrg(org_id, query = {}) {
+	// results stores the data that will be returned at the end
+	let results = [];
+	// retrieving the time period and number of dates from the query, either days, weeks, months, or years
+	let { time = '', number = '' } = query;
+	// increasing the number by one so that the for loop returns that number of times
+	number++;
+	//looping over the range
+	for (let i = 1; i < number; i++) {
+		// getting the number of recognitions within that time period
+		let numberOfRecognitions = await db('Recognition')
+			.where({ org_id })
+			.andWhere(
+				'date',
+				'>',
+				moment()
+					.subtract(i, time)
+					.startOf(time)
+					.toDate(),
+			)
+			.andWhere(
+				'date',
+				'<',
+				moment()
+					.subtract(i, time)
+					.endOf(time)
+					.toDate(),
+			)
+			.count()
+			.first();
+		// pushing the number to the results array
+		results.push(Number(numberOfRecognitions.count));
+	}
+	// returning the array
+	return results;
+}
 
 async function getDataForMyOrg(org_id, query = {}) {
 	// retrieving the time period from the query, either days, weeks, months, or years
