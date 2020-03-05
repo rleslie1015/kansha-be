@@ -17,24 +17,11 @@ router.get('/', async (req, res) => {
 	}
 });
 
-router.get('/topemployees', async (req, res) => {
+router.get('/top', async (req, res) => {
 	const { org_id } = req.profile;
 
 	try {
-		const reportInfo = await reportModel.getTopEmployees(org_id, req.query);
-
-		return res.status(201).json(reportInfo);
-	} catch (error) {
-		console.log('error getting report', error);
-		return res.status(500).json({ error });
-	}
-});
-
-router.get('/topgivers', async (req, res) => {
-	const { org_id } = req.profile;
-
-	try {
-		const reportInfo = await reportModel.getTopGivers(org_id, req.query);
+		const reportInfo = await reportModel.getTops(org_id, req.query);
 
 		return res.status(201).json(reportInfo);
 	} catch (error) {
