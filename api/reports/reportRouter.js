@@ -8,7 +8,7 @@ router.get('/', async (req, res) => {
 	const { org_id } = req.profile;
 
 	try {
-		const reportInfo = await reportModel.dataForMyOrg(org_id, req.query);
+		const reportInfo = await reportModel.getDataForMyOrg(org_id, req.query);
 
 		return res.status(201).json(reportInfo);
 	} catch (error) {
@@ -39,6 +39,23 @@ router.get('/topgivers', async (req, res) => {
 		return res.status(201).json(reportInfo);
 	} catch (error) {
 		console.log('error getting report', error);
+		return res.status(500).json({ error });
+	}
+});
+
+// Endpoint to get employee engagement
+
+router.get('/engagement', async (req, res) => {
+	const { org_id } = req.profile;
+
+	try {
+		const empEngagement = await reportModel.getPercentThanked(
+			org_id,
+			req.query,
+		);
+		return res.status(200).json(empEngagement);
+	} catch (error) {
+		console.log('Error getting total engagement', error);
 		return res.status(500).json({ error });
 	}
 });
