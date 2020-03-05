@@ -44,7 +44,6 @@ router.get('/:id', (req, res) => {
 
 	emp.findEmployeeById(id)
 		.then(e => {
-			console.log(e);
 			res.status(200).json(e);
 		})
 		.catch(error => {

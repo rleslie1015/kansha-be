@@ -19,10 +19,9 @@ afterEach(() => {
 	jest.clearAllMocks();
 });
 
-beforeAll(() => {
-	return testdb.seed.run();
+beforeAll(async () => {
+	await testdb.seed.run();
 });
-
 describe('/reactions router', () => {
 	describe.skip('GET /reactions/:rec_id', () => {
 		it('should return one reaction by id', async () => {

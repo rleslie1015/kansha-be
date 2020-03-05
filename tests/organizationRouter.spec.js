@@ -1,6 +1,7 @@
 const server = require('../server');
 const request = require('supertest');
 const testdb = require('../data/dbConfig');
+const expressJwt = require('express-jwt');
 
 jest.mock('express-jwt', () => {
 	return jest.fn(() => {
@@ -19,8 +20,8 @@ afterEach(() => {
 	jest.clearAllMocks();
 });
 
-beforeAll(() => {
-	return testdb.seed.run();
+beforeAll(async () => {
+	await testdb.seed.run();
 });
 
 //working
@@ -44,6 +45,7 @@ describe('/organizations router', () => {
 	describe('GET /organizations/:id', () => {
 		it('returns one organization with matching id', async () => {
 			const { body } = await request(server).get('/organizations/1');
+
 			expect(body).toMatchObject({
 				id: 1,
 				name: 'Organization 1',
@@ -67,6 +69,18 @@ describe('/organizations router', () => {
 	//getting a setheaders error on this one
 	describe('POST /organizations', () => {
 		it('should successfully create a new organization', async () => {
+			expressJwt.mockImplementationOnce(() => {
+				return jest.fn(() => {
+					return jest.fn((req, res, next) => {
+						req.user = {
+							sub: '1',
+							org_id: '1',
+							email: 'testing_email@kansharewards.com',
+						};
+						next();
+					});
+				});
+			});
 			const { status } = await request(server)
 				.post('/organizations')
 				.send({

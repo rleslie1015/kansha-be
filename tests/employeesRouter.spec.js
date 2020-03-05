@@ -18,8 +18,8 @@ afterEach(() => {
 	jest.clearAllMocks();
 });
 
-beforeAll(() => {
-	return testdb.seed.run();
+beforeAll(async () => {
+	await testdb.seed.run();
 });
 
 describe('/employees router', () => {
@@ -30,12 +30,13 @@ describe('/employees router', () => {
 				.send({
 					first_name: 'Test',
 					last_name: 'User 5',
-					email: 'testing_email@kansharewards.com',
+					email: 'testing_email2@kansharewards.com',
 					department: 'X',
 					job_title: 'Person',
 					user_type: 'admin',
 					org_name: 'Organization 3',
 				});
+			console.log(body);
 			expect(body.user_id).toBe(5);
 		});
 

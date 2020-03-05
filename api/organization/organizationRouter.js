@@ -97,7 +97,6 @@ router.put('/:id', validateOrgId, (req, res) => {
 function validateOrgId(req, res, next) {
 	if (req.user.org_id === req.params.id) {
 		const id = req.user.org_id;
-		console.log(id);
 		Orgs.findOrgById(id).then(org => {
 			if (org) {
 				req.org = org;

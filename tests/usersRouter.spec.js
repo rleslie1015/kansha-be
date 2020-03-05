@@ -18,8 +18,8 @@ afterEach(() => {
 	jest.clearAllMocks();
 });
 
-beforeAll(() => {
-	return testdb.seed.run();
+beforeAll(async () => {
+	await testdb.seed.run();
 });
 
 describe('/users router', () => {
