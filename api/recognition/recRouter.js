@@ -54,6 +54,27 @@ router.get('/:id', (req, res) => {
 		});
 });
 
+<<<<<<< HEAD
+=======
+// Get recognitions by organization ID
+
+router.get('/admin', (req, res) => {
+	const orgId = req.profile.org_id;
+
+	emp.getRecByOrg(orgId, req.query)
+		.then(e => {
+			res.status(200).json(e);
+		})
+		.catch(error => {
+			console.log(error, 'error');
+			res.status(500).json({
+				error:
+					'Recognition List could not be retrieved from the database',
+			});
+		});
+});
+
+>>>>>>> e6e23f84043ef409f6a2fff3b9ee131cd67fd55b
 router.post('/', (req, res) => {
 	const { body, profile } = req;
 	const { recipient, sender, message, date, badge_id } = body;

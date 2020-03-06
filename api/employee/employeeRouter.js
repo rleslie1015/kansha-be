@@ -9,10 +9,11 @@ router.use(auth.validateId);
 // Get all employees from the database
 router.get('/', (req, res) => {
 	emp.findAllEmployees()
-		.then(emp => {
-			res.status(200).json(emp);
+		.then(e => {
+			res.status(200).json(e);
 		})
 		.catch(error => {
+			console.log(error);
 			res.status(500).json({
 				error: 'Could not retrieve employees from the database',
 			});
@@ -25,8 +26,8 @@ router.get('/organizations', (req, res) => {
 	const orgId = req.profile.org_id;
 
 	emp.getEmployeesByOrg(orgId, req.query)
-		.then(emp => {
-			res.status(200).json(emp);
+		.then(e => {
+			res.status(200).json(e);
 		})
 		.catch(error => {
 			console.log(error, 'error');
@@ -42,10 +43,11 @@ router.get('/:id', (req, res) => {
 	const id = req.params.id;
 
 	emp.findEmployeeById(id)
-		.then(emp => {
-			res.status(200).json(emp);
+		.then(e => {
+			res.status(200).json(e);
 		})
 		.catch(error => {
+			console.log(error);
 			res.status(500).json({
 				error: 'Employee could not be retrieved from the database',
 			});
@@ -57,7 +59,7 @@ router.get('/:id', (req, res) => {
 router.delete('/:id', validateEmployeeId, (req, res) => {
 	const id = req.params.id;
 	emp.deleteEmployee(id, req.profile.org_id)
-		.then(emp => {
+		.then(() => {
 			res.sendStatus(204);
 		})
 		.catch(error => {
@@ -124,16 +126,15 @@ router.post('/', async (req, res) => {
 // Edit an Employee
 router.put('/:id', validateEmployeeId, (req, res) => {
 	const id = req.params.id;
-	const { name } = req.body;
-	if (!name) {
-		return res.status(400).json({ error: 'Employee needs a name' });
-	}
+
 	const changes = req.body;
-	emp.editEmployee(id, changes)
+	userModel
+		.editUser(id, changes)
 		.then(updatedEmployee => {
-			res.status(200).json(updatedOrg);
+			res.status(200).json(updatedEmployee);
 		})
 		.catch(error => {
+			console.log(error);
 			res.status(500).json({
 				error: 'Failed to update the employee',
 			});
@@ -144,9 +145,9 @@ router.put('/:id', validateEmployeeId, (req, res) => {
 
 function validateEmployeeId(req, res, next) {
 	const { id } = req.params;
-	emp.findEmployeeById(id).then(emp => {
-		if (emp) {
-			req.emp = emp;
+	emp.findEmployeeById(id).then(e => {
+		if (e) {
+			req.e = e;
 			next();
 		} else {
 			res.status(404).json({

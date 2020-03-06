@@ -11,7 +11,22 @@ module.exports = {
 
 // find all employees
 function findAllEmployees() {
-	return db('Employees');
+	return db('Employees')
+		.join('Users', 'Users.id', 'Employees.user_id')
+		.join('Organizations', 'Organizations.id', 'Employees.org_id')
+		.select(
+			'Users.id as user_id',
+			'first_name',
+			'last_name',
+			'email',
+			'profile_picture',
+			'job_title',
+			'user_type',
+			'department',
+			'Organizations.id as org_id',
+			'Employees.id',
+			'Organizations.name as org_name',
+		);
 }
 function findByEmail(email) {
 	return db('Users')
@@ -19,9 +34,9 @@ function findByEmail(email) {
 		.select('id');
 }
 // find one employee
-function findEmployeeById(user_id) {
-	return db('Employees')
-		.where({ user_id })
+function findEmployeeById(id) {
+	return findAllEmployees()
+		.where({ 'Employees.id': id })
 		.first();
 }
 
