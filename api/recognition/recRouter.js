@@ -54,8 +54,6 @@ router.get('/:id', (req, res) => {
 		});
 });
 
-<<<<<<< HEAD
-=======
 // Get recognitions by organization ID
 
 router.get('/admin', (req, res) => {
@@ -74,7 +72,6 @@ router.get('/admin', (req, res) => {
 		});
 });
 
->>>>>>> e6e23f84043ef409f6a2fff3b9ee131cd67fd55b
 router.post('/', (req, res) => {
 	const { body, profile } = req;
 	const { recipient, sender, message, date, badge_id } = body;
