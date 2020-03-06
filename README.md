@@ -61,7 +61,7 @@ Why did you choose this framework?
 
 ---
 
-```json
+```javascript
   {
     "id": UUID,
     "recipient": INTEGER,
@@ -75,7 +75,7 @@ Why did you choose this framework?
 
 ---
 
-```json
+```javascript
 {
 	"id": UUID,
 	"sub": STRING,
