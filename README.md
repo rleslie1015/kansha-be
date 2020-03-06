@@ -2,7 +2,7 @@
 
 [![Maintainability](https://api.codeclimate.com/v1/badges/da01f596f6f9f722c5b8/maintainability)](https://codeclimate.com/github/Lambda-School-Labs/kansha-be/maintainability)
 
-#### Backend delpoyed at [Heroku](https://kansha-api.herokuapp.com/) <br>
+![Heroku](https://heroku-badge.herokuapp.com/?app=kansha-api)
 
 ## Getting started
 
@@ -23,7 +23,7 @@ Why did you choose this framework?
 
 ## Endpoints
 
-#### Recognition Routes
+### Recognition Routes
 
 | Method | Endpoint   | Access Control         | Description                     |
 | ------ | ---------- | ---------------------- | ------------------------------- |
@@ -33,19 +33,19 @@ Why did you choose this framework?
 | DELETE | `/rec/:id` | mod users, admin users | Delete a recognition.           |
 | PUT    | `/rec/:id` | all users              | Edit a recognition.             |
 
-#### Picture Routes
+### Picture Routes
 
 | Method | Endpoint       | Access Control | Description                 |
 | ------ | -------------- | -------------- | --------------------------- |
 | POST   | `/profile-pic` | all users      | Post a new profile picture. |
 
-#### Profile Routes
+### Profile Routes
 
 | Method | Endpoint   | Access Control | Description                   |
 | ------ | ---------- | -------------- | ----------------------------- |
 | GET    | `/profile` | all users      | Returns all user interaction. |
 
-#### User Routes
+### User Routes
 
 | Method | Endpoint     | Access Control | Description              |
 | ------ | ------------ | -------------- | ------------------------ |
@@ -55,38 +55,38 @@ Why did you choose this framework?
 | DELETE | `/users/:id` | admin users    | Delete a user.           |
 | PUT    | `/users/:id` | all users      | Edit a user.             |
 
-# Data Model
+## Data Model
 
-#### RECOGNITION
-
----
-
-```
-  {
-    id: UUID,
-    recipient: INTEGER,
-    sender: INTEGER,
-    message: STRING,
-    date: DATETIME(YYYY-MM-DDTHH:MM:SS.000Z)
-  }
-```
-
-#### USER
+### RECOGNITION
 
 ---
 
-```
+```json
   {
-    id: UUID,
-    sub: STRING,
-    first_name: STRING,
-    last_name: STRING,
-    job_title: STRING,
-    department: STRING,
-    org_name: STRING,
-    user_type: STRING,
-    profile_picture: STRING
+    "id": UUID,
+    "recipient": INTEGER,
+    "sender": INTEGER,
+    "message": STRING,
+    "date": DATETIME(YYYY-MM-DDTHH:MM:SS.000Z)
   }
+```
+
+### USER
+
+---
+
+```json
+{
+	"id": UUID,
+	"sub": STRING,
+	"first_name": STRING,
+	"last_name": STRING,
+	"job_title": STRING,
+	"department": STRING,
+	"org_name": STRING,
+	"user_type": STRING,
+	"profile_picture": STRING
+}
 ```
 
 ## Actions
@@ -102,9 +102,7 @@ Why did you choose this framework?
 `deleteRec(id)` -> Delete a recognition by ID
 
 `getUserInteractions(id)` -> Get all user recognitions by ID
-<br>
-<br>
-<br>
+
 `addUser(user)` -> Creates a new user
 
 `editUser(id, changes)` -> Update a user by ID
@@ -120,15 +118,16 @@ Why did you choose this framework?
 In order for the app to function correctly, the user must set up their own environment variables.
 
 create a .env file that includes the following:
-  
- _ DATABASE_URL =
-_ CLIENT_ID =
-_ DOMAIN =
-_ SIGNING_CERT_URL =
-_ S3_BUCKET_NAME =
-_ S3_ID =
-_ S3_KEY =
-_ AWS_ACCESS_KEY_ID = \* AWS_SECRET_ACCESS_KEY =
+
+-   DATABASE_URL =
+-   CLIENT\*ID =
+
+-   DOMAIN =
+-   SIGNING_CERT_URL =
+-   S3\*BUCKET_NAME =
+-   S3\*ID =
+-   S3\*KEY =
+-   AWS_ACCESS_KEY_ID = \* AWS_SECRET_ACCESS_KEY =
 
 ## Contributing
 
@@ -140,10 +139,10 @@ Please note we have a [code of conduct](./code_of_conduct.md). Please follow it 
 
 **If you are having an issue with the existing project code, please submit a bug report under the following guidelines:**
 
--   Check first to see if your issue has already been reported.
--   Check to see if the issue has recently been fixed by attempting to reproduce the issue using the latest master branch in the repository.
--   Create a live example of the problem.
--   Submit a detailed bug report including your environment & browser, steps to reproduce the issue, actual and expected outcomes, where you believe the issue is originating from, and any potential solutions you have considered.
+-   Cck first to see if your issue has already been reported.
+-   Cck to see if the issue has recently been fixed by attempting to reproduce the issue using the latest master branch in the repository.
+-   Cate a live example of the problem.
+-   Smit a detailed bug report including your environment & browser, steps to reproduce the issue, actual and expected outcomes, where you believe the issue is originating from, and any potential solutions you have considered.
 
 ### Feature Requests
 
