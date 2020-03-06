@@ -1,58 +1,59 @@
 # API Documentation
 
+[![Maintainability](https://api.codeclimate.com/v1/badges/da01f596f6f9f722c5b8/maintainability)](https://codeclimate.com/github/Lambda-School-Labs/kansha-be/maintainability)
+
 #### Backend delpoyed at [Heroku](https://kansha-api.herokuapp.com/) <br>
 
 ## Getting started
 
 To get the server running locally:
 
-- Clone this repo
-- **npm i** to install all required dependencies
-- **npm run server** to start the local server
-- **npm test** to start server using testing environment
+-   Clone this repo
+-   **npm i** to install all required dependencies
+-   **npm run server** to start the local server
+-   **npm test** to start server using testing environment
 
 ### NodeJS
 
 Why did you choose this framework?
 
--    Was a big part of the Lambda Curriculum 
--    Ability to keep data in JSON format
--    Future Devs can easily work with Node because of JS knowledge 
+-   Was a big part of the Lambda Curriculum
+-   Ability to keep data in JSON format
+-   Future Devs can easily work with Node because of JS knowledge
 
 ## Endpoints
 
 #### Recognition Routes
 
-| Method | Endpoint                | Access Control | Description                                  |
-| ------ | ----------------------- | -------------- | -------------------------------------------- |
-| GET    | `/rec` | all users      | Returns all recognition. |
-| GET    | `/rec/:id` | all users         | Returns a specific recognition.             |
-| POST | `/rec` | all users         | Create a new recognition.                      |
-| DELETE | `/rec/:id` | mod users, admin users        | Delete a recognition.                      |
-| PUT | `/rec/:id` | all users         | Edit a recognition.                      |
+| Method | Endpoint   | Access Control         | Description                     |
+| ------ | ---------- | ---------------------- | ------------------------------- |
+| GET    | `/rec`     | all users              | Returns all recognition.        |
+| GET    | `/rec/:id` | all users              | Returns a specific recognition. |
+| POST   | `/rec`     | all users              | Create a new recognition.       |
+| DELETE | `/rec/:id` | mod users, admin users | Delete a recognition.           |
+| PUT    | `/rec/:id` | all users              | Edit a recognition.             |
 
 #### Picture Routes
 
-| Method | Endpoint                | Access Control | Description                                  |
-| ------ | ----------------------- | -------------- | -------------------------------------------- |
-| POST    | `/profile-pic` | all users      | Post a new profile picture. |
+| Method | Endpoint       | Access Control | Description                 |
+| ------ | -------------- | -------------- | --------------------------- |
+| POST   | `/profile-pic` | all users      | Post a new profile picture. |
 
 #### Profile Routes
 
-| Method | Endpoint                | Access Control | Description                                  |
-| ------ | ----------------------- | -------------- | -------------------------------------------- |
+| Method | Endpoint   | Access Control | Description                   |
+| ------ | ---------- | -------------- | ----------------------------- |
 | GET    | `/profile` | all users      | Returns all user interaction. |
-
 
 #### User Routes
 
-| Method | Endpoint                | Access Control      | Description                                        |
-| ------ | ----------------------- | ------------------- | -------------------------------------------------- |
-| GET    | `/user`        | all users           | Returns all users.               |
-| GET    | `/users/:id`    | all users | Returns a specific user.             |
-| POST    | `/users`        | all users | Creates a new user.                    |
-| DELETE   | `/users/:id` | admin users                | Delete a user. |
-| PUT    | `/users/:id`        | all users | Edit a user.                                                    |
+| Method | Endpoint     | Access Control | Description              |
+| ------ | ------------ | -------------- | ------------------------ |
+| GET    | `/user`      | all users      | Returns all users.       |
+| GET    | `/users/:id` | all users      | Returns a specific user. |
+| POST   | `/users`     | all users      | Creates a new user.      |
+| DELETE | `/users/:id` | admin users    | Delete a user.           |
+| PUT    | `/users/:id` | all users      | Edit a user.             |
 
 # Data Model
 
@@ -119,16 +120,15 @@ Why did you choose this framework?
 In order for the app to function correctly, the user must set up their own environment variables.
 
 create a .env file that includes the following:
-    
-    *  DATABASE_URL = 
-    *  CLIENT_ID = 
-    *  DOMAIN = 
-    *  SIGNING_CERT_URL = 
-    *  S3_BUCKET_NAME = 
-    *  S3_ID = 
-    *  S3_KEY = 
-    *  AWS_ACCESS_KEY_ID = 
-    *  AWS_SECRET_ACCESS_KEY = 
+  
+ _ DATABASE_URL =
+_ CLIENT_ID =
+_ DOMAIN =
+_ SIGNING_CERT_URL =
+_ S3_BUCKET_NAME =
+_ S3_ID =
+_ S3_KEY =
+_ AWS_ACCESS_KEY_ID = \* AWS_SECRET_ACCESS_KEY =
 
 ## Contributing
 
@@ -138,11 +138,12 @@ Please note we have a [code of conduct](./code_of_conduct.md). Please follow it 
 
 ### Issue/Bug Request
 
- **If you are having an issue with the existing project code, please submit a bug report under the following guidelines:**
- - Check first to see if your issue has already been reported.
- - Check to see if the issue has recently been fixed by attempting to reproduce the issue using the latest master branch in the repository.
- - Create a live example of the problem.
- - Submit a detailed bug report including your environment & browser, steps to reproduce the issue, actual and expected outcomes,  where you believe the issue is originating from, and any potential solutions you have considered.
+**If you are having an issue with the existing project code, please submit a bug report under the following guidelines:**
+
+-   Check first to see if your issue has already been reported.
+-   Check to see if the issue has recently been fixed by attempting to reproduce the issue using the latest master branch in the repository.
+-   Create a live example of the problem.
+-   Submit a detailed bug report including your environment & browser, steps to reproduce the issue, actual and expected outcomes, where you believe the issue is originating from, and any potential solutions you have considered.
 
 ### Feature Requests
 
@@ -156,11 +157,11 @@ Remember that this project is licensed under the MIT license, and by submitting 
 
 #### Pull Request Guidelines
 
-- Ensure any install or build dependencies are removed before the end of the layer when doing a build.
-- Update the README.md with details of changes to the interface, including new plist variables, exposed ports, useful file locations and container parameters.
-- Ensure that your code conforms to our existing code conventions and test coverage.
-- Include the relevant issue number, if applicable.
-- You may merge the Pull Request in once you have the sign-off of two other developers, or if you do not have permission to do that, you may request the second reviewer to merge it for you.
+-   Ensure any install or build dependencies are removed before the end of the layer when doing a build.
+-   Update the README.md with details of changes to the interface, including new plist variables, exposed ports, useful file locations and container parameters.
+-   Ensure that your code conforms to our existing code conventions and test coverage.
+-   Include the relevant issue number, if applicable.
+-   You may merge the Pull Request in once you have the sign-off of two other developers, or if you do not have permission to do that, you may request the second reviewer to merge it for you.
 
 ### Attribution
 

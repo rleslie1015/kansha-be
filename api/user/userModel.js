@@ -3,11 +3,13 @@ const db = require('../../data/dbConfig');
 module.exports = {
 	findAll,
 	findById,
+	findByEmail,
 	addUser,
 	deleteUser,
 	editUser,
 	editUserBySub,
 	find,
+	addNewUser,
 };
 //tested in userRouter, works
 function findAll() {
@@ -26,6 +28,15 @@ function findAll() {
 function findById(id) {
 	return findAll().where({ 'Users.id': id });
 }
+
+// needed in employee router
+
+function findByEmail(email) {
+	return db('Users')
+		.where({ email })
+		.select('id');
+}
+
 // need to migrate for email
 async function addUser(newUser) {
 	const {
@@ -51,11 +62,16 @@ async function addUser(newUser) {
 			first_name,
 			last_name,
 			department,
-			profile_picture,
+			email,
 			sub,
 		},
 		'id',
 	);
+	if (profile_picture) {
+		await db('Users')
+			.where({ id: user })
+			.update({ profile_picture });
+	}
 
 	await db('Employees').insert({
 		org_id: org,
@@ -65,7 +81,30 @@ async function addUser(newUser) {
 	});
 	return [user];
 }
-//tested in userRouter, works
+
+async function addNewUser(newUser) {
+	const {
+		first_name,
+		last_name,
+		email,
+		department,
+		sub = 'no-auth',
+		profile_picture,
+	} = newUser;
+
+	return db('Users').insert(
+		{
+			first_name,
+			last_name,
+			email,
+			department,
+			sub,
+			profile_picture,
+		},
+		'id',
+	);
+}
+
 async function deleteUser(id) {
 	await db('Employees')
 		.where({ user_id: id })
@@ -83,6 +122,7 @@ async function editUser(id, changes) {
 		user_type,
 		email,
 		profile_picture,
+		sub,
 	} = changes;
 	if (job_title || user_type) {
 		await db('Employees')
@@ -92,7 +132,7 @@ async function editUser(id, changes) {
 	if (first_name || last_name || email || profile_picture) {
 		await db('Users')
 			.where({ id })
-			.update({ first_name, last_name, email, profile_picture });
+			.update({ first_name, last_name, email, profile_picture, sub });
 	}
 	return findById(id);
 }
