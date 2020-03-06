@@ -1,5 +1,7 @@
 exclude_patterns:
-  - "tests/"
-  - "spec/"
-  - "**/vendor/"
-  - "**/node_modules/"
+    - 'tests/'
+    - 'spec/'
+    - '**/vendor/'
+    - '**/node_modules/'
+    - 'data/migrations'
+    - 'data/seeds'
