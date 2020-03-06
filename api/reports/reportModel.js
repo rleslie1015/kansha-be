@@ -3,18 +3,52 @@ const moment = require('moment');
 
 module.exports = {
 	getDataForMyOrg,
-	getTopEmployees,
-	getTopGivers,
 	getPercentThanked,
+	getRangeOfDataForMyOrg,
+	getTops,
 };
+
+async function getRangeOfDataForMyOrg(org_id, query = {}) {
+	let { time = 'years' } = query;
+	const recognitions = await db('Recognition')
+		.where({ org_id })
+		.andWhere(
+			'date',
+			'>',
+			moment()
+				.subtract(1, time)
+				.startOf(time)
+				.toDate(),
+		)
+		.count();
+
+	const results = {};
+	let count = 0;
+
+	for (const rec of recognitions) {
+		let period;
+		if (time === 'years') {
+			period = moment(rec.date).format('MMMM');
+		} else if (time === 'months') {
+			period = moment(rec.date).format('w');
+		} else if (time === 'weeks') {
+			period = moment(rec.date).format('dddd');
+		}
+
+		if (!results[period]) results[period] = 1;
+		else results[period]++;
+		count++;
+	}
+
+	console.log({ count, results });
+
+	return { count, results };
+}
 
 async function getDataForMyOrg(org_id, query = {}) {
 	// retrieving the time period from the query, either days, weeks, months, or years
-	const { time = '' } = query;
+	const { time = 'years' } = query;
 	// if there is no query in the url, set the time to years
-	if (!query) {
-		time = 'years';
-	}
 	// get the number of recognitions in the Recognition table
 	let { count } = await db('Recognition')
 		// inside of this organization
@@ -36,21 +70,18 @@ async function getDataForMyOrg(org_id, query = {}) {
 	return count;
 }
 
-async function getTopEmployees(org_id, query = {}) {
+async function getTops(org_id, query = {}) {
 	// retrieving the time period from the query, either days, weeks, months, or years
-	const { time = '' } = query;
+	const { time = 'years', type = 'sender', limit = '5' } = query;
 	// if there is no query in the url, set the time to years
-	if (!query) {
-		time = 'years';
-	}
-	// get the people who have received thanks from the Recognition table
-	const topEmployees = await db('Recognition')
+
+	const employees = await db('Recognition')
 		// getting their names and picture from the users table
-		.join('Users', 'Users.id', 'recipient')
+		.join('Users', 'Users.id', type)
 		.select(
 			'Users.first_name',
 			'Users.last_name',
-			'recipient',
+			type,
 			'Users.profile_picture',
 		)
 		// limiting the people to the current organizatoin
@@ -64,74 +95,32 @@ async function getTopEmployees(org_id, query = {}) {
 				.toDate(),
 		)
 		// getting the count of how many times the person has received something
-		.count('recipient')
+		.count(type)
 		// grouping them by their id and other info
 		.groupBy(
-			'recipient',
+			type,
 			'Users.first_name',
 			'Users.last_name',
 			'Users.profile_picture',
 		)
 		//ordering them from most received to least
-		.orderByRaw('COUNT(recipient) DESC');
+		.orderByRaw(`COUNT(${type}) DESC`)
+		.limit(limit);
 
-	return topEmployees;
-}
+	const count = employees.reduce((acc, cur) => acc + Number(cur.count), 0);
 
-async function getTopGivers(org_id, query = {}) {
-	// retrieving the time period from the query, either days, weeks, months, or years
-	const { time = '' } = query;
-
-	// if there is no query in the url, set the time to years
-	if (!query) {
-		time = 'years';
-	}
-	// Retrieving the top givers in an organization from the Recognition table
-	const topGivers = await db('Recognition')
-		.join('Users', 'Users.id', 'sender')
-		.select(
-			'Users.first_name',
-			'Users.last_name',
-			'sender',
-			'Users.profile_picture',
-		)
-		// Grabbing only the data that matches the org_id of the current logged in user
-		.where({ org_id })
-		.andWhere(
-			'date',
-			'>',
-			moment()
-				.subtract(1, time)
-				.toDate(),
-		)
-		// Getting the number of times the person has sent a recognition
-		.count('sender')
-		// Grouping each result by the following information below
-		.groupBy(
-			'sender',
-			'Users.first_name',
-			'Users.last_name',
-			'Users.profile_picture',
-		)
-		// Ordering from most recognitions sent, to least recognitions sent
-		.orderByRaw('COUNT(sender) DESC');
-
-	return topGivers;
+	return { count, employees };
 }
 
 async function getPercentThanked(org_id, query = {}) {
 	// retrieving the time period from the query, either days, weeks, months, or years
-	const { time = '' } = query;
+	const { time = 'years' } = query;
 	// if there is no query in the url, set the time to years
-	if (!query) {
-		time = 'years';
-	}
+
 	//get the number of people thanked
 	let numberOfPeopleThanked = await db('Recognition')
 		//in this org
-		.where({
-			org_id,
-		})
+		.where({ org_id })
 		// who match the query
 		.andWhere(
 			'date',
@@ -140,10 +129,9 @@ async function getPercentThanked(org_id, query = {}) {
 				.subtract(1, time)
 				.toDate(),
 		)
-		.count('recipient')
-		.first();
+		.distinct('recipient');
 	// changing the number from a string to an integer
-	numberOfPeopleThanked = Number(numberOfPeopleThanked.count);
+	numberOfPeopleThanked = numberOfPeopleThanked.length;
 	// get the number of people in org
 	let numberOfPeopleInOrg = await db('Employees')
 		.where({

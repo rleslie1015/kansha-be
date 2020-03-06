@@ -17,24 +17,11 @@ router.get('/', async (req, res) => {
 	}
 });
 
-router.get('/topemployees', async (req, res) => {
+router.get('/top', async (req, res) => {
 	const { org_id } = req.profile;
 
 	try {
-		const reportInfo = await reportModel.getTopEmployees(org_id, req.query);
-
-		return res.status(201).json(reportInfo);
-	} catch (error) {
-		console.log('error getting report', error);
-		return res.status(500).json({ error });
-	}
-});
-
-router.get('/topgivers', async (req, res) => {
-	const { org_id } = req.profile;
-
-	try {
-		const reportInfo = await reportModel.getTopGivers(org_id, req.query);
+		const reportInfo = await reportModel.getTops(org_id, req.query);
 
 		return res.status(201).json(reportInfo);
 	} catch (error) {
@@ -56,6 +43,23 @@ router.get('/engagement', async (req, res) => {
 		return res.status(200).json(empEngagement);
 	} catch (error) {
 		console.log('Error getting total engagement', error);
+		return res.status(500).json({ error });
+	}
+});
+
+// Endpoint to retrieve recognitions in a date range
+
+router.get('/range', async (req, res) => {
+	const { org_id } = req.profile;
+
+	try {
+		const rangeData = await reportModel.getRangeOfDataForMyOrg(
+			org_id,
+			req.query,
+		);
+		return res.status(200).json(rangeData);
+	} catch (error) {
+		console.log('Error getting that range of data', error);
 		return res.status(500).json({ error });
 	}
 });
