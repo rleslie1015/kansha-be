@@ -3,6 +3,7 @@ const organizationRouter = require('./routers/organizationRouter.js');
 const usersRouter = require('./routers/usersRouter.js');
 const recRouter = require('./routers/recRouter.js');
 const profileRouter = require('./routers/profileRouter.js');
+const picRouter = require('./routers/picRouter.js');
 
 jest.mock('express-jwt', () => {
 	return jest.fn(() => {
@@ -26,4 +27,5 @@ describe('router tests', () => {
 	organizationRouter();
 	recRouter();
 	profileRouter();
+	picRouter();
 });

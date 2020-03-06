@@ -40,8 +40,8 @@ router.get('/admin', (req, res) => {
 	const orgId = req.profile.org_id;
 
 	emp.getRecByOrg(orgId, req.query)
-		.then(emp => {
-			res.status(200).json(emp);
+		.then(e => {
+			res.status(200).json(e);
 		})
 		.catch(error => {
 			console.log(error, 'error');

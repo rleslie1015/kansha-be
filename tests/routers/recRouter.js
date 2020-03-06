@@ -23,19 +23,64 @@ module.exports = () => {
 			});
 		});
 		describe('GET /rec/:id', () => {
-			it.todo('get specific recognition');
+			it('get specific recognition', async () => {
+				const { body } = await request(server).get('/rec/1');
+				expect(body).toEqual(
+					expect.arrayContaining([
+						{
+							id: 1,
+							recipient: 1,
+							sender: 2,
+							message: 'Sample Message',
+							date: '2020-03-01T06:00:00.000Z',
+							badge_id: null,
+							org_id: null,
+						},
+					]),
+				);
+			});
 		});
-		describe('GET /rec/admin', () => {
-			it.todo('should return recognitions for an entire organization');
-		});
+
 		describe('POST /rec/', () => {
-			it.todo('should successfully post a new recognition');
+			it('should successfully post a new recognition', async () => {
+				const { status } = await request(server)
+					.post('/rec')
+					.send({
+						recipient: 1,
+						sender: 2,
+						message: 'POST test message',
+						date: '2020-03-01T06:00:00.000Z',
+						badge_id: null,
+						org_id: 1,
+					});
+				expect(status).toBe(201);
+			});
 		});
 		describe('DELETE /rec/:id', () => {
-			it.todo('should delete a recognition successfully');
+			it('should delete a recognition successfully', async () => {
+				const { status } = await request(server).delete('/rec/2');
+				expect(status).toBe(204);
+			});
 		});
 		describe('PUT /rec/:id', () => {
-			it.todo('should edit a recognition successfully');
+			it('should edit a recognition successfully', async () => {
+				const { body } = await request(server)
+					.put('/rec/1')
+					.send({
+						message: 'EDIT test message',
+					});
+				expect(body).toEqual(
+					expect.objectContaining({
+						message: 'EDIT test message',
+					}),
+				);
+			});
+		});
+		describe.skip('GET /rec/admin', () => {
+			it('should return recognitions for an entire organization', async () => {
+				const { body } = await request(server).get('/rec/admin');
+				console.log(body);
+			});
 		});
 	});
 };
