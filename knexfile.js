@@ -49,7 +49,15 @@ module.exports = {
 
 	testing: {
 		client: 'pg',
-		connection: 'postgresql://localhost:5432/kansha_test',
+		connection: {
+			host: process.env.TEST_DB_HOST,
+			user: process.env.TEST_DB_USER,
+			password: process.env.TEST_DB_PASS,
+			database: 'kansha_test',
+			options: {
+				port: process.env.TEST_DB_PORT,
+			},
+		},
 		migrations: {
 			directory: './data/migrations',
 		},

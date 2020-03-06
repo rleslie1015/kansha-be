@@ -2,7 +2,7 @@ const server = require('../../server');
 const request = require('supertest');
 
 module.exports = () => {
-	describe('recognition router', () => {
+	describe.skip('recognition router', () => {
 		describe('GET /rec', () => {
 			it('get all recognitions ', async () => {
 				const { body } = await request(server).get('/rec');
