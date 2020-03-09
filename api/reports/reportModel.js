@@ -1,5 +1,6 @@
 const db = require('../../data/dbConfig');
 const moment = require('moment');
+const { timeMap } = require('./utils');
 
 module.exports = {
 	getDataForMyOrg,
@@ -10,19 +11,21 @@ module.exports = {
 
 async function getRangeOfDataForMyOrg(org_id, query = {}) {
 	let { time = 'years' } = query;
+	const subtract = time === 'months' ? 2 : 1;
 	const recognitions = await db('Recognition')
 		.where({ org_id })
 		.andWhere(
 			'date',
 			'>',
 			moment()
-				.subtract(1, time)
+				.subtract(subtract, time)
 				.startOf(time)
 				.toDate(),
 		)
-		.count();
+		.orderBy('date', 'desc');
 
-	const results = {};
+	const resultsMap = timeMap(time);
+
 	let count = 0;
 
 	for (const rec of recognitions) {
@@ -30,17 +33,20 @@ async function getRangeOfDataForMyOrg(org_id, query = {}) {
 		if (time === 'years') {
 			period = moment(rec.date).format('MMMM');
 		} else if (time === 'months') {
-			period = moment(rec.date).format('w');
+			period = `Week ${moment(rec.date).format('w')}`;
 		} else if (time === 'weeks') {
 			period = moment(rec.date).format('dddd');
 		}
+		const current = resultsMap.get(period) || 0;
 
-		if (!results[period]) results[period] = 1;
-		else results[period]++;
+		resultsMap.set(period, current + 1);
 		count++;
 	}
 
-	console.log({ count, results });
+	const results = {};
+	for (const [key, value] of resultsMap) {
+		results[key] = value;
+	}
 
 	return { count, results };
 }
