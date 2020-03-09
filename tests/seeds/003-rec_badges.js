@@ -15,24 +15,28 @@ exports.seed = async function(knex) {
 			sender: 2,
 			message: 'Sample Message',
 			date: '2020/03/01',
+			org_id: 1,
 		},
 		{
 			recipient: 2,
 			sender: 1,
 			message: 'Sample Message',
 			date: '2020/03/01',
+			org_id: 1,
 		},
 		{
 			recipient: 3,
 			sender: 4,
 			message: 'Sample Message',
 			date: '2020/03/01',
+			org_id: 2,
 		},
 		{
 			recipient: 4,
 			sender: 3,
 			message: 'Sample Message',
 			date: '2020/03/01',
+			org_id: 2,
 		},
 	]);
 };
