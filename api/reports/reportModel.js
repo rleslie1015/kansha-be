@@ -120,11 +120,12 @@ async function getTops(org_id, query = {}) {
 
 async function getPercentThanked(org_id, query = {}) {
 	// retrieving the time period from the query, either days, weeks, months, or years
-	const { time = 'years' } = query;
+	const { time = 'years', person = 'recipient' } = query;
+
 	// if there is no query in the url, set the time to years
 
-	//get the number of people thanked
-	let numberOfPeopleThanked = await db('Recognition')
+	//get the number of people thanked or recieving thanks
+	let numberOfPeople = await db('Recognition')
 		//in this org
 		.where({ org_id })
 		// who match the query
@@ -135,9 +136,9 @@ async function getPercentThanked(org_id, query = {}) {
 				.subtract(1, time)
 				.toDate(),
 		)
-		.distinct('recipient');
+		.distinct(person);
 	// changing the number from a string to an integer
-	numberOfPeopleThanked = numberOfPeopleThanked.length;
+	numberOfPeople = numberOfPeople.length;
 	// get the number of people in org
 	let numberOfPeopleInOrg = await db('Employees')
 		.where({
@@ -148,13 +149,12 @@ async function getPercentThanked(org_id, query = {}) {
 	numberOfPeopleInOrg = Number(numberOfPeopleInOrg.count);
 	// get the percent up to two decimal points
 	let percentThanked =
-		Math.round((numberOfPeopleThanked / numberOfPeopleInOrg) * 100 * 100) /
-		100;
+		Math.round((numberOfPeople / numberOfPeopleInOrg) * 100 * 100) / 100;
 
 	//return all three numbers
 
 	return {
-		numberOfPeopleThanked,
+		numberOfPeople,
 		numberOfPeopleInOrg,
 		percentThanked,
 	};
