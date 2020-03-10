@@ -21,11 +21,11 @@ module.exports = () => {
 						rec: [
 							{
 								badge_id: null,
-								date: '2020-03-01T06:00:00.000Z',
+								date: '2020-03-01T00:00:00.000Z',
 								first_name: 'Test',
-								id: 5,
+								id: 1,
 								last_name: 'User 2',
-								message: 'POST test message',
+								message: 'EDIT test message',
 								org_id: 1,
 								profile_pic:
 									'https://kansha-bucket.s3-us-west-1.amazonaws.com/avatarblank.png',
@@ -36,9 +36,9 @@ module.exports = () => {
 								badge_id: null,
 								date: '2020-03-01T06:00:00.000Z',
 								first_name: 'Test',
-								id: 1,
+								id: 5,
 								last_name: 'User 2',
-								message: 'EDIT test message',
+								message: 'POST test message',
 								org_id: 1,
 								profile_pic:
 									'https://kansha-bucket.s3-us-west-1.amazonaws.com/avatarblank.png',
