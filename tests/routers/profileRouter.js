@@ -21,7 +21,7 @@ module.exports = () => {
 						rec: [
 							{
 								badge_id: null,
-								date: '2020-03-01T00:00:00.000Z',
+								date: expect.stringContaining('2020-03-01'),
 								first_name: 'Test',
 								id: 1,
 								last_name: 'User 2',
@@ -34,7 +34,7 @@ module.exports = () => {
 							},
 							{
 								badge_id: null,
-								date: '2020-03-01T06:00:00.000Z',
+								date: expect.stringContaining('2020-03-01'),
 								first_name: 'Test',
 								id: 5,
 								last_name: 'User 2',

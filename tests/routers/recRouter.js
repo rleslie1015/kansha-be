@@ -13,7 +13,7 @@ module.exports = () => {
 							recipient: 1,
 							sender: 2,
 							message: 'Sample Message',
-							date: '2020-03-01T00:00:00.000Z',
+							date: expect.stringContaining('2020-03-01'),
 							badge_id: null,
 							org_id: 1,
 						},
@@ -31,7 +31,7 @@ module.exports = () => {
 							recipient: 2,
 							sender: 1,
 							message: 'Sample Message',
-							date: '2020-03-01T00:00:00.000Z',
+							date: expect.stringContaining('2020-03-01'),
 							badge_id: null,
 							org_id: 1,
 						},
@@ -48,7 +48,7 @@ module.exports = () => {
 						recipient: 1,
 						sender: 2,
 						message: 'POST test message',
-						date: '2020-03-01T06:00:00.000Z',
+						date: '2020-03-01',
 						badge_id: null,
 						org_id: 1,
 					});
@@ -81,7 +81,7 @@ module.exports = () => {
 				expect(body.recognitions).toEqual(
 					expect.arrayContaining([
 						{
-							id: 5,
+							id: 1,
 							sub: '2',
 							first_name: 'Test',
 							last_name: 'User 2',
@@ -91,8 +91,8 @@ module.exports = () => {
 							email: 'test.user2@kansharewards.com',
 							recipient: 1,
 							sender: 2,
-							message: 'POST test message',
-							date: '2020-03-01T06:00:00.000Z',
+							message: 'EDIT test message',
+							date: expect.stringContaining('2020-03-01'),
 							badge_id: null,
 							org_id: 1,
 							org_name: 'NEW ORG',
