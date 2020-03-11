@@ -10,6 +10,7 @@ router.post('/', function(req, res) {
 		userModel
 			.editUserBySub(req.user.sub, { profile_picture: req.file.location })
 			.catch(err => console.err(err));
+		console.log(req.file.location);
 		return res.json({ url: req.file.location });
 	});
 });
