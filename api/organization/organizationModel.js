@@ -27,7 +27,13 @@ async function addOrg(org) {
 
 // delete an organization
 
-function deleteOrg(id) {
+async function deleteOrg(id) {
+	await db('Recognition')
+		.where({ org_id: id })
+		.del();
+	await db('Employees')
+		.where({ org_id: id })
+		.del();
 	return db('Organizations')
 		.where({ id })
 		.del();

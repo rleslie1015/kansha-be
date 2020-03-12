@@ -67,7 +67,7 @@ router.use(tokenValidator);
 
 router.use((err, req, res, next) => {
 	if (err.name === 'UnauthorizedError') {
-		return res.sendStatus(401);
+		return res.status(401).json({ message: err.message });
 	}
 	next();
 });

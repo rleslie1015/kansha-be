@@ -34,18 +34,6 @@ module.exports = () =>
 				});
 			});
 		});
-
-		//working EXCEPT NEED TO TEST MIDDLEWARE. we can currently delete other orgs.
-
-		describe('DELETE /organizations', () => {
-			it('should successfully delete an organization by id', async () => {
-				const { status } = await request(server).delete(
-					'/organizations/1',
-				);
-				expect(status).toBe(204);
-			});
-		});
-
 		//getting a setheaders error on this one
 		describe('POST /organizations', () => {
 			it('should successfully create a new organization', async () => {
@@ -57,18 +45,28 @@ module.exports = () =>
 				expect(status).toBe(201);
 			});
 		});
+		//working EXCEPT NEED TO TEST MIDDLEWARE. we can currently delete other orgs.
+
+		describe.skip('DELETE /organizations', () => {
+			it('should successfully delete an organization by id', async () => {
+				const { status } = await request(server).delete(
+					'/organizations/3',
+				);
+				expect(status).toBe(204);
+			});
+		});
 
 		//working
 
 		describe('PUT /organizations', () => {
 			it('should edit a new org successfully', async () => {
 				const { body } = await request(server)
-					.put('/organizations/3')
+					.put('/organizations/1')
 					.send({
 						name: 'NEW ORG',
 					});
 				expect(body).toEqual(
-					expect.objectContaining({ id: 3, name: 'NEW ORG' }),
+					expect.objectContaining({ id: 1, name: 'NEW ORG' }),
 				);
 			});
 		});

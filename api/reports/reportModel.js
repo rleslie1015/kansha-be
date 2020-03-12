@@ -1,5 +1,6 @@
 const db = require('../../data/dbConfig');
 const moment = require('moment');
+const { timeMap } = require('./utils');
 
 module.exports = {
 	getDataForMyOrg,
@@ -10,19 +11,21 @@ module.exports = {
 
 async function getRangeOfDataForMyOrg(org_id, query = {}) {
 	let { time = 'years' } = query;
+	const subtract = time === 'months' ? 2 : 1;
 	const recognitions = await db('Recognition')
 		.where({ org_id })
 		.andWhere(
 			'date',
 			'>',
 			moment()
-				.subtract(1, time)
+				.subtract(subtract, time)
 				.startOf(time)
 				.toDate(),
 		)
-		.count();
+		.orderBy('date', 'desc');
 
-	const results = {};
+	const resultsMap = timeMap(time);
+
 	let count = 0;
 
 	for (const rec of recognitions) {
@@ -30,17 +33,20 @@ async function getRangeOfDataForMyOrg(org_id, query = {}) {
 		if (time === 'years') {
 			period = moment(rec.date).format('MMMM');
 		} else if (time === 'months') {
-			period = moment(rec.date).format('w');
+			period = `Week ${moment(rec.date).format('w')}`;
 		} else if (time === 'weeks') {
 			period = moment(rec.date).format('dddd');
 		}
+		const current = resultsMap.get(period) || 0;
 
-		if (!results[period]) results[period] = 1;
-		else results[period]++;
+		resultsMap.set(period, current + 1);
 		count++;
 	}
 
-	console.log({ count, results });
+	const results = {};
+	for (const [key, value] of resultsMap) {
+		results[key] = value;
+	}
 
 	return { count, results };
 }
@@ -114,11 +120,12 @@ async function getTops(org_id, query = {}) {
 
 async function getPercentThanked(org_id, query = {}) {
 	// retrieving the time period from the query, either days, weeks, months, or years
-	const { time = 'years' } = query;
+	const { time = 'years', person = 'recipient' } = query;
+
 	// if there is no query in the url, set the time to years
 
-	//get the number of people thanked
-	let numberOfPeopleThanked = await db('Recognition')
+	//get the number of people thanked or recieving thanks
+	let numberOfPeople = await db('Recognition')
 		//in this org
 		.where({ org_id })
 		// who match the query
@@ -129,9 +136,9 @@ async function getPercentThanked(org_id, query = {}) {
 				.subtract(1, time)
 				.toDate(),
 		)
-		.distinct('recipient');
+		.distinct(person);
 	// changing the number from a string to an integer
-	numberOfPeopleThanked = numberOfPeopleThanked.length;
+	numberOfPeople = numberOfPeople.length;
 	// get the number of people in org
 	let numberOfPeopleInOrg = await db('Employees')
 		.where({
@@ -142,13 +149,12 @@ async function getPercentThanked(org_id, query = {}) {
 	numberOfPeopleInOrg = Number(numberOfPeopleInOrg.count);
 	// get the percent up to two decimal points
 	let percentThanked =
-		Math.round((numberOfPeopleThanked / numberOfPeopleInOrg) * 100 * 100) /
-		100;
+		Math.round((numberOfPeople / numberOfPeopleInOrg) * 100 * 100) / 100;
 
 	//return all three numbers
 
 	return {
-		numberOfPeopleThanked,
+		numberOfPeople,
 		numberOfPeopleInOrg,
 		percentThanked,
 	};
