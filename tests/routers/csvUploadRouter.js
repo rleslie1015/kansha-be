@@ -8,7 +8,7 @@ module.exports = () => {
 				const { body } = await request(server)
 					.post('/csv')
 					.attach('bulkupload', './tests/test-csv-file.csv');
-				console.log(body);
+
 				expect(body).toEqual(
 					expect.objectContaining({
 						message: 'Successfully uploaded 6 users',

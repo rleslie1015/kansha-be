@@ -2,7 +2,7 @@ const server = require('../../server');
 const request = require('supertest');
 
 module.exports = () =>
-	describe('employees router', () => {
+	describe('/employees router', () => {
 		describe('POST /employees', () => {
 			it('should return new employee ID', async () => {
 				const { body } = await request(server)
