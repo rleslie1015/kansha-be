@@ -8,6 +8,7 @@ const reportRouter = require('./routers/reportRouter.js');
 const csvUploadRouter = require('./routers/csvUploadRouter.js');
 const reactionRouter = require('./routers/reactionRouter.js');
 const commentRouter = require('./routers/commentRouter');
+const liveFeedRouter = require('/routers/liveFeedRouter.js');
 
 jest.mock('express-jwt', () => {
 	return jest.fn(() => {
@@ -36,4 +37,5 @@ describe('router tests', () => {
 	csvUploadRouter();
 	reactionRouter();
 	commentRouter();
+	liveFeedRouter();
 });
