@@ -6,7 +6,6 @@ module.exports = () => {
 		describe('/GET /comments/:rec_id', () => {
 			it('return a comment on a recognition', async () => {
 				const { body } = await request(server).get('/comments/1');
-				console.log(body);
 				expect(body).toEqual(
 					expect.arrayContaining([
 						{
