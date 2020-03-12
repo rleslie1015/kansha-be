@@ -10,8 +10,8 @@ module.exports = () =>
 				expect(body).toEqual(
 					expect.arrayContaining([
 						{
-							id: 1,
-							name: 'Organization 1',
+							id: expect.any(Number),
+							name: expect.any(String),
 						},
 					]),
 				);
@@ -25,8 +25,8 @@ module.exports = () =>
 				const { body } = await request(server).get('/organizations/1');
 
 				expect(body).toMatchObject({
-					id: 1,
-					name: 'Organization 1',
+					id: expect.any(Number),
+					name: expect.any(String),
 					company_size: null,
 					industry: null,
 					logo_url: null,
@@ -66,7 +66,10 @@ module.exports = () =>
 						name: 'NEW ORG',
 					});
 				expect(body).toEqual(
-					expect.objectContaining({ id: 1, name: 'NEW ORG' }),
+					expect.objectContaining({
+						id: expect.any(Number),
+						name: expect.any(String),
+					}),
 				);
 			});
 		});
