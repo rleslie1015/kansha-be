@@ -20,7 +20,32 @@ module.exports = () =>
 			});
 		});
 
-		describe('GET /employees', () => {
+		describe('/GET employees for a particular organziation', () => {
+			it('should return a list of employees per organization', async () => {
+				const { body } = await request(server).get(
+					'/employees/organizations',
+				);
+				expect(body).toEqual(
+					expect.objectContaining({
+						count: expect.any(Number),
+						employees: expect.arrayContaining([
+							{
+								department: expect.any(String),
+								first_name: expect.any(String),
+								id: expect.any(Number),
+								job_title: expect.any(String),
+								last_name: expect.any(String),
+								org_name: expect.any(String),
+								profile_picture: expect.any(String),
+								user_type: expect.any(String),
+							},
+						]),
+					}),
+				);
+			});
+		});
+
+		describe('GET /employees  ', () => {
 			it('should return a list of employees', async () => {
 				const { body } = await request(server).get('/employees');
 				expect(body).toEqual(

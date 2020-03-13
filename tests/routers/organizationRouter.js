@@ -1,5 +1,6 @@
 const server = require('../../server');
 const request = require('supertest');
+const jwt = require('express-jwt');
 
 //working
 module.exports = () =>
@@ -45,18 +46,6 @@ module.exports = () =>
 				expect(status).toBe(201);
 			});
 		});
-		//working EXCEPT NEED TO TEST MIDDLEWARE. we can currently delete other orgs.
-
-		describe.skip('DELETE /organizations', () => {
-			it('should successfully delete an organization by id', async () => {
-				const { status } = await request(server).delete(
-					'/organizations/3',
-				);
-				expect(status).toBe(204);
-			});
-		});
-
-		//working
 
 		describe('PUT /organizations', () => {
 			it('should edit a new org successfully', async () => {
@@ -73,4 +62,17 @@ module.exports = () =>
 				);
 			});
 		});
+
+		//working EXCEPT NEED TO TEST MIDDLEWARE. we can currently delete other orgs.
+
+		describe('DELETE /organizations', () => {
+			it('should successfully delete an organization by id', async () => {
+				const { status } = await request(server).delete(
+					'/organizations/1',
+				);
+				expect(status).toBe(204);
+			});
+		});
+
+		//working
 	});

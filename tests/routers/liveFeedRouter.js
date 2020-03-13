@@ -23,7 +23,7 @@ module.exports = () => {
 							date: '2020-03-01T08:00:00.000Z',
 							badge_id: null,
 							org_id: 1,
-							org_name: 'NEW ORG',
+							org_name: 'Organization 1',
 							recipient_last: 'User 1',
 							recipient_first: 'Test',
 							recipient_picture:
