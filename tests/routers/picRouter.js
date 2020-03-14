@@ -1,5 +1,10 @@
 const server = require('../../server');
 const request = require('supertest');
+const multer = require('multer');
+
+jest.mock('multer', () => ({}));
+
+// multer.single.mockImplementation(param => console.log(param));
 
 module.exports = () => {
 	//need to do research to understand how to test what we get back from s3

@@ -2,7 +2,7 @@ const server = require('../../server');
 const request = require('supertest');
 
 module.exports = () =>
-	describe('employees router', () => {
+	describe('/employees router', () => {
 		describe('POST /employees', () => {
 			it('should return new employee ID', async () => {
 				const { body } = await request(server)
@@ -20,24 +20,48 @@ module.exports = () =>
 			});
 		});
 
-		describe('GET /employees', () => {
+		describe('/GET employees for a particular organziation', () => {
+			it('should return a list of employees per organization', async () => {
+				const { body } = await request(server).get(
+					'/employees/organizations',
+				);
+				expect(body).toEqual(
+					expect.objectContaining({
+						count: expect.any(Number),
+						employees: expect.arrayContaining([
+							{
+								department: expect.any(String),
+								first_name: expect.any(String),
+								id: expect.any(Number),
+								job_title: expect.any(String),
+								last_name: expect.any(String),
+								org_name: expect.any(String),
+								profile_picture: expect.any(String),
+								user_type: expect.any(String),
+							},
+						]),
+					}),
+				);
+			});
+		});
+
+		describe('GET /employees  ', () => {
 			it('should return a list of employees', async () => {
 				const { body } = await request(server).get('/employees');
 				expect(body).toEqual(
 					expect.arrayContaining([
 						{
-							department: 'X',
-							email: 'test.user1@kansharewards.com',
-							first_name: 'Test',
-							id: 1,
-							job_title: 'Job Title',
-							last_name: 'User 1',
-							org_id: 1,
-							org_name: 'Organization 1',
-							profile_picture:
-								'https://kansha-bucket.s3-us-west-1.amazonaws.com/avatarblank.png',
-							user_id: 1,
-							user_type: 'admin',
+							department: expect.any(String),
+							email: expect.any(String),
+							first_name: expect.any(String),
+							id: expect.any(Number),
+							job_title: expect.any(String),
+							last_name: expect.any(String),
+							org_id: expect.any(Number),
+							org_name: expect.any(String),
+							profile_picture: expect.any(String),
+							user_id: expect.any(Number),
+							user_type: expect.any(String),
 						},
 					]),
 				);
@@ -55,18 +79,17 @@ module.exports = () =>
 			it('should fetch one employee', async () => {
 				const { body } = await request(server).get('/employees/3');
 				expect(body).toMatchObject({
-					id: 3,
-					user_id: 3,
-					first_name: 'Test',
-					last_name: 'User 6',
-					email: 'test.user3@kansharewards.com',
-					org_id: 2,
-					department: 'X',
-					profile_picture:
-						'https://kansha-bucket.s3-us-west-1.amazonaws.com/avatarblank.png',
-					job_title: 'Will be deleted',
-					user_type: 'admin',
-					org_name: 'Organization 2',
+					id: expect.any(Number),
+					user_id: expect.any(Number),
+					first_name: expect.any(String),
+					last_name: expect.any(String),
+					email: expect.any(String),
+					org_id: expect.any(Number),
+					department: expect.any(String),
+					profile_picture: expect.any(String),
+					job_title: expect.any(String),
+					user_type: expect.any(String),
+					org_name: expect.any(String),
 				});
 			});
 		});
@@ -82,18 +105,17 @@ module.exports = () =>
 				expect(body).toEqual(
 					expect.arrayContaining([
 						{
-							id: 3,
-							sub: '3',
-							first_name: 'Test',
-							last_name: 'User 100',
-							department: 'X',
-							profile_picture:
-								'https://kansha-bucket.s3-us-west-1.amazonaws.com/avatarblank.png',
-							email: 'test.user3@kansharewards.com',
-							job_title: 'Will be deleted',
-							user_type: 'admin',
-							org_id: 2,
-							org_name: 'Organization 2',
+							id: expect.any(Number),
+							sub: expect.any(String),
+							first_name: expect.any(String),
+							last_name: expect.any(String),
+							department: expect.any(String),
+							profile_picture: expect.any(String),
+							email: expect.any(String),
+							job_title: expect.any(String),
+							user_type: expect.any(String),
+							org_id: expect.any(Number),
+							org_name: expect.any(String),
 						},
 					]),
 				);
