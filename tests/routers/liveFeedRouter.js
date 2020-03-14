@@ -14,20 +14,18 @@ module.exports = () => {
 							first_name: 'Test',
 							last_name: 'User 2',
 							department: 'X',
-							profile_picture:
-								'https://kansha-bucket.s3-us-west-1.amazonaws.com/avatarblank.png',
+							profile_picture: expect.stringContaining('https'),
 							email: 'test.user2@kansharewards.com',
 							recipient: 1,
 							sender: 2,
 							message: 'POST test message',
-							date: '2020-03-01T08:00:00.000Z',
+							date: expect.stringContaining('2020-03-01'),
 							badge_id: null,
 							org_id: 1,
 							org_name: 'Organization 1',
 							recipient_last: 'User 1',
 							recipient_first: 'Test',
-							recipient_picture:
-								'https://kansha-bucket.s3-us-west-1.amazonaws.com/avatarblank.png',
+							recipient_picture: expect.stringContaining('https'),
 						},
 					]),
 				);

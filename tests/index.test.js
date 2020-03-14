@@ -27,15 +27,15 @@ afterEach(() => {
 });
 
 describe('router tests', () => {
-	// usersRouter();
-	// employeeRouter();
-	// recRouter();
-	// profileRouter();
+	usersRouter();
+	employeeRouter();
+	recRouter();
+	profileRouter();
+	reportRouter();
+	csvUploadRouter();
+	reactionRouter();
+	commentRouter();
+	liveFeedRouter();
 	picRouter();
-	// reportRouter();
-	// csvUploadRouter();
-	// reactionRouter();
-	// commentRouter();
-	// liveFeedRouter();
-	// organizationRouter();
+	organizationRouter();
 });
