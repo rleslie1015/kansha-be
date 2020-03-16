@@ -129,3 +129,35 @@ _returns an array of employees as well as a count that represents the number of 
     		.catch(error => {
     			console.log(error.response);
     		});
+
+## **Fetch One Employee by ID**
+
+**URL**
+
+_/employees/:id_
+
+**Method:**
+
+`GET`
+
+**Success Response:**
+_returns an array of employees as well as a count that represents the number of employees in the organization_
+
+-   **Code:** 200 <br />
+    **Example Content:** `{ "user_id": 7, "first_name": "Andrew1", "last_name": "Ackerman", "email": null, "profile_picture": "https://kansha-bucket.s3-us-west-1.amazonaws.com/avatarblank.png", "job_title": "SoftwareDev", "user_type": "Admin", "department": "Software", "org_id": 15, "id": 9, "org_name": "Ionn" }`
+
+**Error Response:**
+
+-   **Code:** 500 <br />
+    **Content:** `Employee could not be retrieved from the database`
+
+**Sample Call:**
+
+    	axiosWithAuth()
+    		.get('/employees/7')
+    		.then(response => {
+    			console.log(response);
+    		})
+    		.catch(error => {
+    			console.log(error.response);
+    		});
