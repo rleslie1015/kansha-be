@@ -1,5 +1,6 @@
 const server = require('../../server');
 const request = require('supertest');
+const jwt = require('express-jwt');
 
 //working
 module.exports = () =>
@@ -10,8 +11,8 @@ module.exports = () =>
 				expect(body).toEqual(
 					expect.arrayContaining([
 						{
-							id: 1,
-							name: 'Organization 1',
+							id: expect.any(Number),
+							name: expect.any(String),
 						},
 					]),
 				);
@@ -25,8 +26,8 @@ module.exports = () =>
 				const { body } = await request(server).get('/organizations/1');
 
 				expect(body).toMatchObject({
-					id: 1,
-					name: 'Organization 1',
+					id: expect.any(Number),
+					name: expect.any(String),
 					company_size: null,
 					industry: null,
 					logo_url: null,
@@ -45,18 +46,6 @@ module.exports = () =>
 				expect(status).toBe(201);
 			});
 		});
-		//working EXCEPT NEED TO TEST MIDDLEWARE. we can currently delete other orgs.
-
-		describe.skip('DELETE /organizations', () => {
-			it('should successfully delete an organization by id', async () => {
-				const { status } = await request(server).delete(
-					'/organizations/3',
-				);
-				expect(status).toBe(204);
-			});
-		});
-
-		//working
 
 		describe('PUT /organizations', () => {
 			it('should edit a new org successfully', async () => {
@@ -66,8 +55,24 @@ module.exports = () =>
 						name: 'NEW ORG',
 					});
 				expect(body).toEqual(
-					expect.objectContaining({ id: 1, name: 'NEW ORG' }),
+					expect.objectContaining({
+						id: expect.any(Number),
+						name: expect.any(String),
+					}),
 				);
 			});
 		});
+
+		//working EXCEPT NEED TO TEST MIDDLEWARE. we can currently delete other orgs.
+
+		describe('DELETE /organizations', () => {
+			it('should successfully delete an organization by id', async () => {
+				const { status } = await request(server).delete(
+					'/organizations/1',
+				);
+				expect(status).toBe(204);
+			});
+		});
+
+		//working
 	});
