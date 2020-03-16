@@ -48,11 +48,16 @@ module.exports = {
 	},
 
 	testing: {
-		client: 'sqlite3',
+		client: 'pg',
 		connection: {
-			filename: './tests/test.db3',
+			host: process.env.TEST_DB_HOST,
+			user: process.env.TEST_DB_USER,
+			password: process.env.TEST_DB_PASS,
+			database: 'kansha_test',
+			options: {
+				port: process.env.TEST_DB_PORT,
+			},
 		},
-		useNullAsDefault: true,
 		migrations: {
 			directory: './data/migrations',
 		},
@@ -61,15 +66,7 @@ module.exports = {
 		},
 		pool: {
 			min: 2,
-			max: 10,
-		},
-		pool: {
-			afterCreate: (conn, done) => {
-				conn.run('PRAGMA foreign_keys = ON', done);
-			},
-		},
-		log: {
-			warn() {},
+			max: 75,
 		},
 	},
 };
