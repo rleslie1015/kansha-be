@@ -4,12 +4,27 @@ const router = require('express').Router();
 const auth = require('../../middleware/authMiddleWare');
 
 router.use(auth.validateId);
+
 // get all teams for an organization
 router.get('/', (req, res) => {});
-//get a team by id
-router.get('/:id', (req, res) => {});
-//add a team  to a organization
 
+//get a team by id
+router.get('/:id', (req, res) => {
+	const id = req.params.id;
+
+	Team.getTeamByIdWithMembers(id)
+		.then(team => {
+			res.status(200).json(team);
+		})
+		.catch(error => {
+			console.log(error);
+			res.status(500).json({
+				error: 'Team could not be retrieved from the database',
+			});
+		});
+});
+
+//add a team  to a organization
 router.post('/', async (req, res) => {
 	const currentOrgId = req.profile.org_id;
 	const { name } = req.body;
@@ -29,7 +44,7 @@ router.post('/', async (req, res) => {
 		res.status(500).json({ error: 'Error adding team' });
 	}
 });
-
+// Add team member to team
 router.post('/:id', async (req, res) => {
 	const { team_role, user_id } = req.body;
 
@@ -52,7 +67,33 @@ router.post('/:id', async (req, res) => {
 
 //delete a team
 router.delete('/:id', (req, res) => {});
+
 //update team
 router.put('/:id', (req, res) => {});
+
+// get all team-members for a team Id
+router.get('/:id/members/', (req, res) => {});
+
+//get a team-member by id
+router.get('/members/:id/', (req, res) => {
+	const id = req.params.id;
+
+	TeamMembers.getTeamMemberById(id)
+		.then(member => {
+			res.status(200).json(member);
+		})
+		.catch(error => {
+			console.log(error);
+			res.status(500).json({
+				error: 'Member could not be retrieved from the database',
+			});
+		});
+});
+
+//delete a team-member
+router.delete('/members/:id', (req, res) => {});
+
+//update team-member
+router.put('/members/:id', (req, res) => {});
 
 module.exports = router;
