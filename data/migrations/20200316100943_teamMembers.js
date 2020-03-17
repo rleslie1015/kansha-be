@@ -14,6 +14,7 @@ exports.up = function(knex) {
 			.onDelete('CASCADE')
 			.onUpdate('CASCADE');
 		tbl.string('team_role').notNullable();
+		tbl.boolean('active').defaultTo(true);
 	});
 };
 
