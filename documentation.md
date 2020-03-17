@@ -21,37 +21,39 @@
     -   [**See All Recognitions from One Organization**](#--see-all-recognitions-from-one-organization--)
     -   [**See a Live Feed of Recognitions from One Organization**](#--see-a-live-feed-of-recognitions-from-one-organization--)
 -   [**Reports Endpoints**](#--reports-endpoints--)
-    -   [**Get an Organization's Reports**](#--get-an-organization-s-reports--)
-    -   [**Get an Organization's Report for Top Thankers, Receivers**](#----get-an-organization-s-report-for-top-thankers--receivers)
-    -   [**Get an Organization's Report for Employee Engagement**](#----get-an-organization-s-report-for-employee-engagement)
-    -   [**Get an Organization's Report for Recognition Count in given date range**](#--get-an-organization-s-report-for-recognition-count-in-given-date-range--)
+    -   [**Get an Organizations Reports**](#--get-an-organizations-reports--)
+    -   [**Get an Organizations Report for Top Thankers and Receivers**](#--get-an-organizations-report-for-top-thankers-and-receivers--)
+    -   [**Get an Organizations Report for Employee Engagement**](#--get-an-organizations-report-for-employee-engagement--)
+    -   [**Get an Organizations Report for Recognition Count in given date range**](#--get-an-organizations-report-for-recognition-count-in-given-date-range--)
 -   [**Profile Endpoints**](#--profile-endpoints--)
-    -   [**Fetch a User's Profile**](#--fetch-a-user-s-profile--)
+    -   [**Fetch a Users Profile**](#--fetch-a-users-profile--)
 -   [**Reaction Endpoints**](#--reaction-endpoints--)
     -   [**Fetch Reactions for a given Recognition**](#--fetch-reactions-for-a-given-recognition--)
     -   [**Post a Reaction for a given Recognition**](#--post-a-reaction-for-a-given-recognition--)
     -   [**Delete a Reaction for a given Recognition**](#--delete-a-reaction-for-a-given-recognition--)
 -   [**Comment Endpoints**](#--comment-endpoints--)
     -   [**Fetch Comments for a given Recognition**](#--fetch-comments-for-a-given-recognition--)
-    -   [**Post a new Comment for a given Recognition**](#--post-new-comment-for-given-recognition--)
-    -   [**Delete a Comment for a given Recognition**](#--delete-comment-for-given-recognition--)
+    -   [**Post a new Comment for a given Recognition**](#--post-a-new-comment-for-a-given-recognition--)
+    -   [**Delete a Comment for a given Recognition**](#--delete-a-comment-for-a-given-recognition--)
 -   [**Badge Endpoints**](#--badge-endpoints--)
-    -   [**Fetch a Comprehensive List of Available Badges**](#--fetch-list-of-badges--)
+
+    -   [**Fetch a Comprehensive List of Available Badges**](#--fetch-a-comprehensive-list-of-available-badges--)
+
 -   [**Recognition Endpoints**](#--recognition-endpoints--)
     -   [**Fetch All Recognitions**](#--fetch-all-recognitions--)
-    -   [**Fetch All Recognitions in a given Organization**](#--fetch-all-recs-by-org--)
-    -   [**Fetch One Recognition by rec_id**](#--fetch-one-rec-by-id--)
-    -   [**Post a New Recognition**](#--post-a-recognition--)
-    -   [**Delete a Recognition by rec_id**](#--delete-a-recognition--)
-    -   [**Edit a Recognition by rec_id**](#--edit-a-recognition--)
--   [**Profile Pic Endpoints**](#--profile-pic-endpoints--)
+    -   [**Fetch All Recognitions in a given Organization**](#--fetch-all-recognitions-in-a-given-organization--)
+    -   [**Fetch One Recognition by recid**](#--fetch-one-recognition-by-recid--)
+    -   [**Post a New Recognition**](#--post-a-new-recognition--)
+    -   [**Delete a Recognition by recid**](#--delete-a-recognition-by-recid--)
+    -   [**Edit a Recognition by recid**](#--edit-a-recognition-by-recid--)
+    -   [**Profile Pic Endpoints**](#--profile-pic-endpoints--)
     -   [**Post a New Profile Picture**](#--post-a-profile-pic--)
 -   [**User Endpoints**](#--user-endpoints--)
     -   [**Fetch all Users**](#--fetch-all-users--)
-    -   [**Fetch a User by ID**](#--fetch-user-by-id--)
-    -   [**Create a New User**](#--create-new-user--)
-    -   [**Delete a User by ID**](#--delete-user-by-id--)
-    -   [**Edit a User by ID**](#--edit-user-by-id--)
+    -   [**Fetch a User by ID**](#--fetch-a-user-by-id--)
+    -   [**Create a New User**](#--create-a-new-user--)
+    -   [**Delete a User by ID**](#--delete-a-user-by-id--)
+    -   [**Edit a User by ID**](#--edit-a-user-by-id--)
 
 ## **CSV Endpoints**
 
@@ -127,7 +129,7 @@ _You will also need to verify that the file uploaded is a csv file. Here is an e
 ## **Employees Endpoints**
 
 -   [**Fetch All Employees**](#--fetch-all-employees--)
--   [**Fetch Employees In The Logged-in User's Organization**](#--fetch-employees-in-the-logged-in-user-s-organization--)
+-   [**Fetch Employees In The Logged-in User's Organization**](#--fetch-employees-in-the-logged-in-users-organization--)
 -   [**Fetch One Employee by ID**](#--fetch-one-employee-by-id--)
 -   [**Delete An Employee**](#--delete-an-employee--)
 -   [**Edit An Employee**](#--edit-an-employee--)
@@ -664,10 +666,10 @@ _/feed/live_
 
 ## **Reports Endpoints**
 
--   [**Get an Organizations Reports**](#--get-an-organization-s-reports--)
--   [**Get an Organizations Report for Top Thankers, Receivers**](#--get-an-organization-s-report-for-top-thankers--receivers--)
--   [**Get an Organizations Report for Employee Engagement**](#--get-an-organization-s-report-for-employee-engagement--)
--   [**Get an Organizations Report for Recognition Count in given date range**](#--get-an-organization-s-report-for-recognition-count-in-given-date-range--)
+-   [**Get an Organizations Reports**](#--get-an-organizations-reports--)
+-   [**Get an Organizations Report for Top Thankers and Receivers**](#--get-an-organizations-report-for-top-thankers-and-receivers--)
+-   [**Get an Organizations Report for Employee Engagement**](#--get-an-organizations-report-for-employee-engagement--)
+-   [**Get an Organizations Report for Recognition Count in given date range**](#--get-an-organizations-report-for-recognition-count-in-given-date-range--)
 
 ### **Get an Organizations Reports**
 
@@ -709,7 +711,7 @@ _You can pass in "years" "months" or "weeks" to get how many recognitions were s
 
 _The idea behind this endpoint is that the user can see how many people have sent or received thanks in the organization over a given time period. This can be useful for charts on the admin dashboard._
 
-### **Get an Organizations Report for Top Thankers, Receivers**
+### **Get an Organizations Report for Top Thankers and Receivers**
 
 **URL**
 
@@ -751,7 +753,7 @@ _You can pass in the number of employees you want to receive back_
     			console.log(error.response);
     		});
 
-### **Get an Organization's Report for Employee Engagement**
+### **Get an Organizations Report for Employee Engagement**
 
 **URL**
 
@@ -790,7 +792,7 @@ _You can pass in "recipient" or "sender" to get either the percent of people who
     			console.log(error.response);
     		});
 
-### **Get an Organization's Report for Recognition Count in given date range**
+### **Get an Organizations Report for Recognition Count in given date range**
 
 **URL**
 
@@ -817,9 +819,9 @@ _You can pass in "years" "months" or "weeks" to get data over those time periods
 
 ## **Profile Endpoints**
 
--   [**Fetch a User's Profile**](#--fetch-a-user-s-profile--)
+-   [**Fetch a Users Profile**](#--fetch-a-users-profile--)
 
-### **Fetch a User's Profile**
+### **Fetch a Users Profile**
 
 **URL**
 
@@ -829,11 +831,11 @@ _/profile/:id_
 
 `GET`
 
-**Data Params**
+**URL Params**
 
--   **Required:**
-    -   `id` (integer)
+**Required:**
 
+`id=[integer]`
 **Success Response:**
 
 -   **Code:** 200 <br />
@@ -862,17 +864,17 @@ _/profile/:id_
 
 **URL**
 
-_/reactions/rec_id_
+_/reactions/:rec_id_
 
 **Method**
 
 `GET`
 
-**Data Params**
+**URL Params**
 
--   **Required:**
-    -   `rec_id` (integer)
+**Required:**
 
+`rec_id=[integer]`
 **Success Response:**
 
 -   **Code:** 200 <br />
@@ -895,11 +897,11 @@ _/reactions/_
 
 `POST`
 
-**Data Params**
+**URL Params**
 
--   **Required:**
-    -   `user_id` (integer)
+**Required:**
 
+`rec_id=[integer]`
 **Success Response:**
 
 -   **Code:** 201 <br />
@@ -920,12 +922,11 @@ _/reactions/:id_
 
 `DELETE`
 
-**Data Params**
+**URL Params**
 
--   **Required:**
-    -   `rec_id` (integer)
-    -   `id` (integer)
+**Required:**
 
+`id=[integer]`
 **Success Response:**
 
 -   **Code:** 204 <br />
@@ -938,8 +939,8 @@ _/reactions/:id_
 ## **Comment Endpoints**
 
 -   [**Fetch Comments for a given Recognition**](#--fetch-comments-for-a-given-recognition--)
--   [**Post a new Comment for a given Recognition**](#--post-new-comment-for-given-recognition--)
--   [**Delete a Comment for a given Recognition**](#--delete-comment-for-given-recognition--)
+-   [**Post a new Comment for a given Recognition**](#--post-a-new-comment-for-a-given-recognition--)
+-   [**Delete a Comment for a given Recognition**](#--delete-a-comment-for-a-given-recognition--)
 
 ### **Fetch Comments for a given Recognition**
 
@@ -951,11 +952,11 @@ _/comments/rec_id_
 
 `GET`
 
-**Data Params**
+**URL Params**
 
--   **Required:**
-    -   `rec_id` (integer)
+**Required:**
 
+`rec_id=[integer]`
 **Success Response:**
 
 -   **Code:** 200 <br />
@@ -977,11 +978,6 @@ _/comments/_
 **Method**
 
 `POST`
-
-**Data Params**
-
--   **Required:**
-    -   `user_id` (integer)
 
 **Success Response:**
 
@@ -1020,7 +1016,7 @@ _/comments/:id_
 
 ## **Badge Endpoints**
 
--   [**Fetch a Comprehensive List of Available Badges**](#--fetch-list-of-badges--)
+-   [**Fetch a Comprehensive List of Available Badges**](#--fetch-a-comprehensive-list-of-available-badges--)
 
 ### **Fetch a Comprehensive List of Available Badges**
 
@@ -1045,11 +1041,11 @@ _/badges/_
 ## **Recognition Endpoints**
 
 -   [**Fetch All Recognitions**](#--fetch-all-recognitions--)
--   [**Fetch All Recognitions in a given Organization**](#--fetch-all-recs-by-org--)
--   [**Fetch One Recognition by rec_id**](#--fetch-one-rec-by-id--)
--   [**Post a New Recognition**](#--post-a-recognition--)
--   [**Delete a Recognition by rec_id**](#--delete-a-recognition--)
--   [**Edit a Recognition by rec_id**](#--edit-a-recognition--)
+-   [**Fetch All Recognitions in a given Organization**](#--fetch-all-recognitions-in-a-given-organization--)
+-   [**Fetch One Recognition by recid**](#--fetch-one-recognition-by-recid--)
+-   [**Post a New Recognition**](#--post-a-new-recognition--)
+-   [**Delete a Recognition by recid**](#--delete-a-recognition-by-recid--)
+-   [**Edit a Recognition by recid**](#--edit-a-recognition-by-recid--)
 
 ### **Fetch All Recognitions**
 
@@ -1096,7 +1092,7 @@ _/rec/admin_
 -   **Code:** 500 <br />
     **Example Content:** {error: 'Recognition List could not be retrieved from the database'} <br />
 
-### **Fetch One Recognition by rec_id**
+### **Fetch One Recognition by recid**
 
 **URL**
 
@@ -1138,7 +1134,7 @@ _/rec/_
 -   **Code:** 500 <br />
     **Example Content:** error message <br />
 
-### **Delete a Recognition by rec_id**
+### **Delete a Recognition by recid**
 
 **URL**
 
@@ -1157,7 +1153,7 @@ _/rec/:id_
 -   **Code:** 500 <br />
     **Example Content:** error message <br />
 
-### **Edit a Recognition by rec_id**
+### **Edit a Recognition by recid**
 
 **URL**
 
@@ -1198,10 +1194,10 @@ _/profile-pic/_
 ## **User Endpoints**
 
 -   [**Fetch all Users**](#--fetch-all-users--)
--   [**Fetch a User by ID**](#--fetch-user-by-id--)
--   [**Create a New User**](#--create-new-user--)
--   [**Delete a User by ID**](#--delete-user-by-id--)
--   [**Edit a User by ID**](#--edit-user-by-id--)
+-   [**Fetch a User by ID**](#--fetch-a-user-by-id--)
+-   [**Create a New User**](#--create-a-new-user--)
+-   [**Delete a User by ID**](#--delete-a-user-by-id--)
+-   [**Edit a User by ID**](#--edit-a-user-by-id--)
 
 ### **Fetch all Users**
 
