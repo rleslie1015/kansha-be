@@ -1,4 +1,5 @@
 const Team = require('./teamModel');
+const TeamMembers = require('./teamMembersModel');
 const router = require('express').Router();
 const auth = require('../../middleware/authMiddleWare');
 
@@ -26,6 +27,26 @@ router.post('/', async (req, res) => {
 	} catch (error) {
 		console.log('error creating team', error);
 		res.status(500).json({ error: 'Error adding team' });
+	}
+});
+
+router.post('/:id', async (req, res) => {
+	const { team_role, user_id } = req.body;
+
+	if (!team_role) {
+		return res.status(400).json({ error: 'member needs a role' });
+	}
+
+	try {
+		const newTeamMember = await TeamMembers.AddTeamMemberToTeam({
+			team_role,
+			user_id,
+			team_id: req.params.id,
+		});
+		return res.status(201).json(newTeamMember);
+	} catch (error) {
+		console.log('error creating member', error);
+		res.status(500).json({ error: 'Error adding member' });
 	}
 });
 

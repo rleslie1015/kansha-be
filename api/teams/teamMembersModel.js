@@ -9,21 +9,25 @@ module.exports = {
 };
 
 function getAllTeamMembersForATeam() {
-	return db('Teams');
+	return db('TeamMembers');
 }
 
-function getTeamMemberById() {
-	return db('Teams');
+function getTeamMemberById(id) {
+	return db('TeamMembers')
+		.where({ id })
+		.first();
 }
 
-function AddTeamMemberToTeam() {
-	return db('Teams');
+async function AddTeamMemberToTeam(teamMember) {
+	const [id] = await db('TeamMembers').insert(teamMember, 'id');
+
+	return getTeamMemberById(id);
 }
 
 function EditTeamMember() {
-	return db('Teams');
+	return db('TeamMembers');
 }
 
 function DeleteTeamMember() {
-	return db('Teams');
+	return db('TeamMembers');
 }

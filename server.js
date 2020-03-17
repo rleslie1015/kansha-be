@@ -16,7 +16,6 @@ const employeeRouter = require('./api/employee/employeeRouter');
 const csvUploadRouter = require('./api/csv/csvUploadRouter');
 const reportRouter = require('./api/reports/reportRouter');
 const teamRouter = require('./api/teams/teamRouter');
-const teamMembersRouter = require('./api/teams/teamMembersRouter');
 
 // Global MiddleWare
 server.use(express.json());
@@ -27,7 +26,6 @@ server.use('/badges', badgeRouter);
 
 server.use(auth.validateToken);
 
-server.use('/team-members', teamMembersRouter);
 server.use('/teams', teamRouter);
 server.use('/reports', reportRouter);
 server.use('/users', userRouter);
