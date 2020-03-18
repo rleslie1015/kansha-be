@@ -3,10 +3,15 @@ const Treeize = require('treeize');
 module.exports = {
 	getAllTeamsForAnOrg,
 	getTeamById,
-	AddTeamToOrg,
-	EditTeam,
-	DeleteTeam,
+	addTeamToOrg,
+	editTeam,
+	deleteTeam,
 	getTeamByIdWithMembers,
+	getAllTeamMembersForATeam,
+	getTeamMemberById,
+	addTeamMemberToTeam,
+	editTeamMember,
+	deleteTeamMember,
 };
 
 function getAllTeamsForAnOrg(org_id) {
@@ -32,6 +37,7 @@ async function getTeamByIdWithMembers(id) {
 		.select(
 			'Teams.id',
 			'Teams.name',
+			'TeamMembers.id as team_members:id',
 			'Users.id as team_members:user_id',
 			'Users.first_name as team_members:first_name',
 			'Users.last_name as team_members:last_name',
@@ -49,16 +55,56 @@ function getTeamById(id) {
 		.where({ id })
 		.first();
 }
-async function AddTeamToOrg(team) {
+async function addTeamToOrg(team) {
 	const [id] = await db('Teams').insert(team, 'id');
 
 	return getTeamById(id);
 }
 
-function EditTeam() {
+function editTeam() {
 	return db('Teams');
 }
 
-function DeleteTeam() {
-	return db('Teams');
+async function deleteTeam(id) {
+	await db('TeamMembers')
+		.where({ team_id: id })
+		.del();
+	await db('Teams')
+		.where({ id })
+		.del();
+}
+
+function getAllTeamMembersForATeam() {
+	return db('TeamMembers');
+}
+
+function getTeamMemberById(id) {
+	return db('TeamMembers')
+		.join('Users', 'TeamMembers.user_id', 'Users.id')
+		.join('Teams', 'TeamMembers.team_id', 'Teams.id')
+		.select(
+			'TeamMembers.*',
+			'Teams.name as team_name',
+			'Users.first_name',
+			'Users.last_name',
+			'Users.profile_picture',
+		)
+		.where('TeamMembers.id', id)
+		.first();
+}
+
+async function addTeamMemberToTeam(teamMember) {
+	const [id] = await db('TeamMembers').insert(teamMember, 'id');
+
+	return getTeamMemberById(id);
+}
+
+function editTeamMember() {
+	return db('TeamMembers');
+}
+
+async function deleteTeamMember(id) {
+	await db('TeamMembers')
+		.where({ id: id })
+		.del();
 }
