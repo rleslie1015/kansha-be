@@ -14,20 +14,26 @@ module.exports = {
 	deleteTeamMember,
 };
 
-function getAllTeamsForAnOrg(org_id) {
-	return db('Teams')
+async function getAllTeamsForAnOrg(org_id) {
+	const teams = await db('Teams')
 		.join('TeamMembers', 'Teams.id', 'TeamMembers.team_id')
 		.join('Users', 'TeamMembers.user_id', 'Users.id')
-		.count('TeamMembers.id as team_count')
 		.where('Teams.org_id', org_id)
 		.andWhere('TeamMembers.team_role', 'ilike', 'manager')
 		.select(
-			'Teams.id',
-			'name',
-			'Users.id as user_id',
-			'Users.first_name',
-			'Users.last_name',
-		);
+			'Teams.id as team_id ',
+			'Teams.name',
+
+			'TeamMembers.id as managers:member_id',
+			'Users.id as managers:user_id*',
+			'Users.first_name as managers:first_name',
+			'Users.last_name as managers:last_name',
+		)
+		.groupBy('TeamMembers.id', 'Teams.id', 'Users.id');
+
+	const teamAgg = new Treeize();
+	teamAgg.grow(teams);
+	return teamAgg.getData();
 }
 
 async function getTeamByIdWithMembers(id) {

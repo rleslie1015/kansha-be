@@ -7,6 +7,16 @@ router.use(auth.validateId);
 // get all teams for an organization
 router.get('/', (req, res) => {
 	const currentOrgId = req.profile.org_id;
+
+	Team.getAllTeamsForAnOrg(currentOrgId)
+		.then(teams => {
+			res.status(200).json(teams);
+		})
+		.catch(error => {
+			res.status(500).json({
+				error: 'Teams could not be retrieved from the database',
+			});
+		});
 });
 
 //get a team by id with members
