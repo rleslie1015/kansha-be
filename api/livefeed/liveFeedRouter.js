@@ -4,7 +4,12 @@ const { emitterOutput } = require('./liveFeedEmitter');
 const { validateId } = require('../../middleware/authMiddleWare');
 
 router.get('/', validateId, (req, res) => {
-	getOrgRecognitions(req.profile.org_id).then(data => res.json(data));
+	getOrgRecognitions(req.profile.org_id)
+		.then(data => res.json(data))
+		.catch(err => {
+			console.log(err);
+			res.status(500).json({ message: err });
+		});
 });
 
 router.get('/live', validateId, (req, res) => {
