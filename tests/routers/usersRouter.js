@@ -8,18 +8,17 @@ module.exports = () =>
 				const { body } = await request(server).get('/users');
 
 				expect(body[0]).toMatchObject({
-					id: 1,
-					sub: '1',
-					first_name: 'Test',
-					last_name: 'User 1',
-					department: 'X',
-					profile_picture:
-						'https://kansha-bucket.s3-us-west-1.amazonaws.com/avatarblank.png',
-					email: 'test.user1@kansharewards.com',
-					job_title: 'Job Title',
-					user_type: 'admin',
-					org_id: 1,
-					org_name: 'Organization 1',
+					id: expect.any(Number),
+					sub: expect.any(String),
+					first_name: expect.any(String),
+					last_name: expect.any(String),
+					department: expect.any(String),
+					profile_picture: expect.any(String),
+					email: expect.any(String),
+					job_title: expect.any(String),
+					user_type: expect.any(String),
+					org_id: expect.any(Number),
+					org_name: expect.any(String),
 				});
 			});
 		});
@@ -31,18 +30,17 @@ module.exports = () =>
 				expect(body).toEqual(
 					expect.arrayContaining([
 						{
-							id: 1,
-							sub: '1',
-							first_name: 'Test',
-							last_name: 'User 1',
-							department: 'X',
-							profile_picture:
-								'https://kansha-bucket.s3-us-west-1.amazonaws.com/avatarblank.png',
-							email: 'test.user1@kansharewards.com',
-							job_title: 'Job Title',
-							user_type: 'admin',
-							org_id: 1,
-							org_name: 'Organization 1',
+							id: expect.any(Number),
+							sub: expect.any(String),
+							first_name: expect.any(String),
+							last_name: expect.any(String),
+							department: expect.any(String),
+							profile_picture: expect.any(String),
+							email: expect.any(String),
+							job_title: expect.any(String),
+							user_type: expect.any(String),
+							org_id: expect.any(Number),
+							org_name: expect.any(String),
 						},
 					]),
 				);
@@ -83,18 +81,17 @@ module.exports = () =>
 				expect(body).toEqual(
 					expect.arrayContaining([
 						{
-							id: 3,
-							sub: '3',
-							first_name: 'Test',
-							last_name: 'User 6',
-							department: 'X',
-							profile_picture:
-								'https://kansha-bucket.s3-us-west-1.amazonaws.com/avatarblank.png',
-							email: 'test.user3@kansharewards.com',
-							job_title: 'Will be deleted',
-							user_type: 'admin',
-							org_id: 2,
-							org_name: 'Organization 2',
+							id: expect.any(Number),
+							sub: expect.any(String),
+							first_name: expect.any(String),
+							last_name: expect.any(String),
+							department: expect.any(String),
+							profile_picture: expect.any(String),
+							email: expect.any(String),
+							job_title: expect.any(String),
+							user_type: expect.any(String),
+							org_id: expect.any(Number),
+							org_name: expect.any(String),
 						},
 					]),
 				);
