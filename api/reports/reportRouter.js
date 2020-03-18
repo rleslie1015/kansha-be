@@ -10,7 +10,7 @@ router.get('/', async (req, res) => {
 	try {
 		const reportInfo = await reportModel.getDataForMyOrg(org_id, req.query);
 
-		return res.status(201).json(reportInfo);
+		return res.status(200).json(reportInfo);
 	} catch (error) {
 		console.log('error getting report', error);
 		return res.status(500).json({ error });
@@ -23,7 +23,7 @@ router.get('/top', async (req, res) => {
 	try {
 		const reportInfo = await reportModel.getTops(org_id, req.query);
 
-		return res.status(201).json(reportInfo);
+		return res.status(200).json(reportInfo);
 	} catch (error) {
 		console.log('error getting report', error);
 		return res.status(500).json({ error });

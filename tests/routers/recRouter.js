@@ -9,13 +9,13 @@ module.exports = () => {
 				expect(body).toEqual(
 					expect.arrayContaining([
 						{
-							id: 1,
-							recipient: 1,
-							sender: 2,
-							message: 'Sample Message',
+							id: expect.any(Number),
+							recipient: expect.any(Number),
+							sender: expect.any(Number),
+							message: expect.any(String),
 							date: expect.stringContaining('2020-03-01'),
 							badge_id: null,
-							org_id: 1,
+							org_id: expect.any(Number),
 						},
 					]),
 				);
@@ -27,13 +27,13 @@ module.exports = () => {
 				expect(body).toEqual(
 					expect.arrayContaining([
 						{
-							id: 2,
-							recipient: 2,
-							sender: 1,
-							message: 'Sample Message',
+							id: expect.any(Number),
+							recipient: expect.any(Number),
+							sender: expect.any(Number),
+							message: expect.any(String),
 							date: expect.stringContaining('2020-03-01'),
 							badge_id: null,
-							org_id: 1,
+							org_id: expect.any(Number),
 						},
 					]),
 				);
@@ -70,7 +70,7 @@ module.exports = () => {
 					});
 				expect(body).toEqual(
 					expect.objectContaining({
-						message: 'EDIT test message',
+						message: expect.any(String),
 					}),
 				);
 			});
@@ -81,25 +81,23 @@ module.exports = () => {
 				expect(body.recognitions).toEqual(
 					expect.arrayContaining([
 						{
-							id: 1,
-							sub: '2',
-							first_name: 'Test',
-							last_name: 'User 2',
-							department: 'X',
-							profile_picture:
-								'https://kansha-bucket.s3-us-west-1.amazonaws.com/avatarblank.png',
-							email: 'test.user2@kansharewards.com',
-							recipient: 1,
-							sender: 2,
-							message: 'EDIT test message',
+							id: expect.any(Number),
+							sub: expect.any(String),
+							first_name: expect.any(String),
+							last_name: expect.any(String),
+							department: expect.any(String),
+							profile_picture: expect.any(String),
+							email: expect.any(String),
+							recipient: expect.any(Number),
+							sender: expect.any(Number),
+							message: expect.any(String),
 							date: expect.stringContaining('2020-03-01'),
 							badge_id: null,
-							org_id: 1,
-							org_name: 'NEW ORG',
-							recipient_last: 'User 1',
-							recipient_first: 'Test',
-							recipient_picture:
-								'https://kansha-bucket.s3-us-west-1.amazonaws.com/avatarblank.png',
+							org_id: expect.any(Number),
+							org_name: expect.any(String),
+							recipient_last: expect.any(String),
+							recipient_first: expect.any(String),
+							recipient_picture: expect.any(String),
 						},
 					]),
 				);

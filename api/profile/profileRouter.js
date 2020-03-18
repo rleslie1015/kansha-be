@@ -14,11 +14,16 @@ router.get('/', (req, res) => {
 });
 
 router.get('/:id', validatePeerId, (req, res) => {
-	getUserInteractions(req.peer.id).then(rec => {
-		let { peer } = req;
-		peer.rec = rec;
-		res.status(200).json({ peer });
-	});
+	getUserInteractions(req.peer.id)
+		.then(rec => {
+			let { peer } = req;
+			peer.rec = rec;
+			res.status(200).json({ peer });
+		})
+		.catch(err => {
+			console.log(err);
+			res.status(500).json({ err });
+		});
 });
 
 function validatePeerId(req, res, next) {
