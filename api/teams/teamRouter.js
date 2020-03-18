@@ -55,6 +55,7 @@ router.post('/', async (req, res) => {
 		res.status(500).json({ error: 'Error adding team' });
 	}
 });
+
 // Add team member to team
 router.post('/:id', async (req, res) => {
 	const { team_role, user_id } = req.body;
@@ -94,7 +95,25 @@ router.delete('/:id', (req, res) => {
 });
 
 //update team
-router.put('/:id', (req, res) => {});
+router.put('/:id', (req, res) => {
+	const id = req.params.id;
+
+	const { name } = req.body;
+
+	if (!name) {
+		return res.status(400).json({ error: 'Team needs a name' });
+	}
+	const changes = req.body;
+	Team.editTeam(id, changes)
+		.then(updateTeam => {
+			res.status(200).json(updateTeam);
+		})
+		.catch(error => {
+			res.status(500).json({
+				error: 'Failed to update Team',
+			});
+		});
+});
 
 //get a team-member by id
 router.get('/members/:id', (req, res) => {
@@ -130,6 +149,24 @@ router.delete('/members/:id', (req, res) => {
 });
 
 //update team-member
-router.put('/members/:id', (req, res) => {});
+router.put('/members/:id', (req, res) => {
+	const id = req.params.id;
+
+	const { team_role, active } = req.body;
+
+	if (!team_role) {
+		return res.status(400).json({ error: 'Team member needs a role' });
+	}
+	const changes = req.body;
+	Team.editTeamMember(id, changes)
+		.then(updateMember => {
+			res.status(200).json(updateMember);
+		})
+		.catch(error => {
+			res.status(500).json({
+				error: 'Failed to update Team Member',
+			});
+		});
+});
 
 module.exports = router;

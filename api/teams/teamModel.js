@@ -1,6 +1,7 @@
 const db = require('../../data/dbConfig');
 const Treeize = require('treeize');
 module.exports = {
+	countMembersForTeam,
 	getAllTeamsForAnOrg,
 	getTeamById,
 	addTeamToOrg,
@@ -13,6 +14,14 @@ module.exports = {
 	editTeamMember,
 	deleteTeamMember,
 };
+
+async function countMembersForTeam(team_id) {
+	let [{ count }] = await db('TeamMembers')
+		.where({ 'TeamMembers.team_id': team_id })
+		.count('*');
+	count = Number(count);
+	return count;
+}
 
 async function getAllTeamsForAnOrg(org_id) {
 	const teams = await db('Teams')
@@ -31,8 +40,18 @@ async function getAllTeamsForAnOrg(org_id) {
 		)
 		.groupBy('TeamMembers.id', 'Teams.id', 'Users.id');
 
+	const data = await Promise.all(
+		teams.map(async team => {
+			const count = await countMembersForTeam(team.team_id);
+			return {
+				...team,
+				count,
+			};
+		}),
+	);
+
 	const teamAgg = new Treeize();
-	teamAgg.grow(teams);
+	teamAgg.grow(data);
 	return teamAgg.getData();
 }
 
@@ -67,8 +86,11 @@ async function addTeamToOrg(team) {
 	return getTeamById(id);
 }
 
-function editTeam() {
-	return db('Teams');
+function editTeam(id, changes) {
+	return db('Teams')
+		.where({ id })
+		.update(changes)
+		.then(() => getTeamById(id));
 }
 
 async function deleteTeam(id) {
@@ -105,8 +127,11 @@ async function addTeamMemberToTeam(teamMember) {
 	return getTeamMemberById(id);
 }
 
-function editTeamMember() {
-	return db('TeamMembers');
+function editTeamMember(id, changes) {
+	return db('TeamMembers')
+		.where({ id })
+		.update(changes)
+		.then(() => getTeamMemberById(id));
 }
 
 async function deleteTeamMember(id) {
