@@ -1,5 +1,5 @@
 const db = require('../../data/dbConfig');
-
+const Treeize = require('treeize');
 module.exports = {
 	findAll,
 	findById,
@@ -29,6 +29,44 @@ function findById(id) {
 	return findAll().where({ 'Users.id': id });
 }
 
+async function find(id) {
+	let users = db('Users')
+		.join('Employees', 'Users.id', 'Employees.user_id')
+		.join('Organizations', 'Employees.org_id', 'Organizations.id')
+		.join('TeamMembers', 'TeamMembers.user_id', 'Users.id')
+		.join('Teams', 'Teams.id', 'TeamMembers.team_id')
+		.select(
+			'Users.id as id*',
+			'Users.first_name',
+			'Users.last_name',
+			'Users.profile_picture',
+			'Employees.job_title',
+			'Employees.user_type',
+			'Organizations.id',
+			'Organizations.name',
+
+			'Teams.id as teams:team_id*',
+			'Teams.name as teams:name',
+			'TeamMembers.id as teams:member_id',
+			'TeamMembers.team_role as teams:team_role',
+		)
+		.groupBy(
+			'Teams.id',
+			'TeamMembers.id',
+			'Users.id',
+			'Employees.id',
+			'Organizations.id',
+		);
+	if (id) {
+		users = users.where({ 'Users.id': id });
+	}
+
+	const data = await users;
+
+	const teamAgg = new Treeize();
+	teamAgg.grow(data);
+	return teamAgg.getData();
+}
 // needed in employee router
 
 function findByEmail(email) {
@@ -146,6 +184,6 @@ function editUserBySub(sub, changes) {
 }
 
 //not currently used in userRouter fwiw ¯\_(ツ)_/¯
-function find(filter) {
-	return findAll().where(filter);
-}
+// function find(filter) {
+// 	return findAll().where(filter);
+// }
