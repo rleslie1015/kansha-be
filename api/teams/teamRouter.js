@@ -13,6 +13,7 @@ router.get('/', (req, res) => {
 			res.status(200).json(teams);
 		})
 		.catch(error => {
+			console.log(error);
 			res.status(500).json({
 				error: 'Teams could not be retrieved from the database',
 			});
