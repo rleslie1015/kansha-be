@@ -80,6 +80,7 @@ function getTeamById(id) {
 		.where({ id })
 		.first();
 }
+
 async function addTeamToOrg(team) {
 	const [id] = await db('Teams').insert(team, 'id');
 
