@@ -9,11 +9,13 @@ function getOrgRecognitions(org_id) {
 			'o.id as org_id',
 			'u.last_name as recipient_last',
 			'u.first_name as recipient_first',
+			'e.job_title as recipient_job_title',
 			'u.profile_picture as recipient_picture',
 		)
 		.join('Organizations as o', 'o.id', 'r.org_id')
 		.join('Users as s', 'r.sender', 's.id')
 		.join('Users as u ', 'r.recipient', 'u.id')
+		.join('Employees as e ', 'e.user_id', 'u.id')
 		.where('o.id', org_id)
 		.orderBy('r.date', 'desc')
 		.limit(25);
