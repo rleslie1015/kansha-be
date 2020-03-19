@@ -43,7 +43,7 @@ async function find(id) {
 			'Employees.job_title',
 			'Employees.user_type',
 			'Organizations.id',
-			'Organizations.name',
+			'Organizations.name as org_name',
 
 			'Teams.id as teams:team_id*',
 			'Teams.name as teams:name',
