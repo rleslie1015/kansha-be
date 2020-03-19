@@ -88,13 +88,15 @@ async function addUser(newUser) {
 		sub,
 		department,
 	} = newUser;
-	let { id: org } = await db('Organizations')
+	let org = await db('Organizations')
 		.where({ name: org_name })
 		.first();
 	if (!org) {
-		[org] = await db('Organizations').insert({ name: org_name }, 'id');
+		[org] = await db('Organizations').insert({ name: org_name }, [
+			'id',
+			'name',
+		]);
 	}
-	console.log(org);
 	const [user] = await db('Users').insert(
 		{
 			first_name,
@@ -112,7 +114,7 @@ async function addUser(newUser) {
 	}
 
 	await db('Employees').insert({
-		org_id: org,
+		org_id: org.id,
 		user_id: user,
 		job_title,
 		user_type,
