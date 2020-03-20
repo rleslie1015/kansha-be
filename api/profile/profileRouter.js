@@ -1,7 +1,7 @@
 const router = require('express').Router();
-const { findProfile, getUserInteractions } = require('./profileModel');
+const { getUserInteractions } = require('./profileModel');
 const auth = require('../../middleware/authMiddleWare');
-const { findById, find } = require('../user/userModel.js');
+const { find } = require('../user/userModel.js');
 
 router.use(auth.validateId);
 
@@ -29,7 +29,7 @@ router.get('/:id', validatePeerId, (req, res) => {
 function validatePeerId(req, res, next) {
 	const { id } = req.params;
 	const { profile } = req;
-	find(id).then(([user]) => {
+	find({ 'Users.id': id }).then(([user]) => {
 		if (!user || user.org_name !== profile.org_name) {
 			res.status(200).json({ peer: false });
 		} else {

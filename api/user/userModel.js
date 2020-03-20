@@ -34,20 +34,21 @@ function findById(id) {
 	return findAll().where({ 'Users.id': id });
 }
 
-async function find(id) {
+async function find(search) {
 	let users = db('Users')
 		.join('Employees', 'Users.id', 'Employees.user_id')
 		.join('Organizations', 'Employees.org_id', 'Organizations.id')
-		.join('TeamMembers', 'TeamMembers.user_id', 'Users.id')
-		.join('Teams', 'Teams.id', 'TeamMembers.team_id')
+		.leftJoin('TeamMembers', 'TeamMembers.user_id', 'Users.id')
+		.leftJoin('Teams', 'Teams.id', 'TeamMembers.team_id')
 		.select(
 			'Users.id as id*',
 			'Users.first_name',
 			'Users.last_name',
 			'Users.profile_picture',
+			'Users.email',
 			'Employees.job_title',
 			'Employees.user_type',
-			'Organizations.id',
+			'Organizations.id as org_id',
 			'Organizations.name as org_name',
 
 			'Teams.id as teams:team_id*',
@@ -62,8 +63,9 @@ async function find(id) {
 			'Employees.id',
 			'Organizations.id',
 		);
-	if (id) {
-		users = users.where({ 'Users.id': id });
+
+	if (search) {
+		users = users.where(search);
 	}
 
 	const data = await users;
@@ -179,7 +181,7 @@ async function editUser(id, changes) {
 			.where({ id })
 			.update({ first_name, last_name, email, profile_picture, sub });
 	}
-	return findById(id);
+	return find({ 'Users.id': id });
 }
 
 function editUserBySub(sub, changes) {

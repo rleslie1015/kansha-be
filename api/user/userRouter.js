@@ -1,6 +1,5 @@
 const router = require('express').Router();
 const dbModel = require('./userModel');
-const auth = require;
 
 router.get('/', (req, res) => {
 	dbModel
@@ -17,7 +16,7 @@ router.get('/:id', (req, res) => {
 	const { id } = req.params;
 
 	dbModel
-		.find(id)
+		.find({ 'Users.id': id })
 		.then(([user]) => {
 			if (!user) {
 				res.status(404).json({ message: 'User not found' });
