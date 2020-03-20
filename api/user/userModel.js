@@ -16,12 +16,17 @@ function findAll() {
 	return db('Users')
 		.join('Employees', 'Users.id', 'Employees.user_id')
 		.join('Organizations', 'Employees.org_id', 'Organizations.id')
+		.join('TeamMembers', 'TeamMembers.user_id', 'Users.id')
+		.join('Teams', 'Teams.id', 'TeamMembers.team_id')
+
 		.select(
 			'Users.*',
 			'Employees.job_title',
 			'Employees.user_type',
 			'Organizations.id as org_id',
-			'Organizations.name as org_name',
+			'Teams.name as team_name',
+			'Teams.id as team_id',
+			'TeamMembers.id as members_id',
 		);
 }
 //tested in userRouter, works
@@ -43,7 +48,7 @@ async function find(id) {
 			'Employees.job_title',
 			'Employees.user_type',
 			'Organizations.id',
-			'Organizations.name',
+			'Organizations.name as org_name',
 
 			'Teams.id as teams:team_id*',
 			'Teams.name as teams:name',

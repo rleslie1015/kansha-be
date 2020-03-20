@@ -36,21 +36,40 @@ router.get('/:id', (req, res) => {
 		});
 });
 
-//add a team  to a organization
+// Add new team with team members
 router.post('/', async (req, res) => {
 	const currentOrgId = req.profile.org_id;
-	const { name } = req.body;
+	const { name, team_role, user_id, newMembersArray } = req.body;
 
 	if (!name) {
 		return res.status(400).json({ error: 'Team needs a name' });
 	}
 
 	try {
-		const newTeam = await Team.addTeamToOrg({
+		let newTeam = await Team.addTeamToOrg({
 			name,
 			org_id: currentOrgId,
 		});
-		return res.status(201).json(newTeam);
+		let counter = 0;
+		const memberArray = [];
+		// console.log(newTeam);
+		for (const newMember of newMembersArray) {
+			if (newMember['user_id'] && newMember['team_role']) {
+				const newTeamMember = await Team.addTeamMemberToTeam({
+					team_role: newMember['team_role'],
+					user_id: newMember['user_id'],
+					team_id: newTeam.id,
+				});
+
+				memberArray.push({
+					team_id: newMember['team_id'],
+				});
+				counter++;
+			}
+		}
+		res.status(200).json({
+			message: `Successfully added ${counter} members to team  ${newTeam.name}! `,
+		});
 	} catch (error) {
 		console.log('error creating team', error);
 		res.status(500).json({ error: 'Error adding team' });
