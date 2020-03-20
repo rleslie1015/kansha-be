@@ -1,8 +1,7 @@
 const router = require('express').Router();
 const expressJwt = require('express-jwt');
 const jwksRsa = require('jwks-rsa');
-const db = require('../data/dbConfig');
-const { findAll, editUser } = require('../api/user/userModel.js');
+const { editUser, find } = require('../api/user/userModel.js');
 
 // Authentication middleware. When used, the
 // Access Token must exist and be verified against
@@ -32,16 +31,11 @@ const fixSSEToken = (req, res, next) => {
 module.exports.validateId = async (req, res, next) => {
 	const { sub, email, name } = req.user;
 	// check if there is a user based on sub
-	let user = await findAll()
-		.where({ sub })
-		.first();
-
+	let [user] = await find({ 'Users.sub': sub });
 	const search = email || name;
 	if (!user) {
 		// check if there is a user based on email
-		user = await findAll()
-			.where({ email: search })
-			.first();
+		user = await find({ email: search });
 
 		if (!user) {
 			// returns 200 so that onboarding can be accounted for.

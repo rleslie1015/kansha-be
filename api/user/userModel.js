@@ -1,5 +1,5 @@
 const db = require('../../data/dbConfig');
-
+const Treeize = require('treeize');
 module.exports = {
 	findAll,
 	findById,
@@ -16,12 +16,17 @@ function findAll() {
 	return db('Users')
 		.join('Employees', 'Users.id', 'Employees.user_id')
 		.join('Organizations', 'Employees.org_id', 'Organizations.id')
+		.join('TeamMembers', 'TeamMembers.user_id', 'Users.id')
+		.join('Teams', 'Teams.id', 'TeamMembers.team_id')
+
 		.select(
 			'Users.*',
 			'Employees.job_title',
 			'Employees.user_type',
 			'Organizations.id as org_id',
-			'Organizations.name as org_name',
+			'Teams.name as team_name',
+			'Teams.id as team_id',
+			'TeamMembers.id as members_id',
 		);
 }
 //tested in userRouter, works
@@ -29,6 +34,46 @@ function findById(id) {
 	return findAll().where({ 'Users.id': id });
 }
 
+async function find(search) {
+	let users = db('Users')
+		.join('Employees', 'Users.id', 'Employees.user_id')
+		.join('Organizations', 'Employees.org_id', 'Organizations.id')
+		.leftJoin('TeamMembers', 'TeamMembers.user_id', 'Users.id')
+		.leftJoin('Teams', 'Teams.id', 'TeamMembers.team_id')
+		.select(
+			'Users.id as id*',
+			'Users.first_name',
+			'Users.last_name',
+			'Users.profile_picture',
+			'Users.email',
+			'Employees.job_title',
+			'Employees.user_type',
+			'Organizations.id as org_id',
+			'Organizations.name as org_name',
+
+			'Teams.id as teams:team_id*',
+			'Teams.name as teams:name',
+			'TeamMembers.id as teams:member_id',
+			'TeamMembers.team_role as teams:team_role',
+		)
+		.groupBy(
+			'Teams.id',
+			'TeamMembers.id',
+			'Users.id',
+			'Employees.id',
+			'Organizations.id',
+		);
+
+	if (search) {
+		users = users.where(search);
+	}
+
+	const data = await users;
+
+	const teamAgg = new Treeize();
+	teamAgg.grow(data);
+	return teamAgg.getData();
+}
 // needed in employee router
 
 function findByEmail(email) {
@@ -50,7 +95,15 @@ async function addUser(newUser) {
 		sub,
 		department,
 	} = newUser;
-	const [org] = await db('Organizations').insert({ name: org_name }, 'id');
+	let org = await db('Organizations')
+		.where({ name: org_name })
+		.first();
+	if (!org) {
+		[org] = await db('Organizations').insert({ name: org_name }, [
+			'id',
+			'name',
+		]);
+	}
 	const [user] = await db('Users').insert(
 		{
 			first_name,
@@ -68,7 +121,7 @@ async function addUser(newUser) {
 	}
 
 	await db('Employees').insert({
-		org_id: org,
+		org_id: org.id,
 		user_id: user,
 		job_title,
 		user_type,
@@ -128,7 +181,7 @@ async function editUser(id, changes) {
 			.where({ id })
 			.update({ first_name, last_name, email, profile_picture, sub });
 	}
-	return findById(id);
+	return find({ 'Users.id': id });
 }
 
 function editUserBySub(sub, changes) {
@@ -138,6 +191,6 @@ function editUserBySub(sub, changes) {
 }
 
 //not currently used in userRouter fwiw ¯\_(ツ)_/¯
-function find(filter) {
-	return findAll().where(filter);
-}
+// function find(filter) {
+// 	return findAll().where(filter);
+// }
