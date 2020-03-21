@@ -1,8 +1,6 @@
 const db = require('../../data/dbConfig');
 const Treeize = require('treeize');
 module.exports = {
-	findAll,
-	// findById,
 	findByEmail,
 	addUser,
 	deleteUser,
@@ -11,31 +9,8 @@ module.exports = {
 	find,
 	addNewUser,
 };
-//tested in userRouter, works
-function findAll() {
-	return db('Users')
-		.join('Employees', 'Users.id', 'Employees.user_id')
-		.join('Organizations', 'Employees.org_id', 'Organizations.id')
-		.join('TeamMembers', 'TeamMembers.user_id', 'Users.id')
-		.join('Teams', 'Teams.id', 'TeamMembers.team_id')
-
-		.select(
-			'Users.*',
-			'Employees.job_title',
-			'Employees.user_type',
-			'Organizations.id as org_id',
-			'Teams.name as team_name',
-			'Teams.id as team_id',
-			'TeamMembers.id as members_id',
-		);
-}
-//tested in userRouter, works
-// function findById(id) {
-// 	return findAll().where({ 'Users.id': id });
-// }
 
 async function find(search) {
-	console.log('find function search', search);
 	let users = db('Users')
 		.join('Employees', 'Users.id', 'Employees.user_id')
 		.join('Organizations', 'Employees.org_id', 'Organizations.id')
@@ -190,8 +165,3 @@ function editUserBySub(sub, changes) {
 		.where({ sub })
 		.update(changes);
 }
-
-//not currently used in userRouter fwiw ¯\_(ツ)_/¯
-// function find(filter) {
-// 	return findAll().where(filter);
-// }
