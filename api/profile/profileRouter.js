@@ -29,15 +29,19 @@ router.get('/:id', validatePeerId, (req, res) => {
 function validatePeerId(req, res, next) {
 	const { id } = req.params;
 	const { profile } = req;
-	console.log('inside validatePeerId');
-	find({ 'Users.id': id }).then(([user]) => {
-		if (!user || user.org_name !== profile.org_name) {
-			res.status(200).json({ peer: false });
-		} else {
-			req.peer = user;
-			next();
-		}
-	});
+	find({ 'Users.id': id })
+		.then(([user]) => {
+			if (!user || user.org_name !== profile.org_name) {
+				res.status(200).json({ peer: false });
+			} else {
+				req.peer = user;
+				next();
+			}
+		})
+		.catch(err => {
+			console.error(err);
+			res.status(500).json(...err);
+		});
 }
 
 module.exports = router;
