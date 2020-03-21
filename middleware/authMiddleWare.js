@@ -29,30 +29,35 @@ const fixSSEToken = (req, res, next) => {
 };
 
 module.exports.validateId = async (req, res, next) => {
-	const { sub, email, name } = req.user;
-	// check if there is a user based on sub
-	let [user] = await find({ 'Users.sub': sub });
-	const search = email || name;
-	if (!user) {
-		// check if there is a user based on email
-		user = await find({ email: search });
-
+	try {
+		const { sub, email, name } = req.user;
+		// check if there is a user based on sub
+		let [user] = await find({ 'Users.sub': sub });
+		const search = email || name;
 		if (!user) {
-			// returns 200 so that onboarding can be accounted for.
-			res.status(200).json({ user: false });
+			// check if there is a user based on email
+			user = await find({ email: search });
+
+			if (!user) {
+				// returns 200 so that onboarding can be accounted for.
+				res.status(200).json({ user: false });
+			} else {
+				// adds sub if user is found by email
+				await editUser(user.id, { sub });
+				req.profile = user;
+				next();
+			}
 		} else {
-			// adds sub if user is found by email
-			await editUser(user.id, { sub });
+			if (!user.email) {
+				// adds email address for legacy users
+				await editUser(user.id, { email: search });
+			}
 			req.profile = user;
 			next();
 		}
-	} else {
-		if (!user.email) {
-			// adds email address for legacy users
-			await editUser(user.id, { email: search });
-		}
-		req.profile = user;
-		next();
+	} catch (err) {
+		console.error(err);
+		res.status(500).json(...err);
 	}
 };
 
