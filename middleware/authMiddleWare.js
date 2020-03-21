@@ -37,16 +37,16 @@ module.exports.validateId = async (req, res, next) => {
 		const search = email || name;
 		if (!user) {
 			// check if there is a user based on email
-			user = await find({ email: search });
+			[user] = await find({ email: search });
 			console.log('email search', user);
 			if (!user) {
 				// returns 200 so that onboarding can be accounted for.
-				res.status(200).json({ user: false });
+				return res.status(200).json({ user: false });
 			} else {
 				// adds sub if user is found by email
 				await editUser(user.id, { sub });
 				req.profile = user;
-				next();
+				return next();
 			}
 		} else {
 			if (!user.email) {
@@ -54,11 +54,11 @@ module.exports.validateId = async (req, res, next) => {
 				await editUser(user.id, { email: search });
 			}
 			req.profile = user;
-			next();
+			return next();
 		}
 	} catch (err) {
 		console.error(err);
-		res.status(500).json(...err);
+		return res.status(500).json(...err);
 	}
 };
 
