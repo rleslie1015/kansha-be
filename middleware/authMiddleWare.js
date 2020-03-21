@@ -33,11 +33,12 @@ module.exports.validateId = async (req, res, next) => {
 		const { sub, email, name } = req.user;
 		// check if there is a user based on sub
 		let [user] = await find({ 'Users.sub': sub });
+		console.log('sub search', user);
 		const search = email || name;
 		if (!user) {
 			// check if there is a user based on email
 			user = await find({ email: search });
-
+			console.log('email search', user);
 			if (!user) {
 				// returns 200 so that onboarding can be accounted for.
 				res.status(200).json({ user: false });
