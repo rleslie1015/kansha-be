@@ -2,7 +2,7 @@ const db = require('../../data/dbConfig');
 const Treeize = require('treeize');
 module.exports = {
 	findAll,
-	findById,
+	// findById,
 	findByEmail,
 	addUser,
 	deleteUser,
@@ -30,11 +30,12 @@ function findAll() {
 		);
 }
 //tested in userRouter, works
-function findById(id) {
-	return findAll().where({ 'Users.id': id });
-}
+// function findById(id) {
+// 	return findAll().where({ 'Users.id': id });
+// }
 
 async function find(search) {
+	console.log('find function search', search);
 	let users = db('Users')
 		.join('Employees', 'Users.id', 'Employees.user_id')
 		.join('Organizations', 'Employees.org_id', 'Organizations.id')
