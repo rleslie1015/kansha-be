@@ -49,11 +49,23 @@
     -   [**Profile Pic Endpoints**](#--profile-pic-endpoints--)
     -   [**Post a New Profile Picture**](#--post-a-profile-pic--)
 -   [**User Endpoints**](#--user-endpoints--)
+
     -   [**Fetch all Users**](#--fetch-all-users--)
     -   [**Fetch a User by ID**](#--fetch-a-user-by-id--)
     -   [**Create a New User**](#--create-a-new-user--)
     -   [**Delete a User by ID**](#--delete-a-user-by-id--)
     -   [**Edit a User by ID**](#--edit-a-user-by-id--)
+
+-   [**Teams Endpoints**](#--teams-endpoints--)
+    -   [**Fetch all Teams and Team Members**](#--fetch-all-teams--)
+    -   [**Fetch a Team by ID with Team Members**](#--fetch-a-team-by-id--)
+    -   [**Create a New Team with multiple members**](#--create-a-new-team--)
+    -   [**Add a new team member to a team**](#--create-a-new-team-member--)
+    -   [**Delete a Team by ID and Delete Members on the Team**](#--delete-a-team-by-id--)
+    -   [**Edit a Team by ID**](#--edit-a-team-by-id--)
+    -   [**Fetch a Team Member by ID**](#--fetch-a-team-member-by-id--)
+    -   [**Delete a Team Member by ID**](#--delete-a-team-member-by-id--)
+    -   [**Edit a Team Member by ID**](#--edit-a-team-member-by-id--)
 
 ## **CSV Endpoints**
 
@@ -841,13 +853,58 @@ _/profile/:id_
 -   **Code:** 200 <br />
     **Example Content:** returns the user's profile data
 
-    `first_name` (string)
-    `last_name` (string)
-    `org_name` (string)
-    `org_id` (integer)
-    `job_title` (string)
-    `user_type` (string)
-    `department` (string)
+
+        peer: {
+            "id": 1
+            "first_name": "Matt",
+            "last_name": "Masters",
+            "profile_picture": "https://kansha-bucket.s3-us-west-1.amzononaws.com/avatarblank.png",
+            "job_title": "Dev God",
+            "user_type": "Admin",
+            "org_name": "Ion",
+            "teams": [
+                {
+                    "team_id": 21,
+                    "name": "rockstars",
+                    "member_id": 12,
+                    "team_role": "manager"
+                },
+                {
+                    "team_id": 23,
+                    "name": "winners",
+                    "member_id": 13,
+                    "team_role": "manager"
+                }
+            ],
+            "rec":[
+                {
+                    "id":1,
+                    "recipeient": 1,
+                    "sender": 2.
+                    "message": "Go forth and be a God".
+                    "date": "2019-11-13T07:00:00.000Z",
+                    "badge_id": null,
+                    "org_id": 1,
+                    "first_name" "Ty",
+                    "last_name": "Lippe",
+                    "profile_pic": "https://kansha-bucket.s3-us-west-1.amzononaws.com/avatarblank.png"
+                },
+                 {
+                    "id":3,
+                    "recipeient": 3,
+                    "sender": 1.
+                    "message": "Go be a popsicle!".
+                    "date": "2019-11-13T07:00:00.000Z",
+                    "badge_id": null,
+                    "org_id": 1,
+                    "first_name" "Andrew",
+                    "last_name": "Maddocks",
+                    "profile_pic": "https://kansha-bucket.s3-us-west-1.amzononaws.com/avatarblank.png"
+                },
+
+            ]
+
+        }
 
 **Error Response:**
 
@@ -1299,3 +1356,374 @@ _/users/:id_
 
 -   **Code:** 500 <br />
     **Example Content:** error message <br />
+
+## **Teams Endpoints**
+
+-   [**Teams Endpoints**](#--teams-endpoints--)
+-   [**Fetch all Teams and Team Members**](#--fetch-all-teams--)
+    -   [**Fetch a Team by ID with Team Members**](#--fetch-a-team-by-id--)
+    -   [**Create a New Team with multiple members**](#--create-a-new-team--)
+    -   [**Add a new team member to a team**](#--create-a-new-team-member--)
+    -   [**Delete a Team by ID and Delete Members on the Team**](#--delete-a-team-by-id--)
+    -   [**Edit a Team by ID**](#--edit-a-team-by-id--)
+    -   [**Fetch a Team Member by ID**](#--fetch-a-team-member-by-id--)
+    -   [**Delete a Team Member by ID**](#--delete-a-team-member-by-id--)
+    -   [**Edit a Team Member by ID**](#--edit-a-team-member-by-id--)
+
+### **Fetch All Teams for and organization**
+
+Returns all teams and team members for an organization.
+
+**URL**
+
+_/teams_
+
+**Method:**
+
+`GET`
+
+**Success Response:**
+
+-   **Code:** 200 <br />
+    **Example Content:**
+    `[{ "team_id": 21, "name": "rockstars", "count":7, "managers": [ { "member_id": 1, "user_id": 17, "first_name": "d", "last_name": "cluddles" }, { "member_id": 10, "user_id": 10, "first_name": "kevin", "last_name": "gilles" } ] }, { "team_id": 23, "name": "winners", "count":1, "managers": [ { "member_id": 5, "user_id": 13, "first_name": "kevin", "last_name": "gilles" } ] } ]`
+
+**Error Response:**
+
+-   **Code:** 500 <br />
+    **Content:**
+    error: 'Teams could not be retrieved from the database'
+
+**Sample Call:**
+
+    axiosWithAuth()
+        .get('/teams')
+        .then(response => {
+            console.log(response);
+        })
+        .catch(error => {
+            console.log(error.response);
+        });
+
+### **Fetch a Team by ID with Team Members**
+
+Returns one team with team members.
+
+**URL**
+
+_/teams/:id_
+
+**Method:**
+
+`GET`
+
+**URL Params**
+
+**Required:**
+
+`id=[integer]`
+
+**Success Response:**
+
+-   **Code:** 200 <br />
+    **Example Content:**
+    `{"team_members": [ { "id": 1, "user_id": 17, "first_name": "d", "last_name": "cluddles", "profile_picture": "https://kansha-bucket.s3-us-west-1.amzononaws.com/avatarblank.png" }, { "id": 2, "user_id": 16, "first_name": "jessica", "last_name": "peter", "profile_picture": "https://kansha-bucket.s3-us-west-1.amzononaws.com/avatarblank.png" }, { "id": 3, "user_id": 15, "first_name": "jacey", "last_name": "san", "profile_picture": "https://kansha-bucket.s3-us-west-1.amzononaws.com/avatarblank.png" } ]}`
+
+**Error Response:**
+
+-   **Code:** 500 <br />
+    **Content:**
+    error: 'Team could not be retrieved from the database'
+
+**Sample Call:**
+
+    axiosWithAuth()
+        .get('/teams/21')
+        .then(response => {
+            console.log(response);
+        })
+        .catch(error => {
+            console.log(error.response);
+        });
+
+### **Create a New Team with multiple members**
+
+Adds new team with multiple team members.
+
+**URL**
+
+_/teams_
+
+**Method:**
+
+`POST`
+
+**Data Params**
+
+**Required:**
+
+Team name required.
+
+-   `name` (string)
+
+**Optional:**
+
+To add multiple team members.
+
+-   `newMembersArray`: [{"user_id": 15, "team_role": "manager"}, {"user_id": 18, "team_role": "member"}, {"user_id": 19, "team_role": "member"}]
+
+**Success Response:**
+
+-   **Code:** 201 <br />
+    **Example Content:**
+    "message": "Successfully added 3 members to team rockstars!"
+
+**Error Response:**
+
+-   **Code:** 400 <br />
+    **Content:**
+    error: 'Team needs a name'
+
+-   **Code:** 500 <br />
+    **Content:**
+    error: 'Error adding team'
+
+**Sample Call:**
+
+    axiosWithAuth()
+        .post('/teams, {name: "team-name")
+        .then(response => {
+            console.log(response);
+        })
+        .catch(error => {
+            console.log(error.response);
+        });
+
+### **Add a new team member to a team**
+
+Adds a new team member to a team
+
+**URL**
+
+_/teams/:id_
+
+**URL_PARAMS**
+**Required:**
+`team's id`
+`id=[integer]`
+
+**Data Params**
+
+**Required:**
+
+-   `user_id` (integer)
+-   `team_role` (string)
+
+**Method:**
+
+`POST`
+
+**Success Response:**
+
+-   **Code:** 200 <br />
+    **Example Content:**`{ "id": 11, "user_id": 14, "team_id": 21, "team_role": "manager", "active": true, "team_name": "rockstars", "first_name": "vanessa", "last_name": "san", "profile_picture": "https://kansha-bucket.s3-us-west-1.amazonaws.com/avatarblank.png" }`
+
+**Error Response:**
+
+-   **Code:** 500 <br />
+    **Content:**`error: 'Error adding member'`
+
+**Sample Call:**
+
+    axiosWithAuth()
+        .post('/teams/1', {"id": 1, "team_role": "manager"})
+        .then(response => {
+            console.log(response);
+        })
+        .catch(error => {
+            console.log(error.response);
+        });
+
+### **Delete a Team by ID and Delete Members on the Team**
+
+Deletes a Team by ID and also deletes all team members on that team
+
+**URL**
+
+_/teams/:id_
+
+**URL_PARAMS**
+**Required:**
+`team's id`
+`id=[integer]`
+
+**Method:**
+
+`GET`
+
+**Success Response:**
+
+-   **Code:** 200 <br />
+    **Example Content:**
+
+**Error Response:**
+
+-   **Code:** 500 <br />
+    **Content:**
+
+**Sample Call:**
+
+    axiosWithAuth()
+        .delete('/teams/1')
+        .then(response => {
+            console.log(response);
+        })
+        .catch(error => {
+            console.log(error.response);
+        });
+
+### **Edit a Team by ID**
+
+Edits a team by ID
+
+**URL**
+
+_/teams/:id_
+
+**URL_PARAMS**
+**Required:**
+`team's id`
+`id=[integer]`
+
+**Method:**
+
+`PUT`
+
+**Success Response:**
+
+-   **Code:** 200 <br />
+    **Example Content:**`{ "id": 21, "name": "rockstars", "org_id": 1 }`
+
+**Error Response:**
+
+-   **Code:** 500 <br />
+    **Content:**`error: 'Failed to update Team'`
+    **Sample Call:**
+
+        axiosWithAuth()
+            .put('/teams/1')
+            .then(response => {
+                console.log(response);
+            })
+            .catch(error => {
+                console.log(error.response);
+            });
+
+### **Fetch a Team Member by ID**
+
+Returns information for a team member
+
+**URL**
+
+_/teams/members/:id_
+
+**URL_PARAMS**
+**Required:**
+`team member's id`
+`id=[integer]`
+
+**Method:**
+
+`GET`
+
+**Success Response:**
+
+-   **Code:** 200 <br />
+    **Example Content:**`{ "id": 5, "user_id": 13, "team_id": 23, "team_role": "member", "active": false, "team_name": "winners", "first_name": "kevin", "last_name": "gillies", "profile_picture": "https://kansha-bucket.s3-us-west-1.amazonaws.com/avatarblank.png" }`
+
+**Error Response:**
+
+-   **Code:** 500 <br />
+    **Content:**`error: 'Member could not be retrieved from the database'`
+
+**Sample Call:**
+
+    axiosWithAuth()
+        .get('/teams/members/1')
+        .then(response => {
+            console.log(response);
+        })
+        .catch(error => {
+            console.log(error.response);
+        });
+
+### **Delete a Team Member by ID**
+
+Returns record of deleted team member
+
+**URL**
+
+_/teams/members/:id_
+
+**Method:**
+
+`DELETE`
+
+**Success Response:**
+
+-   **Code:** 200 <br />
+    **Example Content:**`1`
+
+**Error Response:**
+
+-   **Code:** 500 <br />
+    **Content:**`error: 'Error Deleting team member'`
+
+**Sample Call:**
+
+    axiosWithAuth()
+        .delete('/teams/members/1')
+        .then(response => {
+            console.log(response);
+        })
+        .catch(error => {
+            console.log(error.response);
+        });
+
+### **Edit a Team Member by ID**
+
+Returns edited team and team members
+
+**URL**
+
+_teams/members/:id_
+
+**URL_PARAMS**
+**Required:**
+`team member's id`
+`id=[integer]`
+
+**Method:**
+
+`PUT`
+
+**Success Response:**
+
+-   **Code:** 200 <br />
+    **Example Content:**
+    `{ "id": 5, "user_id": 13, "team_id": 23, "team_role": "member", "active": false, "team_name": "winners", "first_name": "kevin", "last_name": "gillies" "profile_picture": "https://kansha-bucket.s3-us-west-1.amazonaws.com/avatarblank.png" }`
+
+**Error Response:**
+
+-   **Code:** 500 <br />
+    **Example Content:** error: 'Failed to update Team Member' <br />
+    **Sample Call:**
+
+        axiosWithAuth()
+            .put('/teams/members/1')
+            .then(response => {
+                console.log(response);
+            })
+            .catch(error => {
+                console.log(error.response);
+            });
