@@ -1559,7 +1559,7 @@ _/teams/:id_
 
 **Method:**
 
-`GET`
+`DELETE`
 
 **Success Response:**
 
