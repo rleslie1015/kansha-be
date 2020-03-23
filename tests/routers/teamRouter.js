@@ -1,0 +1,168 @@
+const server = require('../../server');
+const request = require('supertest');
+
+module.exports = () =>
+	describe('/team router', () => {
+		describe('GET /teams', () => {
+			it('should return all Teams', async () => {
+				const { body } = await request(server).get('/teams');
+				expect(body).toEqual(
+					expect.arrayContaining([
+						{
+							team_id: expect.any(Number),
+							name: expect.any(String),
+							count: expect.any(Number),
+							managers: [
+								{
+									member_id: expect.any(Number),
+									user_id: expect.any(Number),
+									first_name: expect.any(String),
+									last_name: expect.any(String),
+								},
+							],
+						},
+					]),
+				);
+			});
+		});
+
+		describe.skip('GET /teams/:id', () => {
+			it('should return one team by id', async () => {
+				const { body } = await request(server).get('/teams/1');
+				expect(body).toEqual({
+					team_id: expect.any(Number),
+					name: expect.any(String),
+					count: expect.any(Number),
+					team_members: [
+						{
+							id: expect.any(Number),
+							user_id: expect.any(Number),
+							team_id: expect.any(Number),
+							team_role: expect.any(String),
+							active: expect.any(String),
+							team_name: expect.any(String),
+							first_name: expect.any(String),
+							last_name: expect.any(String),
+							profile_picture: expect.any(String),
+						},
+						{
+							id: expect.any(Number),
+							user_id: expect.any(Number),
+							team_id: expect.any(Number),
+							team_role: expect.any(String),
+							active: expect.any(String),
+							team_name: expect.any(String),
+							first_name: expect.any(String),
+							last_name: expect.any(String),
+							profile_picture: expect.any(String),
+						},
+					],
+				});
+			});
+		});
+		describe.skip('POST /teams', () => {
+			it('should create a new team', async () => {
+				const { status } = await request(server)
+					.post('/teams')
+					.send({
+						name: 'Team Three',
+						newMembersArray: [
+							{
+								user_id: 2,
+								team_role: 'manager',
+							},
+							{
+								user_id: 4,
+								team_role: 'manager',
+							},
+						],
+					});
+				expect(status).toBe(201);
+			});
+		});
+
+		describe.skip('POST /teams/:id', () => {
+			it('should create a new team member', async () => {
+				const { status } = await (
+					await request(server).post('/teams/3')
+				).setEncoding({
+					user_id: 3,
+					team_role: 'manager',
+				});
+			});
+		});
+
+		describe.skip('DELETE', () => {
+			it('should delete a team', async () => {
+				const { status } = await request(server).delete('/teams/1');
+				expect(status).toBe(204);
+			});
+		});
+
+		describe.skip('PUT /teams/:id', () => {
+			it('should update a team by id', async () => {
+				const { body } = await request(server)
+					.put('/teams/2')
+					.send({
+						name: 'Team Awesome',
+					});
+				expect(body).toEqual(
+					expect.objectContaining({
+						name: 'Team Awesome',
+					}),
+				);
+			});
+		});
+
+		describe.skip('GET /teams/members/:id', () => {
+			it('should fetch a team-member by id', async () => {
+				const { body } = await request(server).get('/teams/members/1');
+				expect(body).toEqual(
+					expect.objectContaining({
+						id: 1,
+						user_id: expect.any(Number),
+						team_id: expect.any(Number),
+						team_role: expect.any(String),
+						active: expect.any(String),
+						team_name: expect.any(String),
+						first_name: expect.any(String),
+						last_name: expect.any(String),
+						profile_picture: expect.any(String),
+					}),
+				);
+			});
+		});
+
+		describe.skip('DELETE /teams/members/:id', () => {
+			it('should delete a team-member', async () => {
+				const { status } = await request(server).delete(
+					`/teams/members/3`,
+				);
+				expect(status).toBe(204);
+			});
+		});
+
+		describe.skip('PUT /teams/members/:id', () => {
+			it('should update a team-member', async () => {
+				const { body } = await request(server)
+					.put('teams/members/4')
+					.send({
+						team_role: 'manager',
+						active: false,
+					});
+				expect(body).toEqual(
+					expect.objectContaining({
+						id: 1,
+						user_id: expect.any(Number),
+						team_id: expect.any(Number),
+						team_role: expect.any(String),
+						active: expect.any(String),
+						team_name: expect.any(String),
+						first_name: expect.any(String),
+						last_name: expect.any(String),
+						profile_picture: expect.any(String),
+					}),
+				);
+			});
+		});
+	});

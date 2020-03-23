@@ -53,6 +53,7 @@ router.post('/', async (req, res) => {
 		let counter = 0;
 		const memberArray = [];
 		// console.log(newTeam);
+
 		for (const newMember of newMembersArray) {
 			if (newMember['user_id'] && newMember['team_role']) {
 				const newTeamMember = await Team.addTeamMemberToTeam({
