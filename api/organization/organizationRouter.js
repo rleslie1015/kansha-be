@@ -17,8 +17,9 @@ router.get('/', (req, res) => {
 		});
 });
 // get one org
-router.get('/:id', validateOrgId, (req, res) => {
+router.get('/:id', (req, res) => {
 	const id = req.params.id;
+
 	Orgs.findOrgById(id)
 		.then(org => {
 			res.status(200).json(org);
@@ -96,7 +97,9 @@ router.put('/:id', validateOrgId, (req, res) => {
 
 function validateOrgId(req, res, next) {
 	const orgId = Number(req.profile.org_id);
+	console.log(orgId);
 	const paramId = Number(req.params.id);
+	console.log(paramId);
 	if (orgId === paramId) {
 		Orgs.findOrgById(orgId).then(org => {
 			if (org) {

@@ -68,7 +68,7 @@ router.post('/', async (req, res) => {
 				counter++;
 			}
 		}
-		res.status(200).json({
+		res.status(201).json({
 			message: `Successfully added ${counter} members to team  ${newTeam.name}! `,
 		});
 	} catch (error) {
@@ -179,6 +179,7 @@ router.put('/members/:id', (req, res) => {
 		return res.status(400).json({ error: 'Team member needs a role' });
 	}
 	const changes = req.body;
+
 	Team.editTeamMember(id, changes)
 		.then(updateMember => {
 			res.status(200).json(updateMember);

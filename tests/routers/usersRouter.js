@@ -6,19 +6,17 @@ module.exports = () =>
 		describe('GET /users', () => {
 			it('should return array with users', async () => {
 				const { body } = await request(server).get('/users');
-
 				expect(body[0]).toMatchObject({
 					id: expect.any(Number),
-					sub: expect.any(String),
 					first_name: expect.any(String),
 					last_name: expect.any(String),
-					department: expect.any(String),
 					profile_picture: expect.any(String),
 					email: expect.any(String),
 					job_title: expect.any(String),
 					user_type: expect.any(String),
 					org_id: expect.any(Number),
 					org_name: expect.any(String),
+					teams: [{}],
 				});
 			});
 		});
@@ -26,24 +24,18 @@ module.exports = () =>
 		describe('GET /users/:id', () => {
 			it('should return user', async () => {
 				const { body } = await request(server).get('/users/1');
-				expect(body.length).toEqual(1);
-				expect(body).toEqual(
-					expect.arrayContaining([
-						{
-							id: expect.any(Number),
-							sub: expect.any(String),
-							first_name: expect.any(String),
-							last_name: expect.any(String),
-							department: expect.any(String),
-							profile_picture: expect.any(String),
-							email: expect.any(String),
-							job_title: expect.any(String),
-							user_type: expect.any(String),
-							org_id: expect.any(Number),
-							org_name: expect.any(String),
-						},
-					]),
-				);
+				expect(body).toMatchObject({
+					id: expect.any(Number),
+					first_name: expect.any(String),
+					last_name: expect.any(String),
+					profile_picture: expect.any(String),
+					email: expect.any(String),
+					job_title: expect.any(String),
+					user_type: expect.any(String),
+					org_id: expect.any(Number),
+					org_name: expect.any(String),
+					teams: [{}],
+				});
 			});
 		});
 
@@ -82,16 +74,22 @@ module.exports = () =>
 					expect.arrayContaining([
 						{
 							id: expect.any(Number),
-							sub: expect.any(String),
 							first_name: expect.any(String),
 							last_name: expect.any(String),
-							department: expect.any(String),
 							profile_picture: expect.any(String),
 							email: expect.any(String),
 							job_title: expect.any(String),
 							user_type: expect.any(String),
 							org_id: expect.any(Number),
 							org_name: expect.any(String),
+							teams: [
+								{
+									team_id: expect.any(Number),
+									member_id: expect.any(Number),
+									name: expect.any(String),
+									team_role: expect.any(String),
+								},
+							],
 						},
 					]),
 				);
