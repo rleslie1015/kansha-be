@@ -106,16 +106,22 @@ module.exports = () =>
 					expect.arrayContaining([
 						{
 							id: expect.any(Number),
-							sub: expect.any(String),
 							first_name: expect.any(String),
 							last_name: expect.any(String),
-							department: expect.any(String),
 							profile_picture: expect.any(String),
 							email: expect.any(String),
 							job_title: expect.any(String),
 							user_type: expect.any(String),
 							org_id: expect.any(Number),
 							org_name: expect.any(String),
+							teams: [
+								{
+									member_id: expect.any(Number),
+									name: expect.any(String),
+									team_id: expect.any(Number),
+									team_role: expect.any(String),
+								},
+							],
 						},
 					]),
 				);

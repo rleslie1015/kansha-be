@@ -4,11 +4,10 @@ const request = require('supertest');
 module.exports = () => {
 	describe('/profile router', () => {
 		describe('GET /profile', () => {
-			it('should return an array of profiles', async () => {
-				const { body } = await request(server).get('/profile');
+			it('should return a profile object', async () => {
+				const { body } = await request(server).get('/profile/1');
 				expect(body).toMatchObject({
-					user: {
-						department: expect.any(String),
+					peer: {
 						email: expect.any(String),
 						first_name: expect.any(String),
 						id: expect.any(Number),
@@ -43,7 +42,14 @@ module.exports = () => {
 								sender: expect.any(Number),
 							},
 						],
-						sub: expect.any(String),
+						teams: [
+							{
+								member_id: expect.any(Number),
+								name: expect.any(String),
+								team_id: expect.any(Number),
+								team_role: expect.any(String),
+							},
+						],
 						user_type: expect.any(String),
 					},
 				});

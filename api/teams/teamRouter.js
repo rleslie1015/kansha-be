@@ -39,7 +39,7 @@ router.get('/:id', (req, res) => {
 // Add new team with team members
 router.post('/', async (req, res) => {
 	const currentOrgId = req.profile.org_id;
-	const { name, team_role, user_id, newMembersArray } = req.body;
+	const { name, newMembersArray } = req.body;
 
 	if (!name) {
 		return res.status(400).json({ error: 'Team needs a name' });
@@ -51,23 +51,20 @@ router.post('/', async (req, res) => {
 			org_id: currentOrgId,
 		});
 		let counter = 0;
-		const memberArray = [];
-		// console.log(newTeam);
+
 		for (const newMember of newMembersArray) {
-			if (newMember['user_id'] && newMember['team_role']) {
-				const newTeamMember = await Team.addTeamMemberToTeam({
-					team_role: newMember['team_role'],
-					user_id: newMember['user_id'],
+			if (newMember.user_id && newMember.team_role) {
+				await Team.addTeamMemberToTeam({
+					team_role: newMember.team_role,
+					user_id: newMember.user_id,
 					team_id: newTeam.id,
 				});
 
-				memberArray.push({
-					team_id: newMember['team_id'],
-				});
 				counter++;
 			}
 		}
-		res.status(200).json({
+		res.status(201).json({
+			id: team_id,
 			message: `Successfully added ${counter} members to team  ${newTeam.name}! `,
 		});
 	} catch (error) {
@@ -178,6 +175,7 @@ router.put('/members/:id', (req, res) => {
 		return res.status(400).json({ error: 'Team member needs a role' });
 	}
 	const changes = req.body;
+
 	Team.editTeamMember(id, changes)
 		.then(updateMember => {
 			res.status(200).json(updateMember);
