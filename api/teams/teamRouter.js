@@ -64,7 +64,7 @@ router.post('/', async (req, res) => {
 			}
 		}
 		res.status(201).json({
-			id: team_id,
+			id: newTeam.id,
 			message: `Successfully added ${counter} members to team  ${newTeam.name}! `,
 		});
 	} catch (error) {
