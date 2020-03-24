@@ -39,7 +39,7 @@ router.get('/:id', (req, res) => {
 // Add new team with team members
 router.post('/', async (req, res) => {
 	const currentOrgId = req.profile.org_id;
-	const { name, team_role, user_id, newMembersArray } = req.body;
+	const { name, newMembersArray } = req.body;
 
 	if (!name) {
 		return res.status(400).json({ error: 'Team needs a name' });
@@ -69,6 +69,7 @@ router.post('/', async (req, res) => {
 			}
 		}
 		res.status(201).json({
+			id: team_id,
 			message: `Successfully added ${counter} members to team  ${newTeam.name}! `,
 		});
 	} catch (error) {
