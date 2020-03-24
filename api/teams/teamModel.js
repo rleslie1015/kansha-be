@@ -24,35 +24,25 @@ async function countMembersForTeam(team_id) {
 }
 
 async function getAllTeamsForAnOrg(org_id) {
-	const teams = await db('Teams')
-		.join('TeamMembers', 'Teams.id', 'TeamMembers.team_id')
-		.join('Users', 'TeamMembers.user_id', 'Users.id')
-		.where('Teams.org_id', org_id)
-		.andWhere('TeamMembers.team_role', 'ilike', 'manager')
-		.select(
-			'Teams.id as team_id ',
-			'Teams.name',
-
-			'TeamMembers.id as managers:member_id',
-			'Users.id as managers:user_id*',
-			'Users.first_name as managers:first_name',
-			'Users.last_name as managers:last_name',
-		)
-		.groupBy('TeamMembers.id', 'Teams.id', 'Users.id');
+	const teams = await db('Teams').where('Teams.org_id', org_id);
 
 	const data = await Promise.all(
 		teams.map(async team => {
-			const count = await countMembersForTeam(team.team_id);
+			const teamManagers = await db('TeamMembers')
+				.join('Users', 'TeamMembers.user_id', 'Users.id')
+				.where('TeamMembers.team_role', 'ilike', 'manager')
+				.andWhere('TeamMembers.team_id', team.id);
+
+			const count = await countMembersForTeam(team.id);
 			return {
 				...team,
 				count,
+				teamManagers,
 			};
 		}),
 	);
 
-	const teamAgg = new Treeize();
-	teamAgg.grow(data);
-	return teamAgg.getData();
+	return data;
 }
 
 async function getTeamByIdWithMembers(id) {
