@@ -51,20 +51,15 @@ router.post('/', async (req, res) => {
 			org_id: currentOrgId,
 		});
 		let counter = 0;
-		const memberArray = [];
-		// console.log(newTeam);
 
 		for (const newMember of newMembersArray) {
-			if (newMember['user_id'] && newMember['team_role']) {
-				const newTeamMember = await Team.addTeamMemberToTeam({
-					team_role: newMember['team_role'],
-					user_id: newMember['user_id'],
+			if (newMember.user_id && newMember.team_role) {
+				await Team.addTeamMemberToTeam({
+					team_role: newMember.team_role,
+					user_id: newMember.user_id,
 					team_id: newTeam.id,
 				});
 
-				memberArray.push({
-					team_id: newMember['team_id'],
-				});
 				counter++;
 			}
 		}
