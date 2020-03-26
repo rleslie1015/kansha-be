@@ -52,9 +52,9 @@ async function getTeamByIdWithMembers(id) {
 		.select(
 			'Teams.id',
 			'Teams.name',
-			'TeamMembers.id as team_members:id',
+			'TeamMembers.id as team_members:member_id',
 			'TeamMembers.team_role as team_members:team_role',
-			'Users.id as team_members:user_id',
+			'Users.id as team_members:id',
 			'Users.first_name as team_members:first_name',
 			'Users.last_name as team_members:last_name',
 			'Users.profile_picture as team_members:profile_picture',
