@@ -39,10 +39,10 @@ router.post('/', upload.single('bulkupload'), async (req, res) => {
 
 				// add the user to the Employees table
 
-				const newEmployee = await employee.addEmployee({
+				await employee.addEmployee({
 					org_id: currentOrgId,
 					user_id: newUserId,
-					job_title: newUser.job_title,
+					job_title: newUser['Job title'],
 					user_type: 'Standard',
 				});
 
@@ -74,9 +74,6 @@ router.post('/', upload.single('bulkupload'), async (req, res) => {
 		console.log(error, 'error');
 		return res.status(500).json(error);
 	}
-
-	// console.log(req.file.buffer.toString());
-	// res.status(200).end();
 });
 
 module.exports = router;
