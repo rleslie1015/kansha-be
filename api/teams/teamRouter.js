@@ -6,14 +6,12 @@ router.use(auth.validateId);
 
 // get all teams for an organization
 router.get('/', (req, res) => {
-	const currentOrgId = req.profile.org_id;
-
-	Team.getAllTeamsForAnOrg(currentOrgId)
+	Team.getAllTeamsForAnOrg(req.profile.org_id)
 		.then(teams => {
 			res.status(200).json(teams);
 		})
 		.catch(error => {
-			console.log(error);
+			console.error(error);
 			res.status(500).json({
 				error: 'Teams could not be retrieved from the database',
 			});
@@ -22,14 +20,12 @@ router.get('/', (req, res) => {
 
 //get a team by id with members
 router.get('/:id', (req, res) => {
-	const id = req.params.id;
-
-	Team.getTeamByIdWithMembers(id)
+	Team.getTeamByIdWithMembers(req.params.id)
 		.then(team => {
 			res.status(200).json(team);
 		})
 		.catch(error => {
-			console.log(error);
+			console.error(error);
 			res.status(500).json({
 				error: 'Team could not be retrieved from the database',
 			});
@@ -38,21 +34,18 @@ router.get('/:id', (req, res) => {
 
 // Add new team with team members
 router.post('/', async (req, res) => {
-	const currentOrgId = req.profile.org_id;
-	const { name, newMembersArray } = req.body;
-
-	if (!name) {
+	if (!req.body.name) {
 		return res.status(400).json({ error: 'Team needs a name' });
 	}
 
 	try {
 		let newTeam = await Team.addTeamToOrg({
-			name,
-			org_id: currentOrgId,
+			name: req.body.name,
+			org_id: req.profile.org_id,
 		});
 		let counter = 0;
 
-		for (const newMember of newMembersArray) {
+		for (const newMember of req.body.newMembersArray) {
 			if (newMember.user_id && newMember.team_role) {
 				await Team.addTeamMemberToTeam({
 					team_role: newMember.team_role,
@@ -68,28 +61,26 @@ router.post('/', async (req, res) => {
 			message: `Successfully added ${counter} members to team  ${newTeam.name}! `,
 		});
 	} catch (error) {
-		console.log('error creating team', error);
+		console.error('error creating team', error);
 		res.status(500).json({ error: 'Error adding team' });
 	}
 });
 
 // Add team member to team
 router.post('/:id', async (req, res) => {
-	const { team_role, user_id } = req.body;
-
-	if (!team_role) {
+	if (!req.body.team_role) {
 		return res.status(400).json({ error: 'member needs a role' });
 	}
 
 	try {
 		const newTeamMember = await Team.addTeamMemberToTeam({
-			team_role,
-			user_id,
+			team_role: req.body.team_role,
+			user_id: req.body.user_id,
 			team_id: req.params.id,
 		});
 		return res.status(201).json(newTeamMember);
 	} catch (error) {
-		console.log('error creating member', error);
+		console.error('error creating member', error);
 		res.status(500).json({ error: 'Error adding member' });
 	}
 });
@@ -98,13 +89,11 @@ router.post('/:id', async (req, res) => {
 router.delete('/:id', (req, res) => {
 	const id = req.params.id;
 	Team.deleteTeam(id)
-		.then(team => {
-			res.status(204).json({
-				message: 'Successfully deleted team',
-			});
+		.then(() => {
+			res.sendStatus(204);
 		})
 		.catch(error => {
-			console.log('error deleting team', error);
+			console.error('error deleting team', error);
 			res.status(500).json({
 				error: 'Error Deleting team',
 			});
@@ -113,19 +102,15 @@ router.delete('/:id', (req, res) => {
 
 //update team
 router.put('/:id', (req, res) => {
-	const id = req.params.id;
-
-	const { name } = req.body;
-
-	if (!name) {
+	if (!req.body.name) {
 		return res.status(400).json({ error: 'Team needs a name' });
 	}
-	const changes = req.body;
-	Team.editTeam(id, changes)
+	Team.editTeam(req.params.id, req.body)
 		.then(updateTeam => {
 			res.status(200).json(updateTeam);
 		})
 		.catch(error => {
+			console.error(error);
 			res.status(500).json({
 				error: 'Failed to update Team',
 			});
@@ -134,14 +119,12 @@ router.put('/:id', (req, res) => {
 
 //get a team-member by id
 router.get('/members/:id', (req, res) => {
-	const id = req.params.id;
-
-	Team.getTeamMemberById(id)
+	Team.getTeamMemberById(req.params.id)
 		.then(member => {
 			res.status(200).json(member);
 		})
 		.catch(error => {
-			console.log(error);
+			console.error(error);
 			res.status(500).json({
 				error: 'Member could not be retrieved from the database',
 			});
@@ -150,15 +133,12 @@ router.get('/members/:id', (req, res) => {
 
 //delete a team-member
 router.delete('/members/:id', (req, res) => {
-	const id = req.params.id;
-	Team.deleteTeamMember(id)
+	Team.deleteTeamMember(req.params.id)
 		.then(() => {
-			res.status(204).json({
-				message: 'Successfully deleted team member',
-			});
+			res.sendStatus(204);
 		})
 		.catch(error => {
-			console.log('error deleting team member', error);
+			console.error('error deleting team member', error);
 			res.status(500).json({
 				error: 'Error Deleting team member',
 			});
@@ -167,20 +147,16 @@ router.delete('/members/:id', (req, res) => {
 
 //update team-member
 router.put('/members/:id', (req, res) => {
-	const id = req.params.id;
-
-	const { team_role, active } = req.body;
-
-	if (!team_role) {
+	if (!req.body.team_role) {
 		return res.status(400).json({ error: 'Team member needs a role' });
 	}
-	const changes = req.body;
 
-	Team.editTeamMember(id, changes)
+	Team.editTeamMember(req.params.id, req.body)
 		.then(updateMember => {
 			res.status(200).json(updateMember);
 		})
 		.catch(error => {
+			console.error(error);
 			res.status(500).json({
 				error: 'Failed to update Team Member',
 			});

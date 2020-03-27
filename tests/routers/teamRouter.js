@@ -8,19 +8,28 @@ module.exports = () =>
 				const { body } = await request(server).get('/teams');
 				expect(body).toEqual(
 					expect.arrayContaining([
-						{
-							team_id: expect.any(Number),
+						expect.objectContaining({
+							id: expect.any(Number),
+							// team_id: expect.any(Number),
 							name: expect.any(String),
 							count: expect.any(Number),
-							managers: [
-								{
-									member_id: expect.any(Number),
+							org_id: expect.any(Number),
+							teamManagers: expect.arrayContaining([
+								expect.objectContaining({
+									id: expect.any(Number),
 									user_id: expect.any(Number),
 									first_name: expect.any(String),
 									last_name: expect.any(String),
-								},
-							],
-						},
+									// 		sub: expect.any(String),
+									email: expect.any(String),
+									profile_picture: expect.any(String),
+									department: expect.any(String),
+									team_id: expect.any(Number),
+									team_role: expect.any(String),
+									active: expect.any(Boolean),
+								}),
+							]),
+						}),
 					]),
 				);
 			});
@@ -34,18 +43,20 @@ module.exports = () =>
 					name: expect.any(String),
 					team_members: [
 						{
+							member_id: expect.any(Number),
 							id: expect.any(Number),
-							user_id: expect.any(Number),
 							first_name: expect.any(String),
 							last_name: expect.any(String),
 							profile_picture: expect.any(String),
+							team_role: expect.any(String),
 						},
 						{
+							member_id: expect.any(Number),
 							id: expect.any(Number),
-							user_id: expect.any(Number),
 							first_name: expect.any(String),
 							last_name: expect.any(String),
 							profile_picture: expect.any(String),
+							team_role: expect.any(String),
 						},
 					],
 				});
