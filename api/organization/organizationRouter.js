@@ -6,29 +6,28 @@ const emp = require('../employee/employeeModel');
 router.use(auth.validateId);
 
 // get all orgs
-router.get('/', (req, res) => {
-	Orgs.findAllOrgs()
-		.then(orgs => {
-			res.status(200).json(orgs);
-		})
-		.catch(err => {
-			console.log('error getting all orgs', err);
-			res.status(500).end();
-		});
+router.get('/', async (req, res) => {
+	try {
+		const orgs = await Orgs.findAllOrgs();
+		res.status(200).json(orgs);
+	} catch (err) {
+		console.error('error getting all orgs', err);
+		res.status(500).end();
+	}
 });
-// get one org
-router.get('/:id', (req, res) => {
-	const id = req.params.id;
 
-	Orgs.findOrgById(id)
-		.then(org => {
-			res.status(200).json(org);
-		})
-		.catch(err => {
-			console.log('error getting org', err);
-			res.status(500).json({ error: 'Error getting org' });
-		});
+// get one org
+router.get('/:id', async (req, res) => {
+	const { id } = req.params;
+	try {
+		const org = await Orgs.findOrgById(id);
+		res.status(200).json(org);
+	} catch (err) {
+		console.error('error getting org', err);
+		res.status(500).json({ error: 'Error getting org' });
+	}
 });
+
 // add an org
 router.post('/', async (req, res) => {
 	const { id, user_type, job_title } = req.profile;
@@ -41,7 +40,7 @@ router.post('/', async (req, res) => {
 	try {
 		let { id: org_id } = await Orgs.addOrg(req.body);
 		if (id) {
-			const newEmployee = await emp.addEmployee({
+			await emp.addEmployee({
 				user_id: id,
 				org_id,
 				user_type,
@@ -51,64 +50,62 @@ router.post('/', async (req, res) => {
 		}
 		res.status(406).json({ error: 'You are not logged in' });
 	} catch (error) {
-		console.log('error creating organization', error);
+		console.error('error creating organization', error);
 		res.status(500).json({ error: 'Error adding organization' });
 	}
 });
 
 // delete an org
-router.delete('/:id', validateOrgId, (req, res) => {
-	const id = req.params.id;
-	Orgs.deleteOrg(id)
-		.then(org => {
-			res.status(204).json({
-				message: 'Successfully deleted organization',
-			});
-		})
-		.catch(error => {
-			console.log('error deleting Org', error);
-			res.status(500).json({
-				error: 'Error Deleting org',
-			});
+router.delete('/:id', validateOrgId, async (req, res) => {
+	const { id } = req.params;
+	try {
+		await Orgs.deleteOrg(id);
+		res.sendStatus(204);
+	} catch (error) {
+		console.error('error deleting Org', error);
+		res.status(500).json({
+			error: 'Error Deleting org',
 		});
+	}
 });
 
 // edit an org
-
-router.put('/:id', validateOrgId, (req, res) => {
-	const id = req.params.id;
-	const { name } = req.body;
-	if (!name) {
-		return res.status(400).json({ error: 'Organization needs a name' });
-	}
+router.put('/:id', validateOrgId, async (req, res) => {
+	const { id } = req.params;
 	const changes = req.body;
-	Orgs.editOrg(id, changes)
-		.then(updatedOrg => {
-			res.status(200).json(updatedOrg);
-		})
-		.catch(error => {
-			res.status(500).json({
-				error: 'Failed to update the organization',
-			});
+	try {
+		const org = await Orgs.editOrg(id, changes);
+		res.status(200).json(org);
+	} catch (error) {
+		console.error(error);
+		res.status(500).json({
+			error: 'Failed to update the organization',
 		});
+	}
 });
 
 // Middleware
 
-function validateOrgId(req, res, next) {
+async function validateOrgId(req, res, next) {
 	const orgId = Number(req.profile.org_id);
-	console.log(orgId);
 	const paramId = Number(req.params.id);
-	console.log(paramId);
 	if (orgId === paramId) {
-		Orgs.findOrgById(orgId).then(org => {
+		try {
+			const org = await Orgs.findOrgById(orgId);
 			if (org) {
 				req.org = org;
 				next();
 			} else {
-				res.status(404).json({ error: 'there is no org with that id' });
+				res.status(404).json({
+					error: 'there is no org with that id',
+				});
 			}
-		});
+		} catch (err) {
+			console.error(err);
+			res.status(500).json({
+				message: 'Error validating organziation id',
+			});
+		}
 	} else {
 		res.sendStatus(406);
 	}
