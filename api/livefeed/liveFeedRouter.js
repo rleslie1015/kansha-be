@@ -3,16 +3,20 @@ const { getOrgRecognitions } = require('./liveFeedModel');
 const { emitterOutput } = require('./liveFeedEmitter');
 const { validateId } = require('../../middleware/authMiddleWare');
 
-router.get('/', validateId, (req, res) => {
-	getOrgRecognitions(req.profile.org_id)
-		.then(data => res.json(data))
-		.catch(err => {
-			console.log(err);
-			res.status(500).json({ message: err });
-		});
+router.use(validateId);
+
+router.get('/', async (req, res) => {
+	const { org_id } = req.profile;
+	try {
+		const data = await getOrgRecognitions(org_id);
+		res.status(200).json(data);
+	} catch (err) {
+		console.error(err);
+		res.status(500).json({ message: err.toString() });
+	}
 });
 
-router.get('/live', validateId, (req, res) => {
+router.get('/live', (req, res) => {
 	res.writeHead(200, {
 		'Content-Type': 'text/event-stream',
 		'Cache-Control': 'no-cache',
