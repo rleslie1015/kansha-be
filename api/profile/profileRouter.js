@@ -5,43 +5,45 @@ const { find } = require('../user/userModel.js');
 
 router.use(auth.validateId);
 
-router.get('/', (req, res) => {
-	getUserInteractions(req.profile.id).then(rec => {
+router.get('/', async (req, res) => {
+	try {
+		const rec = await getUserInteractions(req.profile.id);
 		let { profile } = req;
 		profile.rec = rec;
 		res.status(200).json({ user: profile });
-	});
+	} catch (err) {
+		console.error(err);
+		res.status(500).json({ message: 'Server error fetching profile' });
+	}
 });
 
-router.get('/:id', validatePeerId, (req, res) => {
-	getUserInteractions(req.peer.id)
-		.then(rec => {
-			let { peer } = req;
-			peer.rec = rec;
-			res.status(200).json({ peer });
-		})
-		.catch(err => {
-			console.log(err);
-			res.status(500).json({ err });
-		});
+router.get('/:id', validatePeerId, async (req, res) => {
+	try {
+		const rec = await getUserInteractions(req.peer.id);
+		let { peer } = req;
+		peer.rec = rec;
+		res.status(200).json({ peer });
+	} catch (err) {
+		console.error(err);
+		res.status(500).json({ err });
+	}
 });
 
-function validatePeerId(req, res, next) {
+async function validatePeerId(req, res, next) {
 	const { id } = req.params;
 	const { profile } = req;
-	find({ 'Users.id': id })
-		.then(([user]) => {
-			if (!user || user.org_name !== profile.org_name) {
-				res.status(200).json({ peer: false });
-			} else {
-				req.peer = user;
-				next();
-			}
-		})
-		.catch(err => {
-			console.error(err);
-			res.status(500).json(...err);
-		});
+	try {
+		const [user] = await find({ 'Users.id': id });
+		if (!user || user.org_name !== profile.org_name) {
+			res.status(200).json({ peer: false });
+		} else {
+			req.peer = user;
+			next();
+		}
+	} catch (err) {
+		console.error(err);
+		res.status(500).json(...err);
+	}
 }
 
 module.exports = router;
