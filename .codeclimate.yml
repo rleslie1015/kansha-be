@@ -1,7 +1,14 @@
 exclude_patterns:
-    - 'tests/'
-    - 'spec/'
-    - '**/vendor/'
-    - '**/node_modules/'
-    - 'data/migrations'
-    - 'data/seeds'
+    - "tests/"
+    - "spec/"
+    - "**/vendor/"
+    - "**/node_modules/"
+    - "data/migrations"
+    - "data/seeds"
+engines:
+    duplication:
+        enabled: true
+        config:
+            languages:
+                javascript:
+                    mass_threshold: 65
