@@ -9,21 +9,7 @@ module.exports = {
 	getTops,
 };
 
-async function getRangeOfDataForMyOrg(org_id, query = {}) {
-	let { time = 'years' } = query;
-	const subtract = time === 'months' ? 2 : 1;
-	const recognitions = await db('Recognition')
-		.where({ org_id })
-		.andWhere(
-			'date',
-			'>',
-			moment()
-				.subtract(subtract, time)
-				.startOf(time)
-				.toDate(),
-		)
-		.orderBy('date', 'desc');
-
+function resultsMap(time, recognitions) {
 	const resultsMap = timeMap(time);
 
 	let count = 0;
@@ -49,6 +35,24 @@ async function getRangeOfDataForMyOrg(org_id, query = {}) {
 	}
 
 	return { count, results };
+}
+
+async function getRangeOfDataForMyOrg(org_id, query = {}) {
+	let { time = 'years' } = query;
+	const subtract = time === 'months' ? 2 : 1;
+	const recognitions = await db('Recognition')
+		.where({ org_id })
+		.andWhere(
+			'date',
+			'>',
+			moment()
+				.subtract(subtract, time)
+				.startOf(time)
+				.toDate(),
+		)
+		.orderBy('date', 'desc');
+
+	return resultsMap(time, recognitions);
 }
 
 async function getDataForMyOrg(org_id, query = {}) {

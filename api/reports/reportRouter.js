@@ -1,31 +1,28 @@
 const router = require('express').Router();
-const reportModel = require('./reportModel');
+const Reports = require('./reportModel');
 const auth = require('../../middleware/authMiddleWare');
 
 router.use(auth.validateId);
 
 router.get('/', async (req, res) => {
 	const { org_id } = req.profile;
-
 	try {
-		const reportInfo = await reportModel.getDataForMyOrg(org_id, req.query);
-
+		const reportInfo = await Reports.getDataForMyOrg(org_id, req.query);
 		return res.status(200).json(reportInfo);
 	} catch (error) {
-		console.log('error getting report', error);
+		console.error('error getting report', error);
 		return res.status(500).json({ error });
 	}
 });
 
 router.get('/top', async (req, res) => {
 	const { org_id } = req.profile;
-
 	try {
-		const reportInfo = await reportModel.getTops(org_id, req.query);
+		const reportInfo = await Reports.getTops(org_id, req.query);
 
 		return res.status(200).json(reportInfo);
 	} catch (error) {
-		console.log('error getting report', error);
+		console.error('error getting report', error);
 		return res.status(500).json({ error });
 	}
 });
@@ -34,15 +31,14 @@ router.get('/top', async (req, res) => {
 
 router.get('/engagement', async (req, res) => {
 	const { org_id } = req.profile;
-
 	try {
-		const empEngagement = await reportModel.getPercentThanked(
+		const empEngagement = await Reports.getPercentThanked(
 			org_id,
 			req.query,
 		);
 		return res.status(200).json(empEngagement);
 	} catch (error) {
-		console.log('Error getting total engagement', error);
+		console.error('Error getting total engagement', error);
 		return res.status(500).json({ error });
 	}
 });
@@ -51,15 +47,14 @@ router.get('/engagement', async (req, res) => {
 
 router.get('/range', async (req, res) => {
 	const { org_id } = req.profile;
-
 	try {
-		const rangeData = await reportModel.getRangeOfDataForMyOrg(
+		const rangeData = await Reports.getRangeOfDataForMyOrg(
 			org_id,
 			req.query,
 		);
 		return res.status(200).json(rangeData);
 	} catch (error) {
-		console.log('Error getting that range of data', error);
+		console.error('Error getting that range of data', error);
 		return res.status(500).json({ error });
 	}
 });
