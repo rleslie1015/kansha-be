@@ -28,11 +28,6 @@ function findAllEmployees() {
 			'Organizations.name as org_name',
 		);
 }
-function findByEmail(email) {
-	return db('Users')
-		.where({ email })
-		.select('id');
-}
 // find one employee
 function findEmployeeById(id) {
 	return findAllEmployees()
@@ -61,8 +56,8 @@ function editEmployee(id, changes) {
 		.update(changes)
 		.then(count => (count > 0 ? findEmployeeById(id) : null));
 }
-// Get all employees by org id
 
+// Get all employees by org id
 async function getEmployeesByOrg(org_id, query = {}) {
 	const {
 		page = 1,
@@ -72,7 +67,34 @@ async function getEmployeesByOrg(org_id, query = {}) {
 		search = '',
 	} = query;
 	const offset = limit * (page - 1);
-	const employees = await db('Employees')
+	const employees = await getAllEmployeesByOrg(org_id)
+		.andWhere(builder => {
+			builder
+				.where('first_name', 'ilike', `%${search}%`)
+				.orWhere('last_name', 'ilike', `%${search}%`);
+		})
+		.orderBy(sortby, sortdir)
+		.limit(limit)
+		.offset(offset);
+
+	const count = await countEmployees(org_id);
+
+	return {
+		count,
+		employees,
+	};
+}
+
+async function countEmployees(org_id) {
+	const { count } = await db('Employees')
+		.where({ org_id })
+		.count()
+		.first();
+	return Number(count);
+}
+
+function getAllEmployeesByOrg(org_id) {
+	return db('Employees')
 		.join('Users', 'Users.id', 'Employees.user_id')
 		.join('Organizations', 'Organizations.id', 'Employees.org_id')
 		.select(
@@ -85,24 +107,5 @@ async function getEmployeesByOrg(org_id, query = {}) {
 			'department',
 			'Organizations.name as org_name',
 		)
-		.where({ org_id })
-		.andWhere(builder => {
-			builder
-				.where('first_name', 'ilike', `%${search}%`)
-				.orWhere('last_name', 'ilike', `%${search}%`);
-		})
-		.orderBy(sortby, sortdir)
-		.limit(limit)
-		.offset(offset);
-
-	let { count } = await db('Employees')
-		.where({ org_id })
-		.count()
-		.first();
-	count = Number(count);
-
-	return {
-		count,
-		employees,
-	};
+		.where({ org_id });
 }
