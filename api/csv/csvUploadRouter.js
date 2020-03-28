@@ -71,7 +71,7 @@ router.post('/', upload.single('bulkupload'), async (req, res) => {
 			});
 		}
 	} catch (error) {
-		console.log(error, 'error');
+		console.error(error, 'error');
 		return res.status(500).json(error);
 	}
 });
