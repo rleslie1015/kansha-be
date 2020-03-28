@@ -13,6 +13,7 @@ module.exports = {
 	addTeamMemberToTeam,
 	editTeamMember,
 	deleteTeamMember,
+	addTeamMembersToTeam,
 };
 
 async function countMembersForTeam(team_id) {
@@ -128,6 +129,23 @@ function editTeamMember(id, changes) {
 
 async function deleteTeamMember(id) {
 	await db('TeamMembers')
-		.where({ id: id })
+		.where({ id })
 		.del();
+}
+
+async function addTeamMembersToTeam(memberArray) {
+	let counter = 0;
+
+	for await (const newMember of memberArray) {
+		if (newMember.user_id && newMember.team_role) {
+			await Team.addTeamMemberToTeam({
+				team_role: newMember.team_role,
+				user_id: newMember.user_id,
+				team_id: newTeam.id,
+			});
+
+			counter++;
+		}
+	}
+	return counter;
 }
