@@ -5,11 +5,13 @@ const requiredFields = require('../../middleware/requiredField');
 
 router.use(auth.validateId);
 
+const getIdFromParams = req => req.params.id;
+const getOrgIdFromProfile = req => req.profile.org_id;
+
 // get all teams for an organization
 router.get('/', async (req, res) => {
-	const { org_id } = req.profile;
 	try {
-		const teams = await Team.getAllTeamsForAnOrg(org_id);
+		const teams = await Team.getAllTeamsForAnOrg(getOrgIdFromProfile(req));
 		res.status(200).json(teams);
 	} catch (error) {
 		console.error(error);
@@ -21,9 +23,8 @@ router.get('/', async (req, res) => {
 
 //get a team by id with members
 router.get('/:id', async (req, res) => {
-	const { id } = req.params;
 	try {
-		const team = await Team.getTeamByIdWithMembers(id);
+		const team = await Team.getTeamByIdWithMembers(getIdFromParams(req));
 		res.status(200).json(team);
 	} catch (error) {
 		console.error(error);
@@ -36,9 +37,11 @@ router.get('/:id', async (req, res) => {
 // Add new team with team members
 router.post('/', requiredFields('name'), async (req, res) => {
 	const { name, newMembersArray } = req.body;
-	const { org_id } = req.profile;
 	try {
-		const newTeam = await Team.addTeamToOrg({ name, org_id });
+		const newTeam = await Team.addTeamToOrg({
+			name,
+			org_id: getOrgIdFromProfile(req),
+		});
 		const count = await Team.addTeamMembersToTeam(newMembersArray);
 		res.status(201).json({
 			id: newTeam.id,
@@ -69,9 +72,8 @@ router.post('/:id', requiredFields('team_role'), async (req, res) => {
 
 //delete a team
 router.delete('/:id', async (req, res) => {
-	const { id } = req.params;
 	try {
-		await Team.deleteTeam(id);
+		await Team.deleteTeam(getIdFromParams(req));
 		res.sendStatus(204);
 	} catch (error) {
 		console.error('error deleting team', error);
@@ -83,10 +85,9 @@ router.delete('/:id', async (req, res) => {
 
 //update team
 router.put('/:id', async (req, res) => {
-	const { id } = req.params;
 	const { name } = req.body;
 	try {
-		const team = await Team.editTeam(id, { name });
+		const team = await Team.editTeam(getIdFromParams(req), { name });
 		res.status(200).json(team);
 	} catch (error) {
 		console.error(error);
@@ -98,9 +99,8 @@ router.put('/:id', async (req, res) => {
 
 //get a team-member by id
 router.get('/members/:id', async (req, res) => {
-	const { id } = req.params;
 	try {
-		const member = await Team.getTeamMemberById(id);
+		const member = await Team.getTeamMemberById(getIdFromParams(req));
 		res.status(200).json(member);
 	} catch (error) {
 		console.error(error);
@@ -112,9 +112,8 @@ router.get('/members/:id', async (req, res) => {
 
 //delete a team-member
 router.delete('/members/:id', async (req, res) => {
-	const { id } = req.params;
 	try {
-		await Team.deleteTeamMember(id);
+		await Team.deleteTeamMember(getIdFromParams(req));
 		res.sendStatus(204);
 	} catch (error) {
 		console.error('error deleting team member', error);
@@ -126,10 +125,12 @@ router.delete('/members/:id', async (req, res) => {
 
 //update team-member
 router.put('/members/:id', async (req, res) => {
-	const { id } = req.params;
 	const { team_role, active } = req.body;
 	try {
-		const member = await Team.editTeamMember(id, { team_role, active });
+		const member = await Team.editTeamMember(getIdFromParams(req), {
+			team_role,
+			active,
+		});
 		res.status(200).json(member);
 	} catch (error) {
 		console.error(error);
