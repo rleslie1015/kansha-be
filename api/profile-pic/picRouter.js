@@ -4,11 +4,11 @@ const upload = require('./profilePicUpload');
 const userModel = require('../user/userModel.js');
 const singleUpload = upload.single('image');
 
-router.post('/', function(req, res) {
-	singleUpload(req, res, function(err) {
+router.post('/', (req, res) => {
+	singleUpload(req, res, err => {
 		userModel
 			.editUserBySub(req.user.sub, { profile_picture: req.file.location })
-			.catch(err => console.err(err));
+			.catch(err => console.error(err));
 		return res.json({ url: req.file.location });
 	});
 });
