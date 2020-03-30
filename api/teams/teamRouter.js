@@ -24,7 +24,7 @@ router.get('/', (req, res) => {
 router.get('/:id', (req, res) => {
 	const id = req.params.id;
 
-	Team.getTeamByIdWithMembers(id)
+	Team.getTeamByIdWithMembers(id, req.query)
 		.then(team => {
 			res.status(200).json(team);
 		})
