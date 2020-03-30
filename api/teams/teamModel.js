@@ -45,7 +45,15 @@ async function getAllTeamsForAnOrg(org_id) {
 	return data;
 }
 
-async function getTeamByIdWithMembers(id) {
+async function getTeamByIdWithMembers(id, query = {}) {
+	const {
+		page = 1,
+		limit = 10,
+		sortby = 'id',
+		sortdir = 'asc',
+		search = '',
+	} = query;
+	const offset = limit * (page - 1);
 	const team = await db('Teams')
 		.join('TeamMembers', 'Teams.id', 'TeamMembers.team_id')
 		.join('Users', 'TeamMembers.user_id', 'Users.id')
@@ -60,7 +68,15 @@ async function getTeamByIdWithMembers(id) {
 			'Users.profile_picture as team_members:profile_picture',
 		)
 		.groupBy('Teams.id', 'TeamMembers.id', 'Users.id')
-		.where('Teams.id', id);
+		.where('Teams.id', id)
+		.andWhere(builder => {
+			builder
+				.where('first_name', 'ilike', `%${search}%`)
+				.orWhere('last_name', 'ilike', `%${search}%`);
+		})
+		.orderBy(sortby, sortdir)
+		.limit(limit)
+		.offset(offset);
 
 	const teamAgg = new Treeize();
 	teamAgg.grow(team);
