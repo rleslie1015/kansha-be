@@ -149,7 +149,7 @@ async function deleteTeamMember(id) {
 		.del();
 }
 
-async function addTeamMembersToTeam(memberArray) {
+async function addTeamMembersToTeam(memberArray, team_id) {
 	let counter = 0;
 
 	for await (const newMember of memberArray) {
@@ -157,7 +157,7 @@ async function addTeamMembersToTeam(memberArray) {
 			await addTeamMemberToTeam({
 				team_role: newMember.team_role,
 				user_id: newMember.user_id,
-				team_id: newTeam.id,
+				team_id,
 			});
 
 			counter++;

@@ -39,7 +39,10 @@ router.post('/', requiredFields('name'), async (req, res) => {
 	const { org_id } = req.profile;
 	try {
 		const newTeam = await Team.addTeamToOrg({ name, org_id });
-		const count = await Team.addTeamMembersToTeam(newMembersArray);
+		const count = await Team.addTeamMembersToTeam(
+			newMembersArray,
+			newTeam.id,
+		);
 		res.status(201).json({
 			id: newTeam.id,
 			message: `Successfully added ${count} members to team  ${newTeam.name}! `,
