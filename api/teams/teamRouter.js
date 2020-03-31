@@ -23,7 +23,7 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
 	const { id } = req.params;
 	try {
-		const team = await Team.getTeamByIdWithMembers(id);
+		const team = await Team.getTeamByIdWithMembers(id, req.query);
 		res.status(200).json(team);
 	} catch (error) {
 		console.error(error);
