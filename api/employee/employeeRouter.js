@@ -52,7 +52,7 @@ router.get('/:id', async (req, res) => {
 
 // Delete an employee
 
-router.delete('/:id', validateEmployeeId, async (req, res) => {
+router.delete('/:id', async (req, res) => {
 	const { id } = req.params;
 	const { org_id } = req.profile;
 	try {
@@ -118,7 +118,7 @@ router.post(
 // use the org id from the current user profile and the user id
 
 // Edit an Employee
-router.put('/:id', validateEmployeeId, async (req, res) => {
+router.put('/:id', async (req, res) => {
 	const { id } = req.params;
 	const changes = req.body;
 	try {
@@ -134,24 +134,24 @@ router.put('/:id', validateEmployeeId, async (req, res) => {
 
 // Middleware
 
-async function validateEmployeeId(req, res, next) {
-	const { id } = req.params;
-	try {
-		const employee = await Emp.findEmployeeById(id);
-		if (employee) {
-			req.e = employee;
-			next();
-		} else {
-			res.status(404).json({
-				error: 'there is no employee with that id',
-			});
-		}
-	} catch (error) {
-		console.error(error);
-		res.status(500).json({
-			error: 'Server error validating employee',
-		});
-	}
-}
+// async function validateEmployeeId(req, res, next) {
+// 	const { id } = req.params;
+// 	try {
+// 		const employee = await Emp.findEmployeeById(id);
+// 		if (employee) {
+// 			req.e = employee;
+// 			next();
+// 		} else {
+// 			res.status(404).json({
+// 				error: 'there is no employee with that id',
+// 			});
+// 		}
+// 	} catch (error) {
+// 		console.error(error);
+// 		res.status(500).json({
+// 			error: 'Server error validating employee',
+// 		});
+// 	}
+// }
 
 module.exports = router;
