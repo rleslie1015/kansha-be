@@ -2,7 +2,6 @@
 
 [![Maintainability](https://api.codeclimate.com/v1/badges/da01f596f6f9f722c5b8/maintainability)](https://codeclimate.com/github/Lambda-School-Labs/kansha-be/maintainability)
 
-![Heroku](https://heroku-badge.herokuapp.com/?app=kansha-server)
 
 ## Getting started
 

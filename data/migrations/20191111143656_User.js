@@ -8,10 +8,11 @@ exports.up = function(knex) {
         tbl
             .string('sub', 64)
             .notNullable()
-            
+
         tbl
             .string('first_name', 255)
             .notNullable()
+
         tbl
             .string('last_name', 255)
             .notNullable()
@@ -19,15 +20,19 @@ exports.up = function(knex) {
         tbl
             .string('job_title', 255)
             .notNullable()
+
         tbl 
             .string('department', 255)
+
         tbl 
             .string('org_name', 255)
             .notNullable()
+
         tbl 
             .string('user_type')
             .defaultTo('standard')
             .notNullable()
+            
         tbl
             .string('profile_picture', 500)
             .defaultTo('https://kansha-bucket.s3-us-west-1.amazonaws.com/avatarblank.png')
